@@ -1,0 +1,21 @@
+.listActive{display:none;}
+
+#itemName{font-size:1.25rem;padding-left:1.5rem;}
+
+article{padding:1rem 2rem;border-top: 1px solid rgb(238, 238, 238);}
+
+/*这里定义模板显示文章列表时的样式*/
+.arclist {margin-top:.5rem;padding-top:.5rem;border-top: 1px solid rgb(238, 238, 238);}
+.arclist:hover{background: #ddd;}
+.listInfo {font-size: .9rem;color:grey ;margin:.5rem 0 0 0.3rem;font-weight:500;}
+.listInfo span+span {padding-left:.5rem;}
+.listTitle {margin:.3rem 0;font-size: 1.2rem;margin-left:0.3rem;font-weight:600;}
+/*这里定义模板显示详情页时的样式*/
+.artheader{display: flex; align-items: center;margin:1rem 0;}
+.authImg {width:70px;margin-left:.5rem;}
+.authImg img{display:block;margin:0;height:60px;width:60px;border:1px solid red;border-radius: 50%;}
+.authInfo {width:60%;margin-left:.3rem;padding:.3rem;text-align: left;}
+.authInfo div:first-child{font-size: 1.1rem;font-weight:500 ;}
+.authInfo div:last-child {font-size: 0.8rem;margin-top:.3rem}
+.arttitle {font-size: 1.4rem;margin-left:0.3rem;font-weight:600 ;border-top: 1px solid rgb(238, 238, 238);}
+.artcontent{background:rgb(248, 248, 248);margin-top:1rem; text-indent:2rem;}

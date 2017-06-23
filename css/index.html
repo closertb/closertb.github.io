@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>vue Learning Program</title>
+    <meta name="keywords" content="vue学习，练手项目">
+ 	<meta name="viewport" content="width=device-width">
+	<meta name="theme-color" content="#ff9900">   
+    <link href="css/common.css" rel="stylesheet">
+</head>
+<body>
+ 	<main class="main-content">
+    <header class="flexheader">
+	    <button class="off-canvas-launcher toLeft">Menu</button>
+        <span id="welInfo" class="toRight">欢迎你：唐波</span>
+    </header>
+    <article>
+		<h1>A basic off-canvas menu</h1>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+	</article>
+    </main>
+	<nav  id="linkList" class="navigation-menu">
+        <div class="slefInfo">
+            <div><img class="photoInfo" src="img/mine.jpg"> </div>
+            <div><span class="font2rem">Denzel</span></div>
+            <div class="motto" ><span class="font2rem">生命不息，战斗不止</span></div>
+            <div class="item">
+                <ul>
+                    <li><img src="img/tag/file.png" alt="文章" title="list" @click="btnClick('item')"></li>
+                    <li><img src="img/tag/folder.png" alt="分类" title="item" @click="btnClick('item')"></li>
+                    <li><img src="img/tag/bookmark.png" alt="标签" title="mark" @click="btnClick('detail')"></li>          
+                </ul> 
+                <countlist v-bind:item="detCount"></countlist> 
+<!--                <ul>
+                    <li>18</li>
+                    <li>21</li>
+                    <li>2</li>          
+                </ul> -->                             
+            </div>
+        </div>
+
+        <navlist v-bind:item="navlist"></navlist>
+	</nav>   
+    <script type="text/javaScript" src="js/app/common.js"></script>
+   <script type="text/javaScript" data-main="js/main.min.js" src="js/lib/require.js"></script>
+<!--    <script type="text/javaScript" data-main="js/main" src="js/lib/require.js"></script>-->
+</body>
+</html>

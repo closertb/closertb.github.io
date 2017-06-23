@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>vue Learning Program</title>
+    <style>
+    .router-link-active {color: red;}
+    </style>
+</head>
+<body>
+    <div id="app">
+    <h1>Hello App!</h1>
+    <div id="testapp">
+        <p>
+            <!-- use router-link component for navigation. -->
+            <!-- specify the link by passing the `to` prop. -->
+            <!-- <router-link> will be rendered as an `<a>` tag by default -->
+            <router-link to="/foo">Go to Foo</router-link>
+            <router-link to="/bar">Go to Bar</router-link>
+        </p>
+        <!-- route outlet -->
+        <!-- component matched by the route will render here -->
+        <router-view>this is a tree:</router-view>
+    </div>
+
+    </div>
+    <script src="js/lib/vue.js"></script>
+    <script src="js/lib/vue-router.js"></script>
+    <script>
+        const Foo = { template: '<div>foo</div>' };
+        const Bar = { template: '<div>bar</div>' };
+        const routes = [
+        { path: '/foo', component: Foo },
+        { path: '/bar', component: Bar }
+        ];
+
+        // 3. Create the router instance and pass the `routes` option
+        // You can pass in additional options here, but let's
+        // keep it simple for now.
+        const router = new VueRouter({
+        routes
+        })
+
+        // 4. Create and mount the root instance.
+        // Make sure to inject the router with the router option to make the
+        // whole app router-aware.
+        const app = new Vue({
+        router,
+        el:"#testapp"
+        });  
+    </script>
+</body>
+</html>

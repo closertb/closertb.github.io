@@ -1,0 +1,124 @@
+/*Make everything use border-box sizing for simplicity*/
+html{font-size: 16px;}
+div,ul,p,li{
+	box-sizing: border-box;
+}
+
+body,div,p,ul,li,header{
+	margin: 0;
+	padding: 0;
+	overflow-x: hidden;
+}
+
+.mcontent {
+	font-size: 18px;
+	font-family: sans-serif;
+}
+/*   */
+
+/*  */
+.flexheader{display:flex;align-items:center;justify-content:space-between;; background: yellowgreen;padding:.5rem 0;}
+.toRight{margin-right:1.5rem;}
+.toLeft {margin-left:1.5rem;}
+
+/*remove default button styling*/
+.off-canvas-launcher {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	border: 1px solid #297D94;
+	border-radius: 4px;
+	background: none;
+	padding: 4px 8px;
+	position: relative;
+}
+
+/*add some interactivity when the button is clicked*/
+.off-canvas-launcher:active {
+	top: 1px;
+}
+
+.nav-link {
+	display: flex;
+	align-items: center;
+	padding: .5rem;
+	color: #ddd;
+	min-height: 2rem;
+	text-decoration: none;
+	transition: border, background-color .35s;
+}
+
+/*when a link follows another, give it a border-top*/
+.nav-link + .nav-link {
+	border-top: 1px solid #aaa;
+}
+
+.nav-link:hover {
+	background-color: #4d90fe;
+	color: #fff;
+}
+
+/*add a transition for the left and transform properties and a duration for transitions*/
+.navigation-menu {
+	background-color: #4285f4;
+	transition: left, transform .4s;
+}
+
+.slefInfo{background: white;border-bottom: 0 dashed #4285f4;border-right: .1rem solid #4285f4;padding:.3rem;text-align:center;}
+
+
+.photoInfo{width:120px;height:120px;border: 2px solid white;border-radius: 50%; }
+.font2rem {font-size: 1rem;font-weight: bold; }
+.motto {margin:.5rem 0 .5rem 0;}
+
+.item{border-top: 0.1rem dashed gray;padding-top:.3rem }
+.item ul{display: flex; justify-content: space-around;}
+.item img{height:25px; width:25px;}
+/*for smaller screens that support JavaScript by default hide the nav off screen*/
+@media (min-width: 200px) {
+	 .navigation-menu {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		width: 200px;
+		left: -200px;
+	}
+	/*when the menu button is clicked move the nav back on screen*/
+	 .OffCanvas-Active .navigation-menu {
+		left: 0;
+	}
+	/*if the browser supports transforms, reset the left property and pull it off screen with a translate */
+	 .csstransforms .navigation-menu {
+		left: auto;
+		transform: translateX(-200px);
+	}
+	/*when transforms are supported and the menu button is clicked, reset the nav to default position*/
+	 .csstransforms .OffCanvas-Active .navigation-menu {
+		transform: translateX(0);
+	}
+	/*where transform3d is supported reset left and pull off screen with a translate3d instead*/
+	 .csstransforms3d .navigation-menu {
+		left: auto;
+		transform: translate3d(-200px, 0, 0);
+	}
+	/*when transform3d is supported and the menu button is clicked, reset the nav to default position*/
+	 .csstransforms3d .OffCanvas-Active .navigation-menu {
+		transform: translate3d(0, 0, 0);
+	}
+}
+
+/*for larger screens set the nav to the left and give the main content extra margin to compensate for it*/
+@media (min-width: 800px) {
+    .flexheader {justify-content: flex-end;}
+	.navigation-menu {
+		left: 0!important;
+		transform: none!important;
+	}
+	.off-canvas-launcher {
+		display: none;
+	}
+	.mcontent {
+		position: relative;
+		margin-left: 200px;
+	}
+}
