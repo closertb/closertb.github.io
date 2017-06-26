@@ -8,6 +8,7 @@
 	<meta name="theme-color" content="#ff9900">   
     <link href="css/common.css" rel="stylesheet">
     <link href="css/index.css" rel="stylesheet">
+    <link type="favicon" rel="shortcut icon" href ="img/icon.jpeg"/>
 </head>
 <body>
 
@@ -18,14 +19,22 @@
     </div>
     </header>
  	<main id="api" class="mcontent" @click="hideNav">    
-    <h1 id="itemName">
-            <router-link v-bind:class="{listActive:isActive.a}" to="/foo">文章列表</router-link>
-            <router-link v-bind:class="{listActive:isActive.b}" to="/bar">分类</router-link>
-            <router-link v-bind:class="{listActive:isActive.c}" to="/bar">更多</router-link>
+    <h1 id="itemName" @click="goback">{{activeTag}}
+<!--            <router-link class="defaulthide" v-bind:class="{listActive:(isActive.a===0x01)}" to="">文章列表</router-link>
+            <router-link class="defaulthide" v-bind:class="{listActive:(isActive.a===0x02)}" to="/goback">返回列表</router-link>
+            <router-link class="defaulthide" v-bind:class="{listActive:(isActive.a===0x4)}" to="/bar">更多</router-link>-->
     </h1>  
-    <article>
         <router-view></router-view>	
-    </article>
+<!--        <div class="relatedNav">
+            <div>
+                <span>上一篇</span>
+                <span>下一篇</span>
+            </div>
+            <div>
+                 <a>这是上一篇</a>
+                 <a>这是下一篇</a>               
+            </div>
+        </div>-->
 
     </main>
 	<nav  id="linkList" class="navigation-menu">
@@ -45,7 +54,6 @@
 
         <navlist v-bind:item="navlist"></navlist>
 	</nav>   
-    <!--<script type="text/javaScript" src="js/main/default.js"></script>-->
     <script type="text/javaScript" data-main="js/app" src="js/main/require.js"></script>
 </body>
 </html>

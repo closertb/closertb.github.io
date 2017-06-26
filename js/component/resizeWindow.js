@@ -15,6 +15,7 @@ define(function(){
             document.querySelector('body').classList.toggle('OffCanvas-Active');
 	    },
         hideNav:function() {
+		//	console.log("propergation");
                 if(document.querySelector('.OffCanvas-Active')){
                     document.querySelector('body').classList.remove('OffCanvas-Active');
                 }

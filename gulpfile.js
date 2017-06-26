@@ -7,6 +7,7 @@ var revCollector = require('gulp-rev-collector');
 var clean = require('gulp-clean');
 var runSequence = require('run-sequence');
 var minifyCss = require('gulp-minify-css');
+var webserver = require('gulp-webserver');
 /*var flatten = require('gulp-flatten')*/
 
 gulp.task('revJs',function(){
@@ -28,12 +29,13 @@ gulp.task('hello', function (cb) {
     gulp.src('js/app.js')
     .pipe(reqOptimize({
         optimize:"none",
-        paths:{
-            vue:'lib/vue',
-            vueRouter:'lib/vue-router',
-            temp:'component/template',
-            resize:'component/resizeWindow'
-        }
+    paths:{
+        vue:'lib/vue',
+        vueRouter:'lib/vue-router',
+        vueResource:'lib/vue-resource',
+        temp:'component/template',
+        resize:'component/resizeWindow'
+    }
     }))
   //  .pipe(rename("main-min.js"))
     .pipe(rev())
@@ -81,6 +83,19 @@ gulp.task("clean",function () {
     ]).pipe(clean());
 });
 
+gulp.task("startServer",function(){
+    gulp.src('dist')
+    .pipe(webserver({
+        port:80,
+        host:'127.0.0.1',
+        liveload:true,
+        directoryListing:{
+            path:'index.html',
+            enable:true
+        }
+    }))
+});
+
 gulp.task('default', function(callback) {
     runSequence(
         "clean",                //- 上一次构建的结果清空
@@ -90,5 +105,7 @@ gulp.task('default', function(callback) {
         "hello",                  //- 文件合并与md5
         "repSuff",        //- 替换.js后缀
         "repHome",      //- 首页路径替换为md5后的路径
+        "startServer",
         callback);
 });
+

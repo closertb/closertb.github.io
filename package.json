@@ -1,10 +1,11 @@
 {
-  "name": "MyDemo",
+  "name": "My-Blog",
   "version": "1.0.0",
   "description": "This is for study gulp project !",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "http-server"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +20,8 @@
     "gulp-requirejs-optimize": "^1.2.0",
     "gulp-rev": "^7.1.2",
     "gulp-rev-collector": "^1.2.2",
+    "gulp-webserver": "^0.9.1",
+    "http-server": "^0.10.0",
     "run-sequence": "^1.2.2",
     "through2": "^2.0.3"
   }

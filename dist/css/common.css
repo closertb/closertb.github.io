@@ -1,5 +1,5 @@
 /*Make everything use border-box sizing for simplicity*/
-
+html{font-size: 16px;}
 div,ul,p,li{
 	box-sizing: border-box;
 }
@@ -11,15 +11,10 @@ body,div,p,ul,li,header{
 }
 
 .mcontent {
-	font-size: 18px;
 	font-family: sans-serif;
 }
 /*   */
-#title{font-size:20px;padding-left:1.5em;}
 
-article{font-size: 16px;padding:1em;}
-
-article p{padding-top:1.5em}
 /*  */
 .flexheader{display:flex;align-items:center;justify-content:space-between;; background: yellowgreen;padding:.5rem 0;}
 .toRight{margin-right:1.5rem;}
