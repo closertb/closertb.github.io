@@ -12,12 +12,20 @@
 </head>
 <body>
 
-    <header>
-    <div class="flexheader">
+    <header class="flexheader">
 	    <button class="off-canvas-launcher toLeft">Menu</button>
-        <span id="welInfo" class="toRight">欢迎你：唐波</span>
-    </div>
+        <button id="test">test</button>
+        <span id="showInfo" class="toRight"><button id="loginEnable">登录</button><label id="welInfo">欢迎你：Dom</label><img id="loginOut" src="img/close.png"/></span>
     </header>
+<!--    <form id="login" class="loginshow" :class="{loginhide:isActive}">-->
+        <form id="login" :class="isActive?'loginshow':'loginhide'" action="" @submit.prevent="userLogin">
+        <fieldset>
+            <h3>用户登录</h3>
+            <input type="text" class="user-id" v-model="userInfo.id" placeholder="请输入你的用户ID" required="required"/>
+            <input type="password" class="user-pwd" v-model="userInfo.psd" placeholder="请输入你的登录密码" required="required"/>
+            <input type="submit" class="login-btn" value="登录"/>
+        </fieldset>
+    </form>    
  	<main id="api" class="mcontent" @click="hideNav">    
     <h1 id="itemName" @click="goback">{{activeTag}}
 <!--            <router-link class="defaulthide" v-bind:class="{listActive:(isActive.a===0x01)}" to="">文章列表</router-link>
@@ -54,6 +62,6 @@
 
         <navlist v-bind:item="navlist"></navlist>
 	</nav>   
-    <script type="text/javaScript" data-main="js/app-1f31e8103d" src="js/main/require.js"></script>
+    <script type="text/javaScript" data-main="js/app-7f1bca7c17" src="js/main/require.js"></script>
 </body>
 </html>

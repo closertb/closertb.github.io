@@ -14,6 +14,28 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
     Vue.use(VueResource);
     window.onresize =resizeWindow.resizeWindow;
     document.querySelector('.off-canvas-launcher').addEventListener('click', resizeWindow.showNav);  
+    document.querySelector("#loginEnable").addEventListener('click',function(){
+        login.showForm();
+    });
+    document.querySelector("#loginOut").addEventListener('click',function(){
+       // login.showForm();
+       document.querySelector("#showInfo").classList.remove("isLogin");
+    });    
+
+    /*此处设置vue-resource 拦截器，用于设置http请求头*/
+    Vue.http.interceptors.push((request,next)=>{
+        let token =sessionStorage.getItem("token");
+        console.log("token:"+token);
+/*        if(token !==null ){
+            request.headers.set('AuthKey',token);
+        }*/
+        console.log(request.headers)
+        next((response) => {
+            console.log(response.status)
+            return response
+        });
+    });
+    
     Vue.component('navlist',{
     render:function(createElement){
         return tempModule.navTemp(createElement,this.item);
@@ -38,33 +60,12 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
                     postdate:'2017年02月20日',
                     classitem:'我的专栏',
                     title:'this is a title'
-            },
-            {
-                    index:13,
-                    username:'Denzel B',
-                    postdate:'2017年02月20日',
-                    classitem:'我的专栏',
-                    title:'this is a title'
-            },
-            {
-                    index:14,
-                    username:'Denzel C',
-                    postdate:'2017年02月20日',
-                    classitem:'我的专栏',
-                    title:'this is a title'
-            },
-            {
-                    index:15,
-                    username:'Denzel D',
-                    postdate:'2017年02月20日',
-                    classitem:'我的专栏',
-                    title:'this is a title'
             }]
         }}
     };
         const Bar = { template: '<div>bar</div>' };
       //  const detInfo ={template:'<div class="arclist"><div class="listInfo"><span>{{$route.params}}</span><span>{{$route.params}}</span><span>{{$route.params.username}}</span></div><div class="listTitle">{{$route.params.username}}</div></div>'}
-        const listInfo ={
+     const listInfo ={
 /*        template: '<div><div class="arclist" v-for="item in items" v-on:click="gotodetail(item.index)"><div class="listInfo"><span>{{item.username}}</span><span>{{item.postdate}}</span><span>{{item.classitem}}</span></div><div class="listTitle">{{item.title}}</div></div></div>',
 */      render:function(createElement){
             return tempModule.contentTemp(createElement,this)
@@ -132,7 +133,7 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
             }
         }
     }; 
-        const content = {
+    const content = {
 /*        template: '<div><div class="artheader"><div class="authImg"><img v-bind:src ="imgurl"></div><div class="authInfo"><div class="name">{{username}}</div><div class="postdate">{{postdate}}</div>'
           +'</div></div><div class="arttitle">{{title}}</div><p class="artcontent">{{content}}</p></div>',*/
         render:function(createElement){
@@ -237,10 +238,58 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
     const router = new VueRouter({
         routes
     })
-    document.querySelector('.off-canvas-launcher').addEventListener('click', function(){
+/*    document.querySelector('.off-canvas-launcher').addEventListener('click', function(){
         console.log("123")
-    });
+    });*/
 
+    const login = new Vue({
+        el:"#login",
+        data:{
+            isActive:false,
+            userInfo:{
+                id:'',
+                psd:''
+            }
+        },
+        methods:{
+            showForm:function(){
+                this.isActive = ! this.isActive;    
+            },
+            userLogin:function(){
+                this.$http({
+                    method:'post',
+                    url:'http://localhost:8089/StockAnalyse/LoginServlet',
+                    params:{"flag":"ajaxlogin","loginName":this.userInfo.id,"loginPwd":this.userInfo.psd}, 
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}, 
+                    credientials:false, 
+                    emulateJSON: true                    
+                }).then(function(response){
+                    sessionStorage.setItem("token",response.data);
+                    this.isActive =false;
+                    document.querySelector("#showInfo").classList.toggle("isLogin");
+                })                 
+            },
+            checkLogin:function(){
+                let token =sessionStorage.getItem('token');
+                console.log("start check:"+token);
+                this.$http({
+                    method:'post',
+                    url:'http://localhost:8089/StockAnalyse/LoginServlet',
+                    params:{"flag":"checklogin","isLogin":true,"token":token}, 
+                //    headers: {"X-Requested-With": "XMLHttpRequest"},
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}, 
+                    headers:{'token':token},                    
+                    credientials:true, 
+                    emulateJSON: true                    
+                }).then(function(response){
+                    console.log("get check:"+response.data);
+                })                 
+            }
+        }
+    });
+    document.querySelector("#test").addEventListener("click",function(){
+        login.checkLogin();
+    })
      var vm = new Vue({
         el:"#linkList",
         data:{
@@ -307,7 +356,8 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
                 credientials:false, 
                 emulateJSON: true                    
             }).then(function(response){
-                console.log("get ajax");
+                console.log("get ajax:"+response.data);
+                sessionStorage.setItem("token",response.data);
             })
          //   this.$http.get('');
         },
