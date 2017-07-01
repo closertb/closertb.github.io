@@ -239,9 +239,9 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
         routes
     })
 /*    document.querySelector('.off-canvas-launcher').addEventListener('click', function(){
-        console.log("123")
-    });*/
-
+        console.log("12345");
+    });
+*/
     const login = new Vue({
         el:"#login",
         data:{
@@ -288,6 +288,7 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
         }
     });
     document.querySelector("#test").addEventListener("click",function(){
+        console.log(123);
         login.checkLogin();
     })
      var vm = new Vue({

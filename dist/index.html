@@ -6,7 +6,7 @@
     <meta name="keywords" content="vue学习，练手项目">
  	<meta name="viewport" content="width=device-width">
 	<meta name="theme-color" content="#ff9900">   
-    <link href="css/common.css" rel="stylesheet">
+  <!--  <link href="css/common.css" rel="stylesheet">-->
     <link href="css/index.css" rel="stylesheet">
     <link type="favicon" rel="shortcut icon" href ="img/icon.jpeg"/>
 </head>
@@ -17,8 +17,8 @@
         <button id="test">test</button>
         <span id="showInfo" class="toRight"><button id="loginEnable">登录</button><label id="welInfo">欢迎你：Dom</label><img id="loginOut" src="img/close.png"/></span>
     </header>
-<!--    <form id="login" class="loginshow" :class="{loginhide:isActive}">-->
-        <form id="login" :class="isActive?'loginshow':'loginhide'" action="" @submit.prevent="userLogin">
+    <form id="login" class="loginhide" :class="{loginshow:isActive}" action="" @submit.prevent="userLogin">
+     <!--   <form id="login" :class="isActive?'loginshow':'loginhide'" action="" @submit.prevent="userLogin">-->
         <fieldset>
             <h3>用户登录</h3>
             <input type="text" class="user-id" v-model="userInfo.id" placeholder="请输入你的用户ID" required="required"/>
@@ -27,23 +27,9 @@
         </fieldset>
     </form>    
  	<main id="api" class="mcontent" @click="hideNav">    
-    <h1 id="itemName" @click="goback">{{activeTag}}
-<!--            <router-link class="defaulthide" v-bind:class="{listActive:(isActive.a===0x01)}" to="">文章列表</router-link>
-            <router-link class="defaulthide" v-bind:class="{listActive:(isActive.a===0x02)}" to="/goback">返回列表</router-link>
-            <router-link class="defaulthide" v-bind:class="{listActive:(isActive.a===0x4)}" to="/bar">更多</router-link>-->
+    <h1 id="itemName" @click="goback" v-text='activeTag'>
     </h1>  
         <router-view></router-view>	
-<!--        <div class="relatedNav">
-            <div>
-                <span>上一篇</span>
-                <span>下一篇</span>
-            </div>
-            <div>
-                 <a>这是上一篇</a>
-                 <a>这是下一篇</a>               
-            </div>
-        </div>-->
-
     </main>
 	<nav  id="linkList" class="navigation-menu">
         <div class="slefInfo">
@@ -62,6 +48,6 @@
 
         <navlist v-bind:item="navlist"></navlist>
 	</nav>   
-    <script type="text/javaScript" data-main="js/app-7f1bca7c17" src="js/main/require.js"></script>
+    <script type="text/javaScript" data-main="js/app-1da68b69e1" src="js/main/require.js"></script>
 </body>
 </html>
