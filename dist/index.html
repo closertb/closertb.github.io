@@ -11,18 +11,17 @@
     <link type="favicon" rel="shortcut icon" href ="img/icon.jpeg"/>
 </head>
 <body>
-
     <header class="flexheader">
 	    <button class="off-canvas-launcher toLeft">Menu</button>
         <button id="test">test</button>
-        <span id="showInfo" class="toRight"><button id="loginEnable">登录</button><label id="welInfo">欢迎你：Dom</label><img id="loginOut" src="img/close.png"/></span>
+        <span id="showInfo" class="toRight"><button id="loginEnable">登录</button><label id="welInfo">欢迎你：<label id='showrName'></label></label><img id="loginOut" src="img/close.png"/></span>
     </header>
     <form id="login" class="loginhide" :class="{loginshow:isActive}" action="" @submit.prevent="userLogin">
      <!--   <form id="login" :class="isActive?'loginshow':'loginhide'" action="" @submit.prevent="userLogin">-->
         <fieldset>
             <h3>用户登录</h3>
-            <input type="text" class="user-id" v-model="userInfo.id" placeholder="请输入你的用户ID" required="required"/>
-            <input type="password" class="user-pwd" v-model="userInfo.psd" placeholder="请输入你的登录密码" required="required"/>
+            <input type="text" class="user-id" v-model="userInfo.userName" placeholder="请输入你的用户ID" required="required"/>
+            <input type="password" class="user-pwd" v-model="userInfo.userPsd" placeholder="请输入你的登录密码" required="required"/>
             <input type="submit" class="login-btn" value="登录"/>
         </fieldset>
     </form>    
@@ -48,6 +47,6 @@
 
         <navlist v-bind:item="navlist"></navlist>
 	</nav>   
-    <script type="text/javaScript" data-main="js/app-1da68b69e1" src="js/main/require.js"></script>
+    <script type="text/javaScript" data-main="js/app-e8d8104b3c" src="js/main/require.js"></script>
 </body>
 </html>

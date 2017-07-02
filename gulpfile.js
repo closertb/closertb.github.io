@@ -1,15 +1,15 @@
-var gulp = require('gulp');
-var reqOptimize =require('gulp-requirejs-optimize');
-var rename = require("gulp-rename");
-var changed = require("gulp-changed");
-var contact =require('gulp-concat');
-var rev =require('gulp-rev');
-var through2 = require('through2');
-var revCollector = require('gulp-rev-collector');
-var clean = require('gulp-clean');
-var runSequence = require('run-sequence');
-var minifyCss = require('gulp-minify-css');
-var webserver = require('gulp-webserver');
+    var gulp = require('gulp'),
+    reqOptimize =require('gulp-requirejs-optimize'),
+    rename = require("gulp-rename"),
+    changed = require("gulp-changed"),
+    contact =require('gulp-concat'),
+    rev =require('gulp-rev'),
+    through2 = require('through2'),
+    revCollector = require('gulp-rev-collector'),
+    clean = require('gulp-clean'),
+    runSequence = require('run-sequence'),
+    minifyCss = require('gulp-minify-css'),
+     webserver = require('gulp-webserver');
 var livereload = require('gulp-livereload');
 var browserSync = require("browser-sync").create();//创建服务 
 /*var flatten = require('gulp-flatten')*/
@@ -30,33 +30,25 @@ function replaceSuffix(data) {
     console.log("replaceSuffix");
     return data.replace(/\.js/gmi, "");
 }
-
+/*将requireJs文件转移到发布目录*/+9-
 gulp.task('revJs',function(){
     gulp.src('js/main/*.js')
     .pipe(gulp.dest('dist/js/main'))
 });
+/*将所有的图片转移到发布目录*/
 gulp.task('revImg',function(){
     gulp.src('img/**/*')
     .pipe(gulp.dest('dist/img'))
 });
+/*将css文件合并压缩转移到发布目录*/
 gulp.task('revCss',function(){  
- //   gulp.src('css/*.css')
      gulp.src('css/*.css')
     .pipe(contact('index.css'))
     .pipe(minifyCss())//{compatibility: 'ie8'}
-  //  .pipe(minifyCss())//{compatibility: 'ie8'}
     .pipe(gulp.dest('dist/css'))
 });
-
-gulp.task('contactCss',function(){  
-    gulp.src('css/*.css')
-    .pipe(contact('index.css'))
-    .pipe(minifyCss())//{compatibility: 'ie8'}
-    .pipe(gulp.dest('dist/css'))
-});
-
-gulp.task('hello', function (cb) {
-	console.log('Hello, fuck World!');
+    /*将主文件依赖管理合并、压缩、重命名、并去掉.js操作，然后转移到发布目录*/ 
+gulp.task('optimizeJS', function (cb) {
     gulp.src('js/app.js')
     .pipe(reqOptimize({
     optimize:"none",
@@ -69,14 +61,12 @@ gulp.task('hello', function (cb) {
     }
     }))
     .pipe(rev())
-/*    .pipe(changed('dist/js/*.js', {hasChanged: changed.compareSha1Digest}))   */
     .pipe(gulp.dest('dist/js'))
     .pipe(rev.manifest({merge:true}))
     .pipe(gulp.dest(""))
     .pipe(modify(replaceSuffix))            //- 去掉.js后缀
     .pipe(gulp.dest(''))       
-    .on('end',cb);
-   // .pipe(browserSync.reload({stream:true}))     
+    .on('end',cb);   
 });
 
 /*//去掉.js后缀，因为requirejs的引用一般都不带后缀
@@ -86,8 +76,8 @@ gulp.task("repSuff",function (cb) {
         .pipe(gulp.dest(''))      
         .on('end', cb);
 });*/
-
-gulp.task("repHome",function (cb) {
+/*由于对app.js重命名加入了md5序列号值，所以需要替换原始index.html中关于app.js的引用*/ 
+gulp.task("updateHtml",function (cb) {
     gulp.src(['rev-manifest.json', 'index.html'])  
         .pipe(revCollector())                   //- 替换为MD5后的文件名
         .pipe(rename("index.html"))
@@ -98,7 +88,6 @@ gulp.task("repHome",function (cb) {
 gulp.task("clean",function () {
     return gulp.src([
         'rev-manifest.json',
-    //    'dist/js/main/*.js',
         'dist/js/*.js',
         'dist/index.html'
     ]).pipe(clean());
@@ -108,27 +97,26 @@ gulp.task("JSreload",function(){
 })
 
 //启动热更新  
- gulp.task('serve', ['clean'], function() {  
+ gulp.task('server', ['clean'], function() {  
     runSequence(       
         "revImg",
         "revCss",
         "revJs",
-        "hello",                  //- 文件合并与md5
+        "optimizeJS",                  //- 文件合并与md5
       //  "repSuff",        //- 替换.js后缀
-        "repHome");      //- 替换index.html文件名
+        "updateHtml");      //- 替换index.html文件名
     browserSync.init({  
         port: 80,  
         server: {  
             baseDir: ['dist']  
         }  
     });  
-/*    gulp.watch('js/app.js', ["JSreload",'hello']);         //监控文件变化，自动更新  */
-//    gulp.watch('dist/js/**', ['reloadHtml']);         //监控文件变化，自动更新 
+  //监控文件变化，自动更新 
     gulp.watch('js/app.js', function(){
             runSequence(
             "JSreload",
-            'hello',           
-            "repHome", 
+            'optimizeJS',           
+            "updateHtml", 
             browserSync.reload     
         );       
     });  
@@ -140,17 +128,13 @@ gulp.task("JSreload",function(){
     });
     gulp.watch('index.html',  function(){
             runSequence(
-            "repHome", 
+            "updateHtml", 
             browserSync.reload    
         );       
-    });
-           //监控文件变化，自动更新 
-  // gulp.watch('src/less/*.less', ['less']);  
-   // gulp.watch('src/*.html', ['html']);  
-  //  gulp.watch('src/images/*.*', ['images']);  
+    }); 
 });
 
-gulp.task('default',['serve']); 
+gulp.task('default',['server']); 
 
 /*gulp.task("startServer",function(){
     gulp.src('dist')

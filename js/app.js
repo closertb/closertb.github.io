@@ -20,18 +20,17 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
     document.querySelector("#loginOut").addEventListener('click',function(){
        // login.showForm();
        document.querySelector("#showInfo").classList.remove("isLogin");
-    });    
-
+    });     
     /*此处设置vue-resource 拦截器，用于设置http请求头*/
     Vue.http.interceptors.push((request,next)=>{
         let token =sessionStorage.getItem("token");
-        console.log("token:"+token);
+      //  console.log("token:"+token);    
 /*        if(token !==null ){
             request.headers.set('AuthKey',token);
         }*/
-        console.log(request.headers)
+     //   console.log(request.headers)
         next((response) => {
-            console.log(response.status)
+         //   console.log(response.status)
             return response
         });
     });
@@ -63,9 +62,9 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
             }]
         }}
     };
-        const Bar = { template: '<div>bar</div>' };
+    const Bar = { template: '<div>bar</div>' };
       //  const detInfo ={template:'<div class="arclist"><div class="listInfo"><span>{{$route.params}}</span><span>{{$route.params}}</span><span>{{$route.params.username}}</span></div><div class="listTitle">{{$route.params.username}}</div></div>'}
-     const listInfo ={
+    const listInfo ={
 /*        template: '<div><div class="arclist" v-for="item in items" v-on:click="gotodetail(item.index)"><div class="listInfo"><span>{{item.username}}</span><span>{{item.postdate}}</span><span>{{item.classitem}}</span></div><div class="listTitle">{{item.title}}</div></div></div>',
 */      render:function(createElement){
             return tempModule.contentTemp(createElement,this)
@@ -103,9 +102,9 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
             }
         },
         beforeRouteEnter(to, from, next){
-            console.log("get data");
+            //console.log("get data");
             next(function(k){
-                console.log("start");
+               // console.log("start");
               //  k.item.username ="denzel funck";
                 k.$http({
                 method:'post',
@@ -205,7 +204,7 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
             }
         },
         created(){
-           console.log("created:"+this.$route.query.arcindex); 
+         //  console.log("created:"+this.$route.query.arcindex); 
            this.fetchDataById();
         //   console.log(this.$route);
         },
@@ -214,81 +213,29 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
             'item':'changeUrl'
         },
         beforeRouteEnter(to, from, next){
-            console.log("beforeRouteEnter");
+           // console.log("beforeRouteEnter");
             next(function(k){
               //  k.item.currentInfo.username ="denzel funck";
                 console.log(k.item);
             });
         },
         beforeRouteUpdate (to, from, next) {
-            console.log("beforeRouteUpdate--queryid:");
+            console.log("beforeRouteUpdate-queryid:");
             next(function(k){
              console.log(k.$route);
             });
 
         }
     };      
-    const routes = [
-    { path: '/foo', component: Bar },
-    { path: '/bar', component: Bar },
-    { path: '/detInfo',name:'detailInfo', component: listInfo },
-    { path: '/conInfo',name:'conInfo', component: content}
-    ];
 
-    const router = new VueRouter({
-        routes
-    })
 /*    document.querySelector('.off-canvas-launcher').addEventListener('click', function(){
         console.log("12345");
     });
 */
-    const login = new Vue({
-        el:"#login",
-        data:{
-            isActive:false,
-            userInfo:{
-                id:'',
-                psd:''
-            }
-        },
-        methods:{
-            showForm:function(){
-                this.isActive = ! this.isActive;    
-            },
-            userLogin:function(){
-                this.$http({
-                    method:'post',
-                    url:'http://localhost:8089/StockAnalyse/LoginServlet',
-                    params:{"flag":"ajaxlogin","loginName":this.userInfo.id,"loginPwd":this.userInfo.psd}, 
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}, 
-                    credientials:false, 
-                    emulateJSON: true                    
-                }).then(function(response){
-                    sessionStorage.setItem("token",response.data);
-                    this.isActive =false;
-                    document.querySelector("#showInfo").classList.toggle("isLogin");
-                })                 
-            },
-            checkLogin:function(){
-                let token =sessionStorage.getItem('token');
-                console.log("start check:"+token);
-                this.$http({
-                    method:'post',
-                    url:'http://localhost:8089/StockAnalyse/LoginServlet',
-                    params:{"flag":"checklogin","isLogin":true,"token":token}, 
-                //    headers: {"X-Requested-With": "XMLHttpRequest"},
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}, 
-                    headers:{'token':token},                    
-                    credientials:true, 
-                    emulateJSON: true                    
-                }).then(function(response){
-                    console.log("get check:"+response.data);
-                })                 
-            }
-        }
-    });
     document.querySelector("#test").addEventListener("click",function(){
         console.log(123);
+        console.log("value:");
+        console.log(login);
         login.checkLogin();
     })
      var vm = new Vue({
@@ -324,13 +271,33 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
                }                            
         }
         }
-     });       
-    var api =new Vue({
+     }); 
+    const routes = [
+    { path: '/foo', component: listInfo },
+    { path: '/detInfo',name:'detailInfo', component: listInfo },
+    { path: '/conInfo',name:'conInfo', component: content}
+    ];
+
+    const router = new VueRouter({
+        routes
+    })
+/*    router.beforeEach((to,from,next)=>{
+        let token =sessionStorage.getItem("token");
+        console.log("check:"+token);
+        next();
+        
+    } ) */
+var api =new Vue({
     router,
     el:"#api",
     data:function(){
         return {activeTag:'文章列表',
         };
+    },
+    wacth:{
+            '$route' (to,from){
+                console.log("fuck you");
+            }
     },
     methods:{
         godie:function(){
@@ -364,5 +331,81 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
         },
         hideNav:resizeWindow.hideNav
     }      
-});           
+});    
+var login = new Vue({
+        el:"#login",
+        data:{
+            isActive:false,
+            userInfo:{
+                userName:'',
+                userPsd:''
+            }
+        },
+        watch:{
+            '$route':'showInfo'
+        },
+        methods:{
+            showForm:function(){
+                this.isActive = !this.isActive;    
+            },
+            showInfo:function(){
+                this.isActive =false;    
+                let token =sessionStorage.getItem('token'); 
+                cosole.log("check:"+token);
+                if(token!==null){
+                    if(this.userInfo.userName===''){
+                        this.$http({
+                            method:'post',
+                            url:'http://localhost:8089/StockAnalyse/LoginServlet',
+                            params:{"flag":"checklogin","token":token}, 
+                        //    headers: {"X-Requested-With": "XMLHttpRequest"},
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'},                   
+                            credientials:false, 
+                            emulateJSON: true                    
+                        }).then(function(response){
+                            console.log("get check:"+response.data);
+                            this.userInfo = response.data;
+                            document.querySelector("#showInfo").classList.toggle("isLogin");
+                            document.querySelector("#showrName").innerHTML("userInfo.userName");                    
+                        })                     
+                    }else{
+                            cosole.log("alreadyLogin:"+userInfo.userNamen);                                            
+                            document.querySelector("#showInfo").classList.toggle("isLogin");
+                            document.querySelector("#showrName").innerHTML(userInfo.userName);                         
+                    }
+                }
+
+            },
+            userLogin:function(){
+                this.$http({
+                    method:'post',
+                    url:'http://localhost:8089/StockAnalyse/LoginServlet',
+                    params:{"flag":"ajaxlogin","loginName":this.userInfo.userName,"loginPwd":this.userInfo.userPsd}, 
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}, 
+                    credientials:false, 
+                    emulateJSON: true                    
+                }).then(function(response){
+                    sessionStorage.setItem("token",response.data);
+                    this.isActive =false;
+                    document.querySelector("#showInfo").classList.toggle("isLogin");
+                })                 
+            },
+            checkLogin:function(){
+                let token =sessionStorage.getItem('token');
+                console.log("start check:"+token);
+                this.$http({
+                    method:'post',
+                    url:'http://localhost:8089/StockAnalyse/LoginServlet',
+                    params:{"flag":"checklogin","isLogin":true,"token":token}, 
+                //    headers: {"X-Requested-With": "XMLHttpRequest"},
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}, 
+                    headers:{'token':token},                    
+                    credientials:true, 
+                    emulateJSON: true                    
+                }).then(function(response){
+                    console.log("get check:"+response.data);
+                })                 
+            }
+        }
+});                      
 })
