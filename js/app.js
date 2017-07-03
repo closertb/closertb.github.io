@@ -11,16 +11,17 @@ requirejs.config({
 //requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRouter,VueResource,tempModule,resizeWindow){
 requirejs(['vueRouter','vueResource','temp','resize'],function(VueRouter,VueResource,tempModule,resizeWindow){
     Vue.use(VueRouter);
-    Vue.use(VueResource);
+    Vue.use(VueResource);  
     window.onresize =resizeWindow.resizeWindow;
-    document.querySelector('.off-canvas-launcher').addEventListener('click', resizeWindow.showNav);  
+    document.querySelector('.off-canvas-launcher').addEventListener('click', resizeWindow.showNav); 
+    document.querySelector('.shadeLayer').addEventListener('click',resizeWindow.hideNav);  
     document.querySelector("#loginEnable").addEventListener('click',function(){
         login.showForm();
     });
     document.querySelector("#loginOut").addEventListener('click',function(){
        document.querySelector("#showInfo").classList.remove("isLogin");
        login.userInfo = "";
-       sessionStorage.removeItem("token");
+       sessionStorage.removeItem("token");  
     });     
     /*此处设置vue-resource 拦截器，用于设置http请求头*/
     Vue.http.interceptors.push((request,next)=>{
@@ -241,7 +242,7 @@ requirejs(['vueRouter','vueResource','temp','resize'],function(VueRouter,VueReso
                }                            
         }
         }
-     }); 
+     });   
     const routes = [
     { path: '/', redirect: '/detInfo' },       
     { path: '/foo', component: listInfo },
@@ -282,10 +283,10 @@ var api =new Vue({
                  this.activeTag="文章列表"          
             }            
         },
-        ajaxTest:function(){
+/*        ajaxTest:function(){
             let user={
-                name:'Dom',
-                id:'123456'
+                name:'',
+                id:''
             };
             console.log("start");
             this.$http({
@@ -300,7 +301,7 @@ var api =new Vue({
                 console.log("get ajax:"+response.data);
                 sessionStorage.setItem("token",response.data);
             })
-        },
+        },*/
         hideNav:resizeWindow.hideNav
     }      
 });    
@@ -314,9 +315,6 @@ var login = new Vue({
                 userPsd:''
             }
         },
-/*    watch:{     
-            '$route':'showInfo'
-    },*/
     created:function(){
         this.showInfo()
     },
@@ -336,7 +334,7 @@ var login = new Vue({
                             method:'post',
                             url:'http://localhost:8089/StockAnalyse/LoginServlet',
                             params:{"flag":"checklogin","token":token}, 
-                        //    headers: {"X-Requested-With": "XMLHttpRequest"},
+                            headers: {"X-Requested-With": "XMLHttpRequest"},
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'},                   
                             credientials:false, 
                             emulateJSON: true                    

@@ -12,16 +12,14 @@ define(function(){
     return {
         showNav:function(event) {
             event.stopPropagation();
-            document.querySelector('body').classList.toggle('OffCanvas-Active');
+            document.querySelector('.shadeLayer').classList.toggle('showItem');
 	    },
         hideNav:function() {
-		//	console.log("propergation");
-                if(document.querySelector('.OffCanvas-Active')){
-                    document.querySelector('body').classList.remove('OffCanvas-Active');
-                }
+           document.querySelector('.shadeLayer').classList.remove('showItem');
 	    },
         resizeWindow:debounce(function() {
-		document.querySelector('body').classList.remove('OffCanvas-Active');
+		//document.querySelector('.shadeLayer').classList.remove('showItem ');
+		console.log("no work to do")
 	}, 250)
     };
 })
