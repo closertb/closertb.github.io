@@ -1,15 +1,15 @@
 requirejs.config({
     paths:{
-        vue:'lib/vue',
+/*
+        vue:'lib/vue',*/
         vueRouter:'lib/vue-router',
         vueResource:'lib/vue-resource',
         temp:'component/template',
         resize:'component/resizeWindow'
     }
 });
-requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRouter,VueResource,tempModule,resizeWindow){
-    //console.log("test:"+tempModule.conTemp());
-  //  console.log(VueRouter);
+//requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRouter,VueResource,tempModule,resizeWindow){
+requirejs(['vueRouter','vueResource','temp','resize'],function(VueRouter,VueResource,tempModule,resizeWindow){
     Vue.use(VueRouter);
     Vue.use(VueResource);
     window.onresize =resizeWindow.resizeWindow;
@@ -18,8 +18,9 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
         login.showForm();
     });
     document.querySelector("#loginOut").addEventListener('click',function(){
-       // login.showForm();
        document.querySelector("#showInfo").classList.remove("isLogin");
+       login.userInfo = "";
+       sessionStorage.removeItem("token");
     });     
     /*此处设置vue-resource 拦截器，用于设置http请求头*/
     Vue.http.interceptors.push((request,next)=>{
@@ -77,27 +78,6 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
                         postdate:'2017年02月20日',
                         itemName:'我的专栏',
                         title:'this is a title'
-                },
-                {
-                        index:13,
-                        username:'Denzel B',
-                        postdate:'2017年02月20日',
-                        itemName:'我的专栏',
-                        title:'this is a title'
-                },
-                {
-                        index:14,
-                        username:'Denzel C',
-                        postdate:'2017年02月20日',
-                        itemName:'我的专栏',
-                        title:'this is a title'
-                },
-                {
-                        index:15,
-                        username:'Denzel D',
-                        postdate:'2017年02月20日',
-                        itemName:'我的专栏',
-                        title:'this is a title'
                 }]
             }
         },
@@ -123,9 +103,7 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
         },
         methods:{
             gotodetail:function(num){
-                console.log("input:"+num);
                 router.push({path: '/coninfo',query:{arcindex:num}});
-                api.activeTag= '返回列表';;
             },
             godie:function(){
                 console.log("i got it");
@@ -167,7 +145,6 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
                 console.log("lastinput:"+num);
                 if(num>0){
                   router.replace({path: '/coninfo',query:{arcindex:num}});
-                  api.activeTag= '返回列表';
                 }else{
                   alert("已经到列表的尽头");
                 }
@@ -175,7 +152,6 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
             },
             changeUrl:function(){
                 let itemId =this.item.currentInfo.itemId;
-                console.log("imgId:"+itemId);
                 switch (itemId) {
                     case 1:
                         this.item.currentInfo.imgurl = 'img/js.png';
@@ -227,17 +203,12 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
 
         }
     };      
-
-/*    document.querySelector('.off-canvas-launcher').addEventListener('click', function(){
-        console.log("12345");
-    });
-*/
-    document.querySelector("#test").addEventListener("click",function(){
+/*    document.querySelector("#test").addEventListener("click",function(){
         console.log(123);
         console.log("value:");
         console.log(login);
         login.checkLogin();
-    })
+    })*/
      var vm = new Vue({
         el:"#linkList",
         data:{
@@ -261,7 +232,6 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
                    router.push({path: '/foo'});                                    
                }
                if(msg==='list'){
-                   api.activeTag= '返回列表';
                    console.log("got it:"+14) 
                    router.push({path: '/coninfo',query:{arcindex:14}});                                    
                } 
@@ -273,6 +243,7 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
         }
      }); 
     const routes = [
+    { path: '/', redirect: '/detInfo' },       
     { path: '/foo', component: listInfo },
     { path: '/detInfo',name:'detailInfo', component: listInfo },
     { path: '/conInfo',name:'conInfo', component: content}
@@ -281,33 +252,35 @@ requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRout
     const router = new VueRouter({
         routes
     })
-/*    router.beforeEach((to,from,next)=>{
-        let token =sessionStorage.getItem("token");
-        console.log("check:"+token);
-        next();
-        
-    } ) */
 var api =new Vue({
     router,
     el:"#api",
-    data:function(){
-        return {activeTag:'文章列表',
-        };
+    data:{
+        activeTag:''
     },
-    wacth:{
-            '$route' (to,from){
-                console.log("fuck you");
-            }
+    created:function(){
+        this.setTagName();
     },
-    methods:{
-        godie:function(){
-            console.log("fuck you ");
-        },
+    watch:{     
+        '$route':'setTagName'
+    },    
+    methods:{     
         goback:function(event){
             event.stopPropagation();
-            if(this.$data.activeTag==="返回列表"){
+            if(this.activeTag==="返回列表"){
                 router.go(-1);
             }
+        },
+        setTagName:function(){
+            let path = this.$route.name;
+            const con_exc =/^conInfo/;
+            const list_exc =/^detail/;
+            if(con_exc.test(path)){ 
+                 this.activeTag="返回列表"        
+            }
+            if(list_exc.test(path)){
+                 this.activeTag="文章列表"          
+            }            
         },
         ajaxTest:function(){
             let user={
@@ -327,13 +300,13 @@ var api =new Vue({
                 console.log("get ajax:"+response.data);
                 sessionStorage.setItem("token",response.data);
             })
-         //   this.$http.get('');
         },
         hideNav:resizeWindow.hideNav
     }      
 });    
 var login = new Vue({
-        el:"#login",
+    el:"#login",
+    router,        
         data:{
             isActive:false,
             userInfo:{
@@ -341,17 +314,22 @@ var login = new Vue({
                 userPsd:''
             }
         },
-        watch:{
+/*    watch:{     
             '$route':'showInfo'
-        },
-        methods:{
+    },*/
+    created:function(){
+        this.showInfo()
+    },
+    methods:{
+            handle:function(curVal,oldVal){
+    　　　　　　　console.log(curVal,'are old and the new are:',oldVal)
+    　　　　 } ,   
             showForm:function(){
                 this.isActive = !this.isActive;    
             },
             showInfo:function(){
                 this.isActive =false;    
                 let token =sessionStorage.getItem('token'); 
-                cosole.log("check:"+token);
                 if(token!==null){
                     if(this.userInfo.userName===''){
                         this.$http({
@@ -363,18 +341,16 @@ var login = new Vue({
                             credientials:false, 
                             emulateJSON: true                    
                         }).then(function(response){
-                            console.log("get check:"+response.data);
                             this.userInfo = response.data;
                             document.querySelector("#showInfo").classList.toggle("isLogin");
-                            document.querySelector("#showrName").innerHTML("userInfo.userName");                    
+                            document.querySelector("#showrName").innerHTML=this.userInfo.userName;                    
                         })                     
                     }else{
-                            cosole.log("alreadyLogin:"+userInfo.userNamen);                                            
+                            console.log("alreadyLogin:");                                            
                             document.querySelector("#showInfo").classList.toggle("isLogin");
-                            document.querySelector("#showrName").innerHTML(userInfo.userName);                         
+                            document.querySelector("#showrName").innerHTML=this.userInfo.userName;                         
                     }
                 }
-
             },
             userLogin:function(){
                 this.$http({
@@ -388,6 +364,7 @@ var login = new Vue({
                     sessionStorage.setItem("token",response.data);
                     this.isActive =false;
                     document.querySelector("#showInfo").classList.toggle("isLogin");
+                    document.querySelector("#showrName").innerHTML=this.userInfo.userName;
                 })                 
             },
             checkLogin:function(){

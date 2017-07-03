@@ -3,7 +3,7 @@
 
 #itemName{font-size:1.25rem;padding-left:1.5rem;}
 
-article{padding:1rem 2rem;border-top: 1px solid rgb(238, 238, 238);}
+article{padding:.5rem 2rem;border-top: 1px solid rgb(238, 238, 238);}
 
 /*这里定义模板显示文章列表时的样式*/
 .arclist {margin-top:.5rem;padding-top:.5rem;border-top: 1px solid rgb(238, 238, 238);}
