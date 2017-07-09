@@ -3,39 +3,48 @@ requirejs.config({
 /*
         vue:'lib/vue',*/
         vueRouter:'lib/vue-router',
-        vueResource:'lib/vue-resource',
         temp:'component/template',
         resize:'component/resizeWindow'
     }
 });
 //requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRouter,VueResource,tempModule,resizeWindow){
-requirejs(['vueRouter','vueResource','temp','resize'],function(VueRouter,VueResource,tempModule,resizeWindow){
-    Vue.use(VueRouter);
-    Vue.use(VueResource);  
+requirejs(['vueRouter','temp','resize'],function(VueRouter,tempModule,resizeWindow){
+    Vue.use(VueRouter); 
     window.onresize =resizeWindow.resizeWindow;
     document.querySelector('.off-canvas-launcher').addEventListener('click', resizeWindow.showNav); 
     document.querySelector('.shadeLayer').addEventListener('click',resizeWindow.hideNav);  
     document.querySelector("#loginEnable").addEventListener('click',function(){
         login.showForm();
     });
+    /*fetch请求配置项参数初始化*/
+    /*为解决fetch请求时，设置Content-Type为application/json时,后台采用
+    getPrameters获取不到参数,所以在发送前，手动将js对象转换为名值对格式，即
+    application/x-www-form-urlencoded格式，然后在传给body*/
+    function fetchInitOption(json){
+        let res=new Array();
+        for(let item in json){
+            res.push(item+'='+json[item])
+        }
+        return {
+            method:'post',
+            mode:'cors',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body:res.join('&')            
+        };                   
+    }        
     document.querySelector("#loginOut").addEventListener('click',function(){
        document.querySelector("#showInfo").classList.remove("isLogin");
-       login.userInfo = "";
        sessionStorage.removeItem("token");  
     });     
     /*此处设置vue-resource 拦截器，用于设置http请求头*/
-    Vue.http.interceptors.push((request,next)=>{
+/*    Vue.http.interceptors.push((request,next)=>{
         let token =sessionStorage.getItem("token");
-      //  console.log("token:"+token);    
-/*        if(token !==null ){
-            request.headers.set('AuthKey',token);
-        }*/
-     //   console.log(request.headers)
         next((response) => {
-         //   console.log(response.status)
             return response
         });
-    });
+    });*/
     
     Vue.component('navlist',{
     render:function(createElement){
@@ -85,22 +94,17 @@ requirejs(['vueRouter','vueResource','temp','resize'],function(VueRouter,VueReso
         beforeRouteEnter(to, from, next){
             //console.log("get data");
             next(function(k){
-               // console.log("start");
-              //  k.item.username ="denzel funck";
-                k.$http({
-                method:'post',
-                url:'http://localhost:8089/StockAnalyse/BlogServlet',
-                params:{"flag":"getList"}, 
-                headers: {"X-Requested-With": "XMLHttpRequest"},
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}, 
-                credientials:false, 
-                emulateJSON: true                    
-            }).then(function(response){
-            //    console.log(response.data);
-                k.items = response.data;
-            })                
-              //  console.log(k);
-            });
+fetch('http://localhost:8089/StockAnalyse/BlogServlet', fetchInitOption({flag:"getList"}))
+.then(function(response){
+    if(response.ok){
+            return response.json();
+    } else {
+        console.error('服务器繁忙，请稍后再试；\r\nCode:' + response.status)
+    }
+}).then(function(data){
+    k.items =data;
+})                
+});
         },
         methods:{
             gotodetail:function(num){
@@ -139,8 +143,8 @@ requirejs(['vueRouter','vueResource','temp','resize'],function(VueRouter,VueReso
                         index:'14'
                     }
                 }
-             }};
-        },
+             }
+        }},
         methods:{
             gotodetail:function(num){
                 console.log("lastinput:"+num);
@@ -167,7 +171,8 @@ requirejs(['vueRouter','vueResource','temp','resize'],function(VueRouter,VueReso
             },
             fetchDataById:function(){
               let indexId = this.$route.query.arcindex;
-              this.$http({
+              let that = this;
+/*              this.$http({
                 method:'post',
                 url:'http://localhost:8089/StockAnalyse/BlogServlet',
                 params:{"flag":"getContentById","queryId":indexId}, 
@@ -175,8 +180,18 @@ requirejs(['vueRouter','vueResource','temp','resize'],function(VueRouter,VueReso
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}, 
                 credientials:false, 
                 emulateJSON: true                    
-            }).then(function(response){
-                this.item = response.data;
+            })*/
+            fetch('http://localhost:8089/StockAnalyse/BlogServlet', fetchInitOption({flag:"getContentById",queryId:indexId}))            
+            .then(function(response){
+                console.log('callback');
+                if(response.ok){
+                    return response.json();
+                } else {
+                    console.error('服务器繁忙，请稍后再试；\r\nCode:' + response.status)
+                }
+            }).then(function(data){
+               that.item =data;
+               that = null;
             })  
             }
         },
@@ -283,38 +298,21 @@ var api =new Vue({
                  this.activeTag="文章列表"          
             }            
         },
-/*        ajaxTest:function(){
-            let user={
-                name:'',
-                id:''
-            };
-            console.log("start");
-            this.$http({
-                method:'post',
-                url:'http://localhost:8089/StockAnalyse/LoginServlet',
-                params:{"flag":"ajaxlogin","loginName":user.name,"loginPwd":user.id}, 
-                headers: {"X-Requested-With": "XMLHttpRequest"},
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}, 
-                credientials:false, 
-                emulateJSON: true                    
-            }).then(function(response){
-                console.log("get ajax:"+response.data);
-                sessionStorage.setItem("token",response.data);
-            })
-        },*/
         hideNav:resizeWindow.hideNav
     }      
 });    
 var login = new Vue({
     el:"#login",
     router,        
-        data:{
+    data:function(){
+        return{
             isActive:false,
             userInfo:{
                 userName:'',
                 userPsd:''
             }
-        },
+        }
+    },
     created:function(){
         this.showInfo()
     },
@@ -326,59 +324,69 @@ var login = new Vue({
                 this.isActive = !this.isActive;    
             },
             showInfo:function(){
-                this.isActive =false;    
+                this.isActive =false; 
+                let that = this;   
                 let token =sessionStorage.getItem('token'); 
-                if(token!==null){
+                if(token!==null && token!=='undefined'){
                     if(this.userInfo.userName===''){
-                        this.$http({
-                            method:'post',
-                            url:'http://localhost:8089/StockAnalyse/LoginServlet',
-                            params:{"flag":"checklogin","token":token}, 
-                            headers: {"X-Requested-With": "XMLHttpRequest"},
-                            headers: {'Content-Type': 'application/x-www-form-urlencoded'},                   
-                            credientials:false, 
-                            emulateJSON: true                    
-                        }).then(function(response){
-                            this.userInfo = response.data;
+                        fetch('http://localhost:8089/StockAnalyse/LoginServlet', fetchInitOption({flag:"checklogin",token:token}))
+                        .then(function(response){
+                            if(response.ok){
+                                return response.json();
+                            } else {
+                                console.error('服务器繁忙，请稍后再试；\r\nCode:' + response.status)
+                            } 
+                        }).then(function(data){
+                            console.log(data);
+                            that.userInfo = data;
                             document.querySelector("#showInfo").classList.toggle("isLogin");
-                            document.querySelector("#showrName").innerHTML=this.userInfo.userName;                    
-                        })                     
+                            document.querySelector("#showrName").innerHTML=that.userInfo.userName;                 
+                            that =null;
+                        });                      
                     }else{
                             console.log("alreadyLogin:");                                            
                             document.querySelector("#showInfo").classList.toggle("isLogin");
-                            document.querySelector("#showrName").innerHTML=this.userInfo.userName;                         
+                            document.querySelector("#showrName").innerHTML=that.userInfo.userName;
+                            that =null;                         
                     }
                 }
             },
-            userLogin:function(){
-                this.$http({
-                    method:'post',
-                    url:'http://localhost:8089/StockAnalyse/LoginServlet',
-                    params:{"flag":"ajaxlogin","loginName":this.userInfo.userName,"loginPwd":this.userInfo.userPsd}, 
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}, 
-                    credientials:false, 
-                    emulateJSON: true                    
+/*            userLogin:function(){
+                let that = this;
+                let requestdata = JSON.stringify({flag:"ajaxlogin",loginName:this.userInfo.userName,loginPwd:this.userInfo.userPsd});
+                fetch('http://localhost:8089/StockAnalyse/LoginServlet?flag=ajaxlogin&loginName='+this.userInfo.userName+'&loginPwd='+this.userInfo.userPsd,{
+                    mode:'cors'                          
                 }).then(function(response){
-                    sessionStorage.setItem("token",response.data);
-                    this.isActive =false;
+                    if(response.ok) {
+                      return response.text();
+                    } else {
+                      console.error('服务器繁忙，请稍后再试；\r\nCode:' + response.status)
+                    }                   
+                }).then(function(data){
+                    console.log('fixed',data)
+                    sessionStorage.setItem("token",data);
+                    that.isActive =false;
                     document.querySelector("#showInfo").classList.toggle("isLogin");
-                    document.querySelector("#showrName").innerHTML=this.userInfo.userName;
+                    document.querySelector("#showrName").innerHTML=that.userInfo.userName;
+                    that = null;
                 })                 
-            },
-            checkLogin:function(){
-                let token =sessionStorage.getItem('token');
-                console.log("start check:"+token);
-                this.$http({
-                    method:'post',
-                    url:'http://localhost:8089/StockAnalyse/LoginServlet',
-                    params:{"flag":"checklogin","isLogin":true,"token":token}, 
-                //    headers: {"X-Requested-With": "XMLHttpRequest"},
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}, 
-                    headers:{'token':token},                    
-                    credientials:true, 
-                    emulateJSON: true                    
-                }).then(function(response){
-                    console.log("get check:"+response.data);
+            },*/
+            userLogin:function(){
+                let that = this;
+                fetch('http://localhost:8089/StockAnalyse/LoginServlet', fetchInitOption({flag:"ajaxlogin",loginName:this.userInfo.userName,loginPwd:this.userInfo.userPsd})
+                ).then(function(response){
+                    if(response.ok) {
+                      return response.text();
+                    } else {
+                      console.error('服务器繁忙，请稍后再试；\r\nCode:' + response.status)
+                    }                   
+                }).then(function(data){
+                    console.log('fixed',data)
+                    sessionStorage.setItem("token",data);
+                    that.isActive =false;
+                    document.querySelector("#showInfo").classList.toggle("isLogin");
+                    document.querySelector("#showrName").innerHTML=that.userInfo.userName;
+                    that = null;
                 })                 
             }
         }
