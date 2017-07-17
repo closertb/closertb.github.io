@@ -6,6 +6,9 @@
     <meta name="keywords" content="vue学习，练手项目">
  	<meta name="viewport" content="width=device-width">
 	<meta name="theme-color" content="#ff9900">   
+<!--    <meta http-equiv="expires" content="0">
+    <meta http-equiv="pragma" content="no-cache">-->
+    <meta http-equiv="cache-control" content="max-age">   
   <!--  <link href="css/common.css" rel="stylesheet">-->
     <link href="css/index.css" rel="stylesheet">
     <link type="favicon" rel="shortcut icon" href ="img/icon.jpeg"/>
@@ -28,7 +31,20 @@
     <h1 id="itemName" @click="goback" v-text='activeTag'>
     </h1>   
         <router-view></router-view>	
+<!--     <div id="markdown">
+        <editor></editor>
+    </div>  -->           
+
+    </div>
+
+    
     </main>
+<!--    <div id="markdown"  class="mcontent">
+            <textarea id="text-input" oninput="this.editor.update()"
+              rows="6" cols="60">Type **Markdown** here.</textarea>
+            <div id="preview"> </div>
+    </div>  -->
+
     <aside class="shadeLayer"></aside>
 	<nav  id="linkList" class="navigation-menu">
         <div class="slefInfo">
@@ -47,7 +63,9 @@
 
         <navlist v-bind:item="navlist"></navlist>
 	</nav>
-    <script type="text/javaScript" src="js/main/vue.js"></script>  
-    <script type="text/javaScript" data-main="js/app-af8d307117" src="js/main/require.js"></script>
+    <script type="text/javaScript" src="js/main/vue.js"></script>
+   <!--  <script type="text/javaScript" src="js/main/markdown.js"></script>  --> 
+   <!--  <script type="text/javaScript" src="js/main/marked.js"></script>   -->   
+    <script type="text/javaScript" data-main="js/app-662dddcc09" src="js/main/require.js"></script>
 </body>
 </html>

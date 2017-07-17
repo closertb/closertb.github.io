@@ -3,8 +3,7 @@
 
 #itemName{font-size:1.25rem;padding-left:1.5rem;}
 
-article{padding:.5rem 2rem;border-top: 1px solid rgb(238, 238, 238);}
-
+article{border-top: 1px solid rgb(238, 238, 238);width:90%;max-width: 900px;margin:1rem auto;}
 /*这里定义模板显示文章列表时的样式*/
 .arclist {margin-top:.5rem;padding-top:.5rem;border-top: 1px solid rgb(238, 238, 238);}
 .arclist:hover{background: #ddd;}
@@ -18,11 +17,27 @@ article{padding:.5rem 2rem;border-top: 1px solid rgb(238, 238, 238);}
 .authInfo {width:60%;margin-left:.3rem;padding:.3rem;text-align: left;}
 .authInfo div:first-child{font-size: 1.1rem;font-weight:500 ;}
 .authInfo div:last-child {font-size: 0.8rem;margin-top:.3rem}
-.arttitle {font-size: 1.4rem;margin-left:0.3rem;font-weight:600 ;border-top: 1px solid rgb(238, 238, 238);}
-.artcontent{background:rgb(248, 248, 248);margin-top:1rem; text-indent:2rem;}
+.arttitle {font-size: 2rem;margin-left:.3rem;padding:0.5rem 1rem;font-weight:600 ;overflow:hidden;  border-top: 1px solid rgb(238, 238, 238);}
+.artcontent{background:rgb(248, 248, 248);padding:.5rem 2rem;}
+.artcontent ul,.artcontent li{overflow:visible ;margin:5px 10px;}
+.artcontent a {color:blue;text-decoration: none;cursor: pointer;}
+.artcontent strong {font-size:1.2rem;display: block; margin: 1rem 0;}
+.artcontent code {display:inline-block;margin:1rem 1rem;background: #f2f2f2;font-size: .9rem;width:95%;max-height:16rem;overflow:auto; }
 /*这里定义模板详情页下方上下篇导航时的样式*/
 .relatedNav{padding:.3rem .1rem;border-top: 1px solid rgb(238, 238, 238); }
 .relatedNav div{display: flex;height:1.4rem;justify-content: space-between;color:rgba(88, 85, 88, 0.57);font-size:1rem }
 .relatedNav div+div{ margin-top:.3rem;}
 .relatedNav a {color:rgba(88, 85, 88, 0.57);font-size: .9rem;transition: all .5s; }
 .relatedNav a:hover{color:black;font-size: 1rem; }
+
+.editorBox {border: 2px solid rgb(238, 238, 238);} 
+.editorBox li {display: inline-block;margin:1px 2px;padding:1px;height:auto;}
+.tagImg {cursor:pointer;display:block;width:20px;height: 20px;background-repeat: no-repeat;background-size: 380px 60px;
+background-image: url(../img/editor@2x.png);background-position:0 0;text-indent: 110%;white-space: nowrap;overflow: hidden; }
+.editorBox a:hover {background-position-y:-40px; color:red; border-color: #f6f6f6;background-color: #f6f6f6;}
+.contentBox {display: flex;}
+.contentBox textarea {display:block;width: 50%;font-size: 1rem;}
+/*.contentBox div+div {}*/
+.contentBox>div{width: 50%;border:1px solid #ccc;border-left: 0;min-height:350px;max-height:450px;overflow: auto;padding:0 .5rem;font-size: 16px;outline: none;}
+/*.editDiv{
+}*/

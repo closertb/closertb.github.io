@@ -7,9 +7,10 @@
     through2 = require('through2'),
     revCollector = require('gulp-rev-collector'),
     clean = require('gulp-clean'),
+    uglify = require('gulp-uglify'),
     runSequence = require('run-sequence'),
     minifyCss = require('gulp-minify-css'),
-     webserver = require('gulp-webserver');
+    webserver = require('gulp-webserver');
 var livereload = require('gulp-livereload');
 var browserSync = require("browser-sync").create();//创建服务 
 /*var flatten = require('gulp-flatten')*/
@@ -33,6 +34,7 @@ function replaceSuffix(data) {
 /*将requireJs文件转移到发布目录*/+9-
 gulp.task('revJs',function(){
     gulp.src('js/main/*.js')
+    .pipe(uglify())
     .pipe(gulp.dest('dist/js/main'))
 });
 /*将所有的图片转移到发布目录*/
@@ -53,9 +55,9 @@ gulp.task('optimizeJS', function (cb) {
     .pipe(reqOptimize({
     optimize:"none",
     paths:{
-        vue:'lib/vue',
         vueRouter:'lib/vue-router',
-        vueResource:'lib/vue-resource',
+        marked:'component/marked.js',
+        editor:'component/editor',
         temp:'component/template',
         resize:'component/resizeWindow'
     }
@@ -97,13 +99,12 @@ gulp.task("JSreload",function(){
 })
 
 //启动热更新  
- gulp.task('server', ['clean'], function() {  
+ gulp.task('default', ['clean'], function() {  
     runSequence(       
         "revImg",
         "revCss",
         "revJs",
         "optimizeJS",                  //- 文件合并与md5
-      //  "repSuff",        //- 替换.js后缀
         "updateHtml");      //- 替换index.html文件名
     browserSync.init({  
         port: 80,  
@@ -134,9 +135,9 @@ gulp.task("JSreload",function(){
     }); 
 });
 
-gulp.task('default',['server']); 
+//gulp.task('default',['server']); 
 
-/*gulp.task("startServer",function(){
+gulp.task("startServer",function(){
     gulp.src('dist')
     .pipe(webserver({
         port:80,
@@ -149,19 +150,17 @@ gulp.task('default',['server']);
     }))
 });
 
-gulp.task('default', function(callback) {
+/*gulp.task('default', function(callback) {
     runSequence(
-        "clean",                //- 上一次构建的结果清空
+        "clean",                //- 上一次构建的结果清空   
         "revImg",
         "revCss",
         "revJs",
-        "hello",                  //- 文件合并与md5
-        "repSuff",        //- 替换.js后缀
-        "repHome",      //- 首页路径替换为md5后的路径
+        "optimizeJS",                  //- 文件合并与md5
+        "updateHtml",
         "startServer",
         callback);
-});
-*/
+});*/
 /*gulp.task('hot',function(){
     livereload.listen();
     gulp.watch('js/.js',function(event){
