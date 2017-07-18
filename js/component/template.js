@@ -54,10 +54,32 @@ return {
                 attrs:{
                     "class":'authInfo'
                 }               
-             },infoarr.map(function(key){
-                 return createElement('div',{domProps:{innerHTML:key}});
-             }));
+             },[
+                 createElement('div',[
+                     createElement('span',{
+                    domProps:{innerHTML:info.username}
+                    }),
+                    createElement('span',{
+                    attrs:{
+                        id:"editContent"
+                    },
+                    domProps:{
+                            innerHTML:'编辑'
+                    },
+                    on:{
+                        click:function(){
+                            vm.editContent(info.index);
+                        }
+                    } 
+                    })
+             ]),
+                createElement('div',{
+                 domProps:{innerHTML:info.postdate}
+             }),]);
             }
+/*             infoarr.map(function(key){
+                 return createElement('div',{domProps:{innerHTML:key}});
+             }) */
             return createElement('div',{
             attrs:{
                 "class":'artheader'

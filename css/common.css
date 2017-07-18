@@ -116,21 +116,17 @@ body,div,p,ul,li,header,form,fieldset{
 		left: 0;
 		transition: left .35s
 	}
-	/*if the browser supports transforms, reset the left property and pull it off screen with a translate */
 	 .csstransforms .navigation-menu {
 		left: auto;
 		transform: translateX(-200px);
 	}
-	/*when transforms are supported and the menu button is clicked, reset the nav to default position*/
 	 .csstransforms .OffCanvas-Active .navigation-menu {
 		transform: translateX(0);
 	}
-	/*where transform3d is supported reset left and pull off screen with a translate3d instead*/
 	 .csstransforms3d .navigation-menu {
 		left: auto;
 		transform: translate3d(-200px, 0, 0);
 	}
-	/*when transform3d is supported and the menu button is clicked, reset the nav to default position*/
 	 .csstransforms3d .OffCanvas-Active .navigation-menu {
 		transform: translate3d(0, 0, 0);
 	}

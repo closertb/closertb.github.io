@@ -27,24 +27,12 @@
             <input type="submit" class="login-btn" value="登录"/>
         </fieldset>
     </form>    
- 	<main id="api" class="mcontent" @click="hideNav">    
+ 	<main id="api" class="mcontent">    
     <h1 id="itemName" @click="goback" v-text='activeTag'>
     </h1>   
         <router-view></router-view>	
-<!--     <div id="markdown">
-        <editor></editor>
-    </div>  -->           
-
     </div>
-
-    
     </main>
-<!--    <div id="markdown"  class="mcontent">
-            <textarea id="text-input" oninput="this.editor.update()"
-              rows="6" cols="60">Type **Markdown** here.</textarea>
-            <div id="preview"> </div>
-    </div>  -->
-
     <aside class="shadeLayer"></aside>
 	<nav  id="linkList" class="navigation-menu">
         <div class="slefInfo">
@@ -63,9 +51,9 @@
 
         <navlist v-bind:item="navlist"></navlist>
 	</nav>
-    <script type="text/javaScript" src="js/main/vue.js"></script>
-   <!--  <script type="text/javaScript" src="js/main/markdown.js"></script>  --> 
-   <!--  <script type="text/javaScript" src="js/main/marked.js"></script>   -->   
-    <script type="text/javaScript" data-main="js/app" src="js/main/require.js"></script>
+   <!--  <script type="text/javaScript" src="js/main/vue.js"></script> -->
+   <!--  <script type="text/javaScript" data-main="js/app" src="js/main/require.js"></script> -->
+    <script type="text/javaScript" src="https://cdn.bootcss.com/vue/2.4.1/vue.min.js"></script> 
+    <script type="text/javaScript" data-main="js/app" src=" https://cdn.bootcss.com/require.js/2.3.3/require.min.js"></script>  
 </body>
 </html>

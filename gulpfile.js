@@ -103,7 +103,7 @@ gulp.task("JSreload",function(){
     runSequence(       
         "revImg",
         "revCss",
-        "revJs",
+      //  "revJs",
         "optimizeJS",                  //- 文件合并与md5
         "updateHtml");      //- 替换index.html文件名
     browserSync.init({  

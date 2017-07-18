@@ -1,20 +1,17 @@
 requirejs.config({
     paths:{
-/*  
-        vue:'lib/vue',*/  
         vueRouter:'lib/vue-router',    
         editor:'component/editor',    
         temp:'component/template',         
         resize:'component/resizeWindow'               
     }         
 });
-//requirejs(['vue','vueRouter','vueResource','temp','resize'],function(Vue,VueRouter,VueResource,tempModule,resizeWindow){
-requirejs(['vueRouter','temp','resize','editor'],function(VueRouter,tempModule,resizeWindow,editor){
-    //Vue.use(VueRouter);    
+requirejs(['vueRouter','temp','resize','editor'],function(VueRouter,tempModule,resizeWindow,editor){   
     const reqUrl ='http://localhost:8089/StockAnalyse';   
+    // const reqUrl ='/myBlog';  
     window.onresize =resizeWindow.resizeWindow;   
     document.querySelector('.off-canvas-launcher').addEventListener('click', resizeWindow.showNav); 
-    document.querySelector('.shadeLayer').addEventListener('click',resizeWindow.hideNav);  
+    document.querySelector('aside.shadeLayer').addEventListener('click',resizeWindow.hideNav);  
     document.querySelector("#loginEnable").addEventListener('click',function(){
         login.showForm();         
     });         
@@ -22,18 +19,25 @@ requirejs(['vueRouter','temp','resize','editor'],function(VueRouter,tempModule,r
     /*为解决fetch请求时，设置Content-Type为application/json时,后台采用
     getPrameters获取不到参数,所以在发送前，手动将js对象转换为名值对格式，即
     application/x-www-form-urlencoded格式，然后在传给body*/
-    function fetchInitOption(json){ 
-        let res=new Array();      
-        for(let item in json){          
-            res.push(item+'='+json[item])    
-        }  
-        return { 
+    function fetchInitOption(json){
+        let sendData; 
+        if(json instanceof Object) {
+            let res=new Array(); 
+            for(let item in json){          
+                res.push(item+'='+json[item])    
+            }  
+            sendData =res.join('&') ;        
+        }else{
+            sendData = json ;
+        }
+        console.log('callback:'+sendData); 
+        return {  
             method:'post',
             mode:'cors', 
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body:res.join('&')            
+            body:sendData           
         };                   
     }        
     document.querySelector("#loginOut").addEventListener('click',function(){
@@ -47,10 +51,10 @@ requirejs(['vueRouter','temp','resize','editor'],function(VueRouter,tempModule,r
             return response
         }); 
     });*/ 
-    Vue.component('editor',{   
+/*     Vue.component('editor',{   
         render:function(createElement){
             return editor.component(createElement);}   
-    });  
+    });   */
       
     Vue.component('navlist',{    
     render:function(createElement){  
@@ -63,19 +67,87 @@ requirejs(['vueRouter','temp','resize','editor'],function(VueRouter,tempModule,r
         return tempModule.countTemp(createElement,this.item);
     },
     props:['item']               
-    });    
-
-    const Bar = { template: '<div>bar</div>' };
+    });          
+    /*注册markdown编辑器组件*/
     const markdownEditor = {
         render:function(createElement){
-                    return editor.component(createElement);
+                    return editor.component(createElement,this);
                 },
          data: function() {
              return {
-                 content:'nothing'
+                 arcticle:{  
+                        index:0,
+                        title:'', 
+                        itemName:'',
+                        itemId:3,
+                        tags:'',
+                        content:''
+                }
              }
-         }       
+         },
+        methods:{
+            fetchDataById:function(indexId,that){
+                fetch(reqUrl+'/BlogServlet', fetchInitOption({flag:"getEditContent",queryId:indexId}))            
+                .then(function(response){
+                    console.log('callback');
+                    if(response.ok){
+                        return response.json();
+                    } else {
+                        console.error('服务器繁忙，请稍后再试；\r\nCode:' + response.status)
+                    }  
+                }).then(function(data){
+                that.arcticle =data;
+                that.arcticle.content = editor.toOrigin(that.arcticle.content);
+                that = null;
+                })  
+            },
+            tokenTest:function(){
+                let token =sessionStorage.getItem('token');
+                console.log('token:',token)
+                fetch(reqUrl+'/BlogServlet',fetchInitOption({flag:'test',token:token})).then(
+                    function(response){
+                        if(response.ok){
+                            console.log('token:');
+                        }
+                    }
+                )
+            },
+            editContent:function(data){
+                let token =sessionStorage.getItem('token');
+                console.log('token:',token)
+                if(token===null){
+                    alert("请先登录");
+                    return ;
+                }
+                if(token.length<10){
+                    alert("请确保你已正确登录");
+                    return ;                   
+                }
+                data = data + "&token ="+token;
+                    fetch(reqUrl+'/BlogServlet',fetchInitOption(data))
+                    .then(function(response){
+                        if(response.ok){
+                            return response.text();
+                        }else{
+                            console.log('网络错误，请稍后再试');
+                        }
+                    }).then(function(data){
+                        console.log('index',data);
+                        router.push({path: '/coninfo',query:{arcindex:data}})
+                    })
+            }
+        },
+        beforeRouteEnter(to, from, next){
+            next(function(k){
+                let query = k.$route.query
+                console.log(query.hasOwnProperty('arcindex'))
+                if(query.hasOwnProperty('arcindex')){
+                  k.fetchDataById(query.arcindex,k);
+                }
+            });
+        }       
     }
+    /*注册列表视图组件*/    
     const listInfo ={
        render:function(createElement){
             return tempModule.contentTemp(createElement,this)
@@ -83,28 +155,27 @@ requirejs(['vueRouter','temp','resize','editor'],function(VueRouter,tempModule,r
         data: function() {  
             return {    
                 items: [{  
-                        index:10,
-                        username:'Denzel A',
-                        postdate:'2017年02月20日',
-                        itemName:'我的专栏',
-                        title:'this is a title'
+                        index:0,
+                        username:' ',
+                        postdate:' ',
+                        itemName:' ',
+                        title:' '
                 }]
             }    
         },
         beforeRouteEnter(to, from, next){
-            //console.log("get data");
-         next(function(k){
+         next(function(k){  
             fetch(reqUrl+'/BlogServlet', fetchInitOption({flag:"getList"}))
             .then(function(response){
-                if(response.ok){
-                        return response.json();
-                } else {
-                    console.error('服务器繁忙，请稍后再试；\r\nCode:' + response.status)
-                }
-            }).then(function(data){
-                k.items =data;
-            })                
-});
+                    if(response.ok){
+                            return response.json();
+                    } else {
+                        console.error('服务器繁忙，请稍后再试；\r\nCode:' + response.status)
+                    }
+                }).then(function(data){
+                    k.items =data;
+                })                
+            });
         },
         methods:{
             gotodetail:function(num){
@@ -115,9 +186,8 @@ requirejs(['vueRouter','temp','resize','editor'],function(VueRouter,tempModule,r
             }
         }
     }; 
+    /*注册文章详情页视图组件*/
     const content = {
-/*        template: '<div><div class="artheader"><div class="authImg"><img v-bind:src ="imgurl"></div><div class="authInfo"><div class="name">{{username}}</div><div class="postdate">{{postdate}}</div>'
-          +'</div></div><div class="arttitle">{{title}}</div><p class="artcontent">{{content}}</p></div>',*/
         render:function(createElement){
             return tempModule.detailTemp(createElement,this)
         },
@@ -125,22 +195,23 @@ requirejs(['vueRouter','temp','resize','editor'],function(VueRouter,tempModule,r
             return {item:{
                 currentInfo:{
                         count:0,
-                        username:'Denzel boss',
+                        index:0,
+                        username:' ',
                         itemId:0,
                         imgurl:'img/front.png',
-                        postdate:'2017年02月20日',
-                        itemName:'我的专栏',
-                        content:'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',                        
-                        title:'this is a title'
+                        postdate:' ',
+                        itemName:' ',
+                        content:'',                        
+                        title:''
                     },
                 relatedInfo:{
                     last:{
                         title:'这是他的上一篇',
-                        index:'12'
+                        index:''
                     },
                     next:{
                         title:'这是他的下一篇',
-                        index:'14'
+                        index:''
                     }
                 }
              }
@@ -154,11 +225,11 @@ requirejs(['vueRouter','temp','resize','editor'],function(VueRouter,tempModule,r
                   alert("已经到列表的尽头");
                 }
                      
-            },
+            }, 
             changeUrl:function(){
                 let itemId =this.item.currentInfo.itemId;
                 switch (itemId) {
-                    case 1:
+                    case 1:  
                         this.item.currentInfo.imgurl = 'img/js.png';
                         break;
                      case 2:
@@ -168,13 +239,27 @@ requirejs(['vueRouter','temp','resize','editor'],function(VueRouter,tempModule,r
                         this.item.currentInfo.imgurl = 'img/front.png';                    
                         break;  
                 } 
-            },  
+            },
+            setEditEnable:function(){
+                let token =sessionStorage.getItem('token');
+                console.log('token:',token)
+                if(token!==null&&token.length>10){
+                    document.querySelector('.archeader').classList.toggle('editEnable');
+                }else{
+                    (document.querySelector('.archeader').classList.contains('editEnable'))&&(
+                        document.querySelector('.archeader').classList.remove('editEnable')
+                    );
+                }
+            }, 
+            editContent:function(index){
+               console.log("as:",index);
+               router.push({path:'/markdown',query:{arcindex:index}}) 
+            }, 
             fetchDataById:function(){
               let indexId = this.$route.query.arcindex;
               let that = this;
             fetch(reqUrl+'/BlogServlet', fetchInitOption({flag:"getContentById",queryId:indexId}))            
             .then(function(response){
-                console.log('callback');
                 if(response.ok){
                     return response.json();
                 } else {
@@ -202,7 +287,7 @@ requirejs(['vueRouter','temp','resize','editor'],function(VueRouter,tempModule,r
         beforeRouteUpdate (to, from, next) {
             console.log("beforeRouteUpdate-queryid:");
             next(function(k){
-             console.log(k.$route);
+             //console.log(k.$route);
             });
 
         }
@@ -250,19 +335,19 @@ requirejs(['vueRouter','temp','resize','editor'],function(VueRouter,tempModule,r
 
     const router = new VueRouter({
         routes
-    }) 
-var api =new Vue({
+    })
+
+    var api =new Vue({
     router,
     el:"#api",
     data:{
         activeTag:'',
         myinput:''
     },
-    created:function(){
-        this.setTagName();
-        this.updateText();
-    },
-    watch:{     
+    created:function(){    
+        this.setTagName();  
+    },    
+    watch:{       
         '$route':'setTagName'
     },    
     methods:{     
@@ -272,30 +357,6 @@ var api =new Vue({
                 router.go(-1);  
             }
         },
-        updateText:function(){
-            const editor = this.$('#text-input');
-            const preview = this.$('#preview');
-           // preview.innerHTML = markdown.toHTML(editor.innerHTML);            
-        },
-        $:function(id) {     
-            return document.querySelector(id);  
-        }, 
-        getSelText:function(){         
-            let word ="";
-            let target =window.getSelection() ; 
-            console.log(target);
-            console.log(target.getRangeAt(0)); 
-            if(window.getSelection){
-                var range=document.createRange();
-                console.log('get');    
-                if(target.rangeCount>0){ 
-                  console.log(':'+target.rangeCount);  
-                  console.log(target.text);
-                }    
-            }else{     
-              console.log('getNothing');  
-            }
-        }, 
         setTagName:function(){
             let path = this.$route.name;
             const con_exc =/^conInfo/;
@@ -306,21 +367,9 @@ var api =new Vue({
             if(list_exc.test(path)){
                  this.activeTag="文章列表"          
             }            
-        },
-        hideNav:resizeWindow.hideNav
+        }
     }      
 }); 
-
-/*var editDiv =new Vue({
-    el:'#markdown',
-    render:function(createElement){
-        return editor.makeDom(createElement);
-    },    
-    component:editor.makeDom(createElement),
-    created(){
-        console.log('it is done')
-    }
-});  */
 var login = new Vue({
     el:"#login",
     router,        
@@ -382,11 +431,18 @@ var login = new Vue({
                     }                   
                 }).then(function(data){
                     console.log('fixed',data)
-                    sessionStorage.setItem("token",data);
-                    that.isActive =false;
-                    document.querySelector("#showInfo").classList.toggle("isLogin");
-                    document.querySelector("#showrName").innerHTML=that.userInfo.userName;
-                    that = null;
+                    if(data.length>10){
+                        sessionStorage.setItem("token",data);
+                        that.isActive =false;
+                        document.querySelector("#showInfo").classList.toggle("isLogin");
+                        document.querySelector("#showrName").innerHTML=that.userInfo.userName;
+                        that = null;
+                    }else{
+                        alert('请输入与用户名匹配的密码');
+                        that.userInfo.userPsd='';
+                    }
+
+
                 })                 
             }
         }

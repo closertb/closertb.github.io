@@ -3,7 +3,8 @@ define(["./component/marked.js"],function(marked){
       index:0,
       posLink:''
   }
-  const reqUrl ='http://localhost:8089/StockAnalyse';      
+  const reqUrl ='http://localhost:8089/StockAnalyse';  
+ // const reqUrl ='/myBlog';     
   const complexMethod = (obj, {prefix, subfix, str},linkIndex) => {
     obj.focus()
     if (document.selection) {
@@ -188,7 +189,7 @@ define(["./component/marked.js"],function(marked){
     function $(id) { 
                 return document.querySelector(id); 
     }    
-    function debounce(fn, delay) {
+     function debounce(fn, delay) {
         var timer = null;
         return function () {
             console.log('start')
@@ -199,20 +200,18 @@ define(["./component/marked.js"],function(marked){
             }, delay);
         };
     }
-    function makeDom(createElement){
-        return createElement('div',{
-            attrs:{
-               class:'markdown', 
-            }
-        },[ makeFormHeader(createElement),makeEditor(createElement),makeContent(createElement),shadeDialog(createElement),submitFooter(createElement)])
-    }
-    function makeContent(createElement){
+  function makeDom(createElement,vm){
+    let content = vm.arcticle;
+    let editState = (content.index>0)?'add':'update';
+    function makeContent(createElement,arcticle){
         function makeInputDiv(){
             return createElement('textarea',{
             attrs:{
                     id:"text-input",
-                    placeholder:'输入你的内容'/*,
-                    contenteditable:"true"*/
+                    placeholder:'输入你的内容',
+                },
+                domProps:{
+                    innerHTML:arcticle.content
                 },
                 on:{
                     input:method.updateText
@@ -234,9 +233,9 @@ define(["./component/marked.js"],function(marked){
             }
         },[makeInputDiv(),makePreviewDiv()]) 
     } 
-    function makeFormHeader(createElement){
+    function makeFormHeader(createElement,arcticle){
         function makeSelect(){
-            const items =[{index:1,name:'JS'},{index:2,name:'CSS'},{index:3,name:'HTML'},{index:4,name:'综合'}]
+            const items =[{index:1,name:'JS'},{index:2,name:'CSS'},{index:3,name:'HTML'},{index:4,name:'综合'}]          
             return createElement('div',{
                 attrs:{
                     class:'multiSelect'
@@ -244,7 +243,8 @@ define(["./component/marked.js"],function(marked){
             },[createElement('input',{
                     attrs:{
                         id:'classInput',
-                        placeholder:'输入类别名称'
+                        placeholder:'输入类别名称',
+                        value:arcticle.itemName
                     }
                 }),
                 createElement('select',{
@@ -252,18 +252,32 @@ define(["./component/marked.js"],function(marked){
                         id:'itemInput'
                     }
                 },items.map(function(item){
-                    return createElement('option',{
-                        attrs:{
-                            value:item.index
-                        },
-                        domProps:{
-                            innerHTML:item.name
-                        }
+                     if(item.index===arcticle.itemId){
+                        return createElement('option',{
+                            attrs:{
+                                value:item.index,
+                                selected:'selected'
+                            },
+                            domProps:{
+                                innerHTML:item.name
+                            }
+                        })
+                    }else{ 
+                        return createElement('option',{
+                            attrs:{
+                                value:item.index,
+                            },
+                            domProps:{
+                                innerHTML:item.name
+                            }
+                        })
                     }
-                )})),createElement('input',{
+
+                })),createElement('input',{
                     attrs:{
                         id:'tagInput',
-                        placeholder:'输入标签'
+                        placeholder:'输入标签',
+                        value:arcticle.tags
                     }
                 })
             ])
@@ -273,12 +287,22 @@ define(["./component/marked.js"],function(marked){
             attrs:{
                 class:'headerFotm'
             }
-        },[createElement('input',{
+        },[createElement('div',[
+            createElement('input',{
             attrs:{
                 id:'titleInput',
-                placeholder:'输入你的标题'
+                type:'text',
+                placeholder:'输入你的标题',
+                value:arcticle.title
             }
-        }),makeSelect()])
+        }),createElement('input',{
+            attrs:{
+                id:'titleInput',
+                type:'hidden',
+                value:arcticle.index
+            }
+        })
+        ]),makeSelect()])
     }   
     function makeEditor(createElement){
         const items =[
@@ -497,7 +521,9 @@ define(["./component/marked.js"],function(marked){
         },[makeDialog()])
 
     }
-    function submitFooter(createElement){
+    function submitFooter(createElement,content){
+        let editFlag = content.index;
+        let submitHTML = (editFlag>0) ? '保存编辑' : '发布文章' ;
         return createElement('footer',{
             class:'fixFooter'
         },[createElement('button',{
@@ -506,6 +532,11 @@ define(["./component/marked.js"],function(marked){
             },
             domProps:{
                 innerHTML:'定时发布'
+            },
+            on:{
+                click:function(){
+                    vm.tokenTest();
+                }
             }
 
         }),createElement('button',{
@@ -513,7 +544,7 @@ define(["./component/marked.js"],function(marked){
             id:'submitButton'
             },
             domProps:{
-                innerHTML:'发布文章'
+                innerHTML:submitHTML
             },
             on:{
                 click:function(){
@@ -524,7 +555,8 @@ define(["./component/marked.js"],function(marked){
                         tags:$("#tagInput"),
                         content:$("#text-input")
                     };
-                    const cdecode =(str)=>{
+                    /*替换内容中的单引号，双引号，按位与，百分号*/
+                    const cdecode =(str)=>{ 
                         console.log('change');
                         str = 
                         str=str.replace(/['"]/gm,'@gt@');
@@ -533,6 +565,7 @@ define(["./component/marked.js"],function(marked){
                         return str;
                     }
                     let urlform =new Array();
+
                     let check =Object.keys(formdata).every(function(key){
                         if(formdata[key].value.trim() ===''){
                             formdata[key].focus();
@@ -549,38 +582,41 @@ define(["./component/marked.js"],function(marked){
                     if(!check){
                         return ;  
                     }
-                    let sendData =urlform.join('&');
-                    console.log(sendData)
-                    const option ={
-                                method:'post',
-                                mode:'cors',
-                                headers: {
-                                    'Content-Type': 'application/x-www-form-urlencoded'
-                                },                                
-                                body:'flag=add&'+sendData
-                    }; 
-                    fetch(reqUrl+'/BlogServlet',option)
-                    .then(function(response){
-                        if(response.ok){
-                            return response.text();
-                        }else{
-                            console.log('网络错误，请稍后再试');
-                        }
-                    }).then(function(data){
-                        console.log('dosth',data);
-                    })
+                    let sendData ='';
+                    if(editFlag){
+                        urlform.push('queryId'+'='+editFlag);
+                        urlform.push('version'+'='+content.version);
+                        urlform.push('flag=update')
+                        sendData =urlform.join('&');
+                    }else{  
+                        urlform.push('flag=add')
+                        sendData =urlform.join('&');
+                    }
+                    vm.editContent(sendData)
                 }
             }            
         })]);
     }
+        return createElement('div',{
+            attrs:{
+               class:'markdown', 
+            }
+        },[ makeFormHeader(createElement,content),makeEditor(createElement,content),makeContent(createElement,content),shadeDialog(createElement),submitFooter(createElement,content)])
+    }   
     return {
         component:makeDom,
         method:'',
+        toOrigin:function(str){
+            str =str.replace(/@gt@/gm,"'");
+            str =str.replace(/@lt@/gm,"%");
+            str = str.replace(/@pt@/gm,'&')
+            return str;  //输出一个方法，供markdown转换；
+        }  ,
         toPreview:function(str){
             str =str.replace(/@gt@/gm,"'");
             str =str.replace(/@lt@/gm,"%");
             str = str.replace(/@pt@/gm,'&')
-            return marked(str)  //输出一个方法，供markdown转换；
+            return marked(str);  //输出一个方法，供markdown转换；
         }  
     }    
 })

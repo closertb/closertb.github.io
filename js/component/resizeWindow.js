@@ -11,15 +11,15 @@ define(function(){
 	}   
     return {
         showNav:function(event) {
-            event.stopPropagation();
-            document.querySelector('.shadeLayer').classList.toggle('showItem');
+			event.stopPropagation();
+			document.querySelector('aside.shadeLayer').classList.toggle('showItem');
 	    },
         hideNav:function() {
-           document.querySelector('.shadeLayer').classList.remove('showItem');
+		   document.querySelector('aside.shadeLayer').classList.remove('showItem');
 	    },
         resizeWindow:debounce(function() {
 		//document.querySelector('.shadeLayer').classList.remove('showItem ');
-		console.log("no work to do")
+		console.log("no change")
 	}, 250)
     };
 })
