@@ -10,6 +10,7 @@
     <meta http-equiv="pragma" content="no-cache">-->
     <meta http-equiv="cache-control" content="max-age">   
   <!--  <link href="css/common.css" rel="stylesheet">-->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="css/index.css" rel="stylesheet">
     <link type="favicon" rel="shortcut icon" href ="img/icon.jpeg"/>
 </head>
@@ -19,12 +20,21 @@
         <span id="showInfo" class="toRight"><button id="loginEnable">登录</button><label id="welInfo">欢迎你：<label id='showrName'></label></label><img id="loginOut" src="img/close.png"/></span>
     </header>
     <form id="login" class="hideItem" :class="{loginshow:isActive}" action="" @submit.prevent="userLogin">
-     <!--   <form id="login" :class="isActive?'loginshow':'loginhide'" action="" @submit.prevent="userLogin">-->
+     <!--   <form id="login"  :class="{loginshow:isActive}" :class="isActive?'loginshow':'loginhide'" action="" @submit.prevent="userLogin">-->
         <fieldset>
             <h3>用户登录</h3>
-            <input type="text" class="user-id" v-model="userInfo.userName" placeholder="请输入你的用户ID" required="required"/>
-            <input type="password" class="user-pwd" v-model="userInfo.userPsd" placeholder="请输入你的登录密码" required="required"/>
+            <div class="btn-group">
+                <span><i class="fa fa-fw fa-key"></i></span>
+                 <input type="text" class="user-id" v-model="userInfo.userName" placeholder="请输入你的用户ID" required="required"/>
+            </div>
+            <div class="btn-group">
+                <span><i class="fa fa-fw fa-lock"></i></span>
+                <input type="password" class="user-pwd" v-model="userInfo.userPsd" placeholder="请输入你的登录密码" required="required"/>
+            </div>
+            <div class="btn-group">      
+                <span><i class="fa fa-fw fa-unlock"></i></span>
             <input type="submit" class="login-btn" value="登录"/>
+            </div>
         </fieldset>
     </form>    
  	<main id="api" class="mcontent">    
@@ -50,6 +60,21 @@
         </div>
 
         <navlist v-bind:item="navlist"></navlist>
+                <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                    <i class="sidebar-button-icon fa fa-2x fa-home"></i>
+                    <span class="sidebar-button-desc">主页</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                    <i class="sidebar-button-icon fa fa-2x fa-github"></i>
+                    <span class="sidebar-button-desc">分类</span>
+                </a>
+        </li>
+        
+    </ul>
 	</nav>
    <!--  <script type="text/javaScript" src="js/main/vue.js"></script> -->
    <!--  <script type="text/javaScript" data-main="js/app" src="js/main/require.js"></script> -->

@@ -21,16 +21,16 @@ requirejs(['vueRouter','temp','resize','editor'],function(VueRouter,tempModule,r
     application/x-www-form-urlencoded格式，然后在传给body*/
     function fetchInitOption(json){
         let sendData; 
-        if(json instanceof Object) {
-            let res=new Array(); 
+        if(json instanceof Object) {  
+            let res=new Array();   
             for(let item in json){          
                 res.push(item+'='+json[item])    
             }  
-            sendData =res.join('&') ;        
+            sendData =res.join('&') ;         
         }else{
-            sendData = json ;
+            sendData = json ;  
         }
-        console.log('callback:'+sendData); 
+    //    console.log('callback:'+sendData); 
         return {  
             method:'post',
             mode:'cors', 
@@ -89,7 +89,6 @@ requirejs(['vueRouter','temp','resize','editor'],function(VueRouter,tempModule,r
             fetchDataById:function(indexId,that){
                 fetch(reqUrl+'/BlogServlet', fetchInitOption({flag:"getEditContent",queryId:indexId}))            
                 .then(function(response){
-                    console.log('callback');
                     if(response.ok){
                         return response.json();
                     } else {
@@ -101,16 +100,23 @@ requirejs(['vueRouter','temp','resize','editor'],function(VueRouter,tempModule,r
                 that = null;
                 })  
             },
-            tokenTest:function(){
-                let token =sessionStorage.getItem('token');
-                console.log('token:',token)
-                fetch(reqUrl+'/BlogServlet',fetchInitOption({flag:'test',token:token})).then(
-                    function(response){
+            uploadImg:function(data,callback){
+                    fetch(reqUrl+'/imgUploadServlet',{
+                                method:'post',
+                                mode:'cors', 
+                                body:data                       
+                    })
+                    .then(function(response){
                         if(response.ok){
-                            console.log('token:');
+                            console.log('suc')
+                            return response.text();
+                        }else{
+                            console.log('网络错误，请稍后再试')
+                            return ;
                         }
-                    }
-                )
+                    }).then(function(data){
+                       callback(reqUrl+data);//函数回调
+                    })
             },
             editContent:function(data){
                 let token =sessionStorage.getItem('token');
@@ -123,7 +129,9 @@ requirejs(['vueRouter','temp','resize','editor'],function(VueRouter,tempModule,r
                     alert("请确保你已正确登录");
                     return ;                   
                 }
-                data = data + "&token ="+token;
+                data.token = token ;
+                console.log(data);
+              //  data = data + "&token ="+token;
                     fetch(reqUrl+'/BlogServlet',fetchInitOption(data))
                     .then(function(response){
                         if(response.ok){
@@ -242,17 +250,15 @@ requirejs(['vueRouter','temp','resize','editor'],function(VueRouter,tempModule,r
             },
             setEditEnable:function(){
                 let token =sessionStorage.getItem('token');
-                console.log('token:',token)
                 if(token!==null&&token.length>10){
-                    document.querySelector('.archeader').classList.toggle('editEnable');
+                    document.querySelector('.artheader').classList.toggle('editEnable');
                 }else{
-                    (document.querySelector('.archeader').classList.contains('editEnable'))&&(
-                        document.querySelector('.archeader').classList.remove('editEnable')
+                    (document.querySelector('.artheader').classList.contains('editEnable'))&&(
+                        document.querySelector('.artheader').classList.remove('editEnable')
                     );
                 }
             }, 
             editContent:function(index){
-               console.log("as:",index);
                router.push({path:'/markdown',query:{arcindex:index}}) 
             }, 
             fetchDataById:function(){
@@ -275,19 +281,23 @@ requirejs(['vueRouter','temp','resize','editor'],function(VueRouter,tempModule,r
         created(){
            this.fetchDataById();
         },
+        mounted(){
+            this.setEditEnable(); 
+        },
         watch:{
             '$route':'fetchDataById',
             'item':'changeUrl'
         },
         beforeRouteEnter(to, from, next){
             next(function(k){
-                console.log(k.item); 
+                console.log('entered');
             });
         },
         beforeRouteUpdate (to, from, next) {
             console.log("beforeRouteUpdate-queryid:");
             next(function(k){
              //console.log(k.$route);
+             console.log('update');
             });
 
         }
@@ -361,12 +371,16 @@ requirejs(['vueRouter','temp','resize','editor'],function(VueRouter,tempModule,r
             let path = this.$route.name;
             const con_exc =/^conInfo/;
             const list_exc =/^detail/;
+            const mark_exc =/^markdown/;
             if(con_exc.test(path)){ 
-                 this.activeTag="返回列表"        
+                 this.activeTag="返回列表";        
             }  
             if(list_exc.test(path)){
-                 this.activeTag="文章列表"          
-            }            
+                 this.activeTag="文章列表" ;         
+            }  
+            if(mark_exc.test(path)){
+                 this.activeTag="文章编辑" ;         
+            }               
         }
     }      
 }); 
@@ -406,14 +420,12 @@ var login = new Vue({
                                 console.error('服务器繁忙，请稍后再试；\r\nCode:' + response.status)
                             } 
                         }).then(function(data){
-                            console.log(data);
                             that.userInfo = data;
                             document.querySelector("#showInfo").classList.toggle("isLogin");
                             document.querySelector("#showrName").innerHTML=that.userInfo.userName;                 
                             that =null;
                         });                      
-                    }else{
-                            console.log("alreadyLogin:");                                            
+                    }else{                                          
                             document.querySelector("#showInfo").classList.toggle("isLogin");
                             document.querySelector("#showrName").innerHTML=that.userInfo.userName;
                             that =null;                         
@@ -441,8 +453,6 @@ var login = new Vue({
                         alert('请输入与用户名匹配的密码');
                         that.userInfo.userPsd='';
                     }
-
-
                 })                 
             }
         }

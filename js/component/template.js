@@ -118,13 +118,18 @@ return {
         return createElement('article',[infoTemp(vm.item.currentInfo),titleTemp('h1','arttitle',vm.item.currentInfo.title),titleTemp('p','artcontent',vm.item.currentInfo.content),relatedNav(vm.item.relatedInfo)]);        
     },
     contentTemp:function(createElement,vm){
-        function titleTemp(title){
+        function titleTemp(item){
             return createElement('div',{
             attrs:{
                 "class":'listTitle'
             },
             domProps:{
-                innerHTML:title
+                innerHTML:item.title
+            },                    
+            on:{
+                 click:function(event){
+                        vm.gotodetail(item.index)
+                  }
             }
           });
         }
@@ -146,15 +151,8 @@ return {
             return createElement('div',{
                 attrs:{
                     class:'arclist'
-                },                    
-                on:{
-                    click:function(event){
-                        /*考虑这里是否需要冒泡*/
-                     //   event.stopPropagation();
-                        vm.gotodetail(item.index)
-                    }
                 }
-            },[infoTemp(item),titleTemp(item.title)]);
+            },[infoTemp(item),titleTemp(item)]);
         })]
         );
     }

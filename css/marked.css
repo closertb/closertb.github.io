@@ -59,9 +59,11 @@ background-image: url(../img/editor@2x.png);background-position:0 0;text-indent:
 
 /*for larger screens set the nav to the left and give the main content extra margin to compensate for it*/
 @media (max-width: 700px) {
-    #classInput {width:25%;}
-    #itemInput {width:25%;}
-    #tagInput {width:40%;}
+   
+    .multiSelect{ flex-wrap:wrap;}
+    #classInput {width:45%;}
+    #itemInput {width:45%;}
+    #tagInput {width:100%;margin-top:.5rem;}
     .markdown {padding:.5rem 1rem;margin-bottom: 2rem;}
     .contentBox {display: flex;font-weight:500;min-height:300px;max-height:350px;}    
     .contentBox textarea {width: 100%;}

@@ -42,9 +42,7 @@ define(["./component/marked.js"],function(marked){
         }
     } else {
        console.log('else')
-        // obj.value += str;
     }
-    // 触发change事件
     obj.focus()
   }   
   const editorClick = (target, editType,poslink) => {
@@ -152,7 +150,6 @@ define(["./component/marked.js"],function(marked){
         if (complexEdit.hasOwnProperty(editType)) {
             // 插入对应的内容
             (poslink!==undefined&&poslink!=='')&&change(editType);
-            console.log('complex')
             if(poslink){
               complexMethod(target,complexEdit[editType],makeIndex);
             }else{
@@ -160,7 +157,6 @@ define(["./component/marked.js"],function(marked){
             }
 
         }else{  //除以上操作，其余的操作都在私有函数内解决；
-            console.log('simple')
             privateMethod[editType](target);
         }
   }
@@ -187,7 +183,7 @@ define(["./component/marked.js"],function(marked){
     }
 
     function $(id) { 
-                return document.querySelector(id); 
+       return document.querySelector(id); 
     }    
      function debounce(fn, delay) {
         var timer = null;
@@ -463,7 +459,6 @@ define(["./component/marked.js"],function(marked){
                             let link =linkInput.value;
                             const act = (_link,_type)=>{
                                if(_link.trim()){
-                                    console.log('type:'+_link);
                                     const editor  = $('#text-input');
                                     editorClick(editor,_type,_link);
                                 }else{
@@ -475,35 +470,17 @@ define(["./component/marked.js"],function(marked){
                                 dialog.style.display='none';  
                             };
                             /*业务处理*/
-                            if(flag){  //图片上传
-                    let data =new FormData();
-                    data.append('file',$("#realFile").files[0]);
-                    const option ={
-                                method:'post',
-                                mode:'cors', 
-/*                                 headers: {
-                                    'Content-Type': 'multipart/form-data'
-                                },  */                                                                         
-                                body:data
-                    };
-                    fetch(reqUrl+'/imgUploadServlet',option)
-                    .then(function(response){
-                        if(response.ok){
-                            console.log('suc')
-                            return response.text();
-                        }else{
-                            console.log('网络错误，请稍后再试')
-                            return ;
+                        if(flag){  //图片上传
+                        let data =new FormData();
+                        data.append('file',$("#realFile").files[0]);
+                        vm.uploadImg(data,function(data){
+                            $("#realFile").value ='';
+                            $("#fakeFile").value ='';
+                            act(data,'imagelink');
+                        })
                         }
-                    }).then(function(data){
-                        $("#realFile").value ='';
-                        $("#fakeFile").value ='';
-                        act(reqUrl+data,'imagelink')
-                        console.log(reqUrl+data);
-                    })
-                            }
-                            (!flag)&&(act(link,'link'))                          
-                        }
+                      (!flag)&&(act(link,'link'))                          
+                      }
                     }
                 })])
             }                       
@@ -557,42 +534,38 @@ define(["./component/marked.js"],function(marked){
                     };
                     /*替换内容中的单引号，双引号，按位与，百分号*/
                     const cdecode =(str)=>{ 
-                        console.log('change');
-                        str = 
+                       // console.log('change');
                         str=str.replace(/['"]/gm,'@gt@');
                         str=str.replace(/&/gm,'@pt@');
                         str= str.replace(/%/gm,'@lt@')  
                         return str;
                     }
                     let urlform =new Array();
-
                     let check =Object.keys(formdata).every(function(key){
                         if(formdata[key].value.trim() ===''){
                             formdata[key].focus();
-                            alert('该项不能为空');
+                            alert('该项为必填,不能为空');
                             return false;
                         }
                         if(key ==='content'){
-                           urlform.push(key +'='+cdecode(formdata[key].value));
-                           return true;
+                           formdata[key] = cdecode(formdata[key].value);
+                           return true;                            
                         }
-                        urlform.push(key +'='+formdata[key].value)
-                        return true;
+                        formdata[key] = formdata[key].value;
+                        return true; 
                     })
                     if(!check){
                         return ;  
                     }
                     let sendData ='';
                     if(editFlag){
-                        urlform.push('queryId'+'='+editFlag);
-                        urlform.push('version'+'='+content.version);
-                        urlform.push('flag=update')
-                        sendData =urlform.join('&');
+                        formdata.queryId = editFlag;
+                        formdata.version = content.version;
+                        formdata.flag = 'update';
                     }else{  
-                        urlform.push('flag=add')
-                        sendData =urlform.join('&');
+                        formdata.flag = 'update';
                     }
-                    vm.editContent(sendData)
+                    vm.editContent(formdata);
                 }
             }            
         })]);
