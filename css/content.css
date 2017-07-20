@@ -5,12 +5,13 @@
 
 article{border-top: 1px solid rgb(238, 238, 238);margin:1rem;}
 /*这里定义模板显示文章列表时的样式*/
-.arclist {margin-top:.5rem;padding-top:.5rem;border-top: 1px solid rgb(238, 238, 238);}
+.arclist {margin-top:.5rem;padding-top:.5rem;border-top: 1px solid rgb(238, 238, 238);transition: all 0.4s;}
+.arclist:hover{background: #ddd;cursor:pointer;}
 
 .listInfo {font-size: .9rem;color:grey ;margin:.5rem 0 0 0.3rem;font-weight:500;}
 .listInfo span+span {padding-left:.5rem;}
 .listTitle {margin:.3rem 0; padding:.5rem 0;font-size: 1.2rem;margin-left:0.3rem;font-weight:600;}
-.listTitle:hover{background: #ddd;cursor:pointer;}
+
 /*这里定义模板显示详情页时的样式*/
 .artheader{display: flex; align-items: center;margin:1rem 0;}
 .authImg {width:70px;margin-left:.5rem;}
@@ -33,6 +34,27 @@ article{border-top: 1px solid rgb(238, 238, 238);margin:1rem;}
 .relatedNav div+div{ margin-top:.3rem;}
 .relatedNav a {color:rgba(88, 85, 88, 0.57);font-size: .9rem;transition: all .5s; }
 .relatedNav a:hover{color:black;font-size: 1rem; }
+
+.item-list {margin:1rem 0;}
+.item-list + .item-list {margin-top: 2rem;}
+.item-list h3 {margin:0;}
+.item-list h3 label {display: inline-block;margin:.5rem;}
+.item-list h3 span::before {content: '(';}
+.item-list h3 span::after {content: ')';}
+.item-list ul {margin:0 1.5rem;}
+.item-list li{list-style-type:none;margin:.5rem 0;}
+.item-list li a {padding-left:.3rem;color:#5d686f;text-decoration: none;}
+.item-list li a:hover{cursor: pointer;color:#64b5f6; } 
+.item-list li a {transition: all .35s }
+.item-list li span::before {padding:0 .2rem 0 .4rem;content: '-'}
+.item-list li span { color: #9eabb3;}   
+.router-link-active {color: red;background-image: url('../img/js.png'); }
+.jsimg::before {content:'';background: url('../img/js.png') no-repeat;background-size: 3rem;width:3rem;height:3rem;display: inline-block;vertical-align: middle;margin-right:.3rem}
+.jsimg::after {content:'JavaScript';}
+.cssimg::before {content:'';background: url('../img/css.png') no-repeat;background-size: 3rem;width:3rem;height:3rem;display: inline-block;vertical-align: middle;margin-right:.3rem}
+.cssimg::after {content:'CSS Style';}
+.htmlimg::before {content:'';background: url('../img/front.png') no-repeat;background-size: 3rem;width:3rem;height:3rem;display: inline-block;vertical-align: middle;margin-right:.3rem}
+.htmlimg::after {content:'前端综合';}
 
 /* .editorBox {border: 2px solid rgb(238, 238, 238);} 
 .editorBox li {display: inline-block;margin:1px 2px;padding:1px;height:auto;}

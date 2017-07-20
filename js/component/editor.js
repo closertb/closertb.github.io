@@ -2,13 +2,11 @@ define(["./component/marked.js"],function(marked){
   const makeIndex={
       index:0,
       posLink:''
-  }
-  const reqUrl ='http://localhost:8089/StockAnalyse';  
- // const reqUrl ='/myBlog';     
+  } 
   const complexMethod = (obj, {prefix, subfix, str},linkIndex) => {
     obj.focus()
     if (document.selection) {
-        console.log('your browser is too lower')
+        alert('your browser is too lower')
     } else if (typeof obj.selectionStart === 'number' && typeof obj.selectionEnd === 'number') {
         let startPos = obj.selectionStart;
         let endPos = obj.selectionEnd;
@@ -41,23 +39,23 @@ define(["./component/marked.js"],function(marked){
             }
         }
     } else {
-       console.log('else')
+       ;//console.log('else')
     }
     obj.focus()
   }   
   const editorClick = (target, editType,poslink) => {
       const privateMethod ={
           undo:function(obj){
-            console.log('undo');
+            ;//console.log('undo');
           },          
           redo:function(obj){
-             console.log('redo');             
+             ;//console.log('redo');             
           },
           trash:function(obj){
-            console.log('trash');              
+           ;// console.log('trash');              
           },
           save:function(obj){
-            console.log('save');              
+           ;// console.log('save');              
           },
       }   
       const complexEdit = {
@@ -188,7 +186,7 @@ define(["./component/marked.js"],function(marked){
      function debounce(fn, delay) {
         var timer = null;
         return function () {
-            console.log('start')
+           ;// console.log('start')
             var context = this, args = arguments;
             clearTimeout(timer);
             timer = setTimeout(function () {
@@ -310,9 +308,9 @@ define(["./component/marked.js"],function(marked){
             {name:'eidt_code',index:4},
             {name:'eidt_imagelink',index:5},
             {name:'eidt_ol',index:6},
-            {name:'eidt_ul',index:7},
+            {name:'eidt_ul',index:7}/* ,
             {name:'eidt_hr',index:9},
-            {name:'eidt_undo',index:10}
+            {name:'eidt_undo',index:10} */
         ];
         function makeAtag(index){
             return createElement('a',{

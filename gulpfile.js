@@ -59,6 +59,7 @@ gulp.task('optimizeJS', function (cb) {
         marked:'component/marked.js',
         editor:'component/editor',
         temp:'component/template',
+        resume:'component/resume',         
         resize:'component/resizeWindow'
     }
     }))

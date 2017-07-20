@@ -19,7 +19,8 @@ define(function(){
 	    },
         resizeWindow:debounce(function() {
 		//document.querySelector('.shadeLayer').classList.remove('showItem ');
-		console.log("no change")
+		//console.log("no change")
+		;
 	}, 250)
     };
 })

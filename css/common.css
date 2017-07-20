@@ -73,15 +73,19 @@ body,div,p,ul,li,header,form,fieldset{
 .nav-link {
 	display: flex;
 	align-items: center;
-	padding: .5rem;
+	justify-content:flex-start;
+	padding:.5rem 2rem;
 	color: #ddd;
 	min-height: 2rem;
 	text-decoration: none;
 	transition: border, background-color .35s;
 }
+.nav-link span{margin-left:2rem;display: inline-block;}
 .nav-link + .nav-link {
 	border-top: 1px solid #aaa;
 }
+#addAction{display: none;}
+.nav-link:last-child{border-bottom: 1px solid #aaa;}
 .nav-link:hover {
 	background-color: #4d90fe;
 	color: #fff;

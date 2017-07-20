@@ -17,18 +17,18 @@
 <body>
     <header class="flexheader">
 	    <button class="off-canvas-launcher toLeft">Menu</button>
-        <span id="showInfo" class="toRight"><button id="loginEnable">登录</button><label id="welInfo">欢迎你：<label id='showrName'></label></label><img id="loginOut" src="img/close.png"/></span>
+        <span id="showInfo" class="toRight"><button id="loginEnable">登录</button><label id="welInfo">欢迎你：<label id='showrName'></label></label><i id="loginOut" class="fa fa-fw fa-user-times"></i></span>
     </header>
     <form id="login" class="hideItem" :class="{loginshow:isActive}" action="" @submit.prevent="userLogin">
      <!--   <form id="login"  :class="{loginshow:isActive}" :class="isActive?'loginshow':'loginhide'" action="" @submit.prevent="userLogin">-->
         <fieldset>
             <h3>用户登录</h3>
             <div class="btn-group">
-                <span><i class="fa fa-fw fa-key"></i></span>
+                <span><i class="fa fa-fw fa-user"></i></span>
                  <input type="text" class="user-id" v-model="userInfo.userName" placeholder="请输入你的用户ID" required="required"/>
             </div>
             <div class="btn-group">
-                <span><i class="fa fa-fw fa-lock"></i></span>
+                <span><i class="fa fa-fw fa-key"></i></span>
                 <input type="password" class="user-pwd" v-model="userInfo.userPsd" placeholder="请输入你的登录密码" required="required"/>
             </div>
             <div class="btn-group">      
@@ -49,32 +49,14 @@
             <div><img class="photoInfo" src="img/mine.jpg"> </div>
             <div><span class="font2rem">Denzel</span></div>
             <div class="motto" ><span class="font2rem">生命不息，战斗不止</span></div>
-            <div class="item">
-                <ul>
-                    <li><img src="img/tag/file.png" alt="文章" title="list" @click="btnClick('list')"></li>
-                    <li><img src="img/tag/folder.png" alt="分类" title="item" @click="btnClick('item')"></li>
-                    <li><img src="img/tag/bookmark.png" alt="标签" title="mark" @click="btnClick('more')"></li>          
-                </ul> 
-                <countlist v-bind:item="detCount"></countlist>                             
-            </div>
         </div>
-
-        <navlist v-bind:item="navlist"></navlist>
-                <ul class="sidebar-buttons">
-        
-            <li class="sidebar-button">
-                    <i class="sidebar-button-icon fa fa-2x fa-home"></i>
-                    <span class="sidebar-button-desc">主页</span>
-                </a>
-        </li>
-        
-            <li class="sidebar-button">
-                    <i class="sidebar-button-icon fa fa-2x fa-github"></i>
-                    <span class="sidebar-button-desc">分类</span>
-                </a>
-        </li>
-        
-    </ul>
+        <a class="nav-link" alt="主页"  @click="btnClick('list')"><i class="fa fa-lg fa-home"></i><span class="sidebar-button-desc">主页</span></a>
+        <a class="nav-link" alt="分类"  @click="btnClick('item')"><i class="fa fa-lg fa-bookmark"></i><span class="sidebar-button-desc">分类</span></a> 
+        <a class="nav-link hideItem" id="addAction" alt="新增"  @click="btnClick('more')"><i class="fa fa-lg fa-plus"></i><span class="sidebar-button-desc" >新增文章</span></a>
+        <a class="nav-link" alt="简历"  @click="btnClick('resume')"><i class="fa fa-lg fa-mortar-board"></i><span class="sidebar-button-desc" style="margin-left:1.4rem;">个人简历</span></a>
+        <a class="nav-link" target="_blank" href="https://github.com/closertb"><i class="fa fa-lg fa-github"></i><span class="sidebar-button-desc">GITHUB</span></a>
+         <a class="nav-link" target="_blank" href="http://weibo.com/1894846207/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1"><i class="fa fa-lg fa-weibo"></i><span class="sidebar-button-desc">微博</span></a>
+         <a class="nav-link" @click="btnClick('email')"><i class="fa fa-lg fa-envelope-o"></i><span class="sidebar-button-desc">Email</span></a>    
 	</nav>
    <!--  <script type="text/javaScript" src="js/main/vue.js"></script> -->
    <!--  <script type="text/javaScript" data-main="js/app" src="js/main/require.js"></script> -->

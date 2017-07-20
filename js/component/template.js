@@ -1,32 +1,5 @@
 define(function(){
 return {
-    navTemp:function(createElement,items){
-    return createElement('div',items.map(function(data){
-        return createElement('a',{
-                attrs:{
-                    "class":'nav-link',
-                    "href":'#',
-                },
-                domProps:{
-                    innerHTML:data.cname
-                }
-            })
-    }))
-    },
-    countTemp:function(createElement,items){
-        return createElement('ul',items.map(function(data){
-            return createElement('li',{
-                    on:{
-                        click:function(){
-                            console.log("click:"+data.count)
-                        }
-                    },
-                    domProps:{
-                        innerHTML:data.count
-                    }
-                })
-        }));
-    },
     detailTemp:function(createElement,vm){
          function titleTemp(el,classname,content){
             return createElement(el,{
@@ -116,6 +89,53 @@ return {
                     },[createDiv(),createDiv(item)])           
         }        
         return createElement('article',[infoTemp(vm.item.currentInfo),titleTemp('h1','arttitle',vm.item.currentInfo.title),titleTemp('p','artcontent',vm.item.currentInfo.content),relatedNav(vm.item.relatedInfo)]);        
+    },
+    itemTemp:function(createElement,vm){
+        const stylelist = ['jsimg','cssimg','htmlimg','htmlimg'];
+        function tagTemp(item,sty){
+            return createElement('h3',[createElement('label',{
+                attrs:{
+                    class:sty
+                }
+            }),createElement('span',{
+                domProps:{
+                    innerHTML:item.count
+                }
+            })]);
+        }
+        function itemList(item){
+            return createElement('ul',item.list.map(function(data){
+                return createElement('li',[createElement('i',{
+                    attrs:{
+                        class:'fa fa-fw fa-caret-right'
+                    }
+                }),createElement('a',{
+                    attrs:{
+                        href:'javaScript:;'
+                    },
+                    domProps:{
+                        innerHTML:data.title
+                    },
+                    on:{
+                        click:function(){
+                            vm.gotodetail(data.index);
+                        }
+                    }
+                }),createElement('span',{
+                domProps:{
+                    innerHTML:data.postdate
+                }
+            })])
+            }))
+        }
+        return createElement('article',vm.items.map(function(item){
+            let imgstyle = stylelist[item.tid-1];
+            return createElement('div',{
+                attrs:{
+                    class:'item-list'
+                }
+            },[tagTemp(item,imgstyle),itemList(item)])
+        }))
     },
     contentTemp:function(createElement,vm){
         function titleTemp(item){
