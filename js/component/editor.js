@@ -561,7 +561,7 @@ define(["./component/marked.js"],function(marked){
                         formdata.version = content.version;
                         formdata.flag = 'update';
                     }else{  
-                        formdata.flag = 'update';
+                        formdata.flag = 'add';
                     }
                     vm.editContent(formdata);
                 }

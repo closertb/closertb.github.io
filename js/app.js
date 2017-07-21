@@ -33,7 +33,8 @@ requirejs(['vueRouter','temp','resize','editor','resume'],function(VueRouter,tem
         }
         return {  
             method:'post',
-            mode:'cors', 
+            mode:'no-cors', 
+         //   mode:'cors', 
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
@@ -72,7 +73,7 @@ requirejs(['vueRouter','temp','resize','editor','resume'],function(VueRouter,tem
                         tags:'',
                         content:''
                 }
-             }
+             }  
          },
         methods:{
             fetchDataById:function(indexId,that){
@@ -92,7 +93,7 @@ requirejs(['vueRouter','temp','resize','editor','resume'],function(VueRouter,tem
             uploadImg:function(data,callback){
                     fetch(reqUrl+'/imgUploadServlet',{
                                 method:'post',
-                                mode:'cors', 
+                                mode:'no-cors', 
                                 body:data                       
                     })
                     .then(function(response){
@@ -122,10 +123,15 @@ requirejs(['vueRouter','temp','resize','editor','resume'],function(VueRouter,tem
                         if(response.ok){
                             return response.text();
                         }else{
-                            console.erro('网络错误，请稍后再试');
+                            console.error('网络错误，请稍后再试');
                         }
                     }).then(function(data){
-                        router.replace({path: '/coninfo',query:{arcindex:data}})
+                        if(/^[1-9]\d*$/.test(data)){  
+                            router.replace({path: '/coninfo',query:{arcindex:data}});
+                        }else{
+                            alert('你的token已超期，需重新登录');
+                        }
+
                     })
             }
         },
@@ -345,23 +351,18 @@ requirejs(['vueRouter','temp','resize','editor','resume'],function(VueRouter,tem
         methods:{     
             btnClick:function(msg){               
                if(msg==='item'){
-                //  api.activeTag= '文章列表';;
                    router.push({path: '/listbyItem'});                                    
                }
                if(msg==='list'){ 
-               //    api.activeTag= '文章编辑';
                    router.push({path: '/detInfo'});                                    
                } 
                if(msg==='more'){
-                 //  api.activeTag= '文章列表';
                    router.push({path:'/markdown'});                                      
                }
                if(msg==='resume'){
-                 //  api.activeTag= '文章列表';
                    router.push({path:'/resume'});                                      
                } 
                if(msg==='email'){
-                 //  api.activeTag= '文章列表';
                    router.push({path:'/email'});                                      
                }                                                              
         }
@@ -420,7 +421,7 @@ requirejs(['vueRouter','temp','resize','editor','resume'],function(VueRouter,tem
                  this.activeTag="返回列表";        
             }  
             if(/^detail/.test(path)){ 
-                 this.activeTag="分类列表";        
+                 this.activeTag="文章列表";        
             }                  
             if(/^markdown/.test(path)){
                  this.activeTag="文章编辑" ;         
