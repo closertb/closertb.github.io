@@ -28,10 +28,10 @@ requirejs(['vueRouter','temp','resize','editor','resume'],function(VueRouter,tem
                 res.push(item+'='+json[item])    
             }  
             sendData =res.join('&') ;         
-        }else{
+        }else{  
             sendData = json ;  
-        }
-        return {  
+        }    
+        return {    
             method:'post',
             mode:'no-cors', 
          //   mode:'cors', 
@@ -98,11 +98,11 @@ requirejs(['vueRouter','temp','resize','editor','resume'],function(VueRouter,tem
                     })
                     .then(function(response){
                         if(response.ok){
-                            return response.text();
+                            return response.text();  
                         }else{
                             console.error('网络错误，请稍后再试')
                             return ;
-                        }
+                        }  
                     }).then(function(data){
                        callback(reqUrl+data);//函数回调
                     })
@@ -364,10 +364,11 @@ requirejs(['vueRouter','temp','resize','editor','resume'],function(VueRouter,tem
                } 
                if(msg==='email'){
                    router.push({path:'/email'});                                      
-               }                                                              
+               }                                                                 
         }
         }  
      });   
+    let test ='';
     const routes = [
     { path: '/', redirect: '/detInfo' },       
     { path: '/listbyItem',name:'listbyItem', component: listbyItem },

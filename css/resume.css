@@ -10,7 +10,7 @@
 .rebody .delInfo{margin-left:2.2rem;width:80%;} 
 .rebody h4{margin: 0 0 .6rem 2.2rem;}
 .rebody h4 span{padding-left:2rem;}
-.rebody ul {margin:0 2rem;}
+.rebody ul {margin:0 2rem;}  
 .rebody li::before{content:"※";font-weight:bold;padding-right:.3rem;}
 .rebody li{list-style-type: none;padding:1px 0;}
 .relist {margin-left:1.2rem;font-weight: bold;}
