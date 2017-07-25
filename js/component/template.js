@@ -1,5 +1,31 @@
 define(function(){
+    function waitload(cr){
+        return cr('div',{
+            attrs:{
+                class:'waitLoad'
+            }
+        },[cr('div',[
+            cr('span',{
+                attrs:{
+                 class:'spanCenter'                   
+                }
+                },[cr('i',{
+                    attrs:{
+                    class:'fa fa-spinner fa-spin'                   
+                    }                
+                    })]),
+                    cr('span',{
+                        attrs:{
+                        class:'span1rem'                   
+                        },
+                    domProps:{
+                        innerHTML:'服务器响应缓慢，请耐心等待'
+                    }
+                })
+        ])])
+    }
 return {
+    
     detailTemp:function(createElement,vm){
          function titleTemp(el,classname,content){
             return createElement(el,{
@@ -88,7 +114,7 @@ return {
                         } 
                     },[createDiv(),createDiv(item)])           
         }        
-        return createElement('article',[infoTemp(vm.item.currentInfo),titleTemp('h1','arttitle',vm.item.currentInfo.title),titleTemp('p','artcontent',vm.item.currentInfo.content),relatedNav(vm.item.relatedInfo)]);        
+        return createElement('article',[waitload(createElement),infoTemp(vm.item.currentInfo),titleTemp('h1','arttitle',vm.item.currentInfo.title),titleTemp('p','artcontent',vm.item.currentInfo.content),relatedNav(vm.item.relatedInfo)]);        
     },
     itemTemp:function(createElement,vm){
         const stylelist = ['jsimg','cssimg','htmlimg','htmlimg'];
@@ -134,7 +160,7 @@ return {
                 attrs:{
                     class:'item-list'
                 }
-            },[tagTemp(item,imgstyle),itemList(item)])
+            },[waitload(createElement),tagTemp(item,imgstyle),itemList(item)])
         }))
     },
     contentTemp:function(createElement,vm){
@@ -172,9 +198,35 @@ return {
                 attrs:{
                     class:'arclist'
                 }
-            },[infoTemp(item),titleTemp(item)]);
+            },[waitload(createElement),infoTemp(item),titleTemp(item)]);
         })]
         );
+    },
+    versionTemp:function(createElement,items){
+        function baseSpan(style,ele){
+            return createElement('span',{attrs:{
+                class:style
+            },
+            },[ele])
+        }
+        function conSpan(style,data){
+            return createElement('span',{attrs:{
+                class:style
+            },
+            domProps:{
+                innerHTML:data
+            }})
+        }
+        return createElement('article',[createElement('ul',{
+            attrs:{
+                class:'skcontainer'
+            }
+        },items.map(function(item){
+            return createElement('li',{attrs:{
+                class:'skitem'
+            }}, [conSpan('skdate',item.date),baseSpan('skborder',baseSpan('skdot','')),baseSpan('skline',''),
+         baseSpan('skcontent',[conSpan('skversion',item.version+':'),conSpan('skversion',item.content)])])})
+        )]);
     }
 };
 });

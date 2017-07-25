@@ -32,11 +32,11 @@ body,div,p,ul,li,header,form,fieldset{
 .login-btn{background:#dc3c00;color: white;text-indent: 0!important; border-radius:.4rem;}
 
 /*主页面内容样式*/
-.mcontent {font-family: sans-serif;z-index: 1;min-height: 500px;}
+.mcontent {font-family: sans-serif;z-index: 1;min-height: 500px;position: relative;top:2.3rem;}
 
 
 /*主页面头样式*/
-.flexheader{display:flex;align-items:center;justify-content:space-between; background: yellowgreen;padding:.3rem 0;}
+.flexheader{position: fixed;top:0; right:0;left:0;z-index:5;display:flex;align-items:center;justify-content:space-between; background: yellowgreen; padding:.3rem 0;}
 .toRight{margin-right:1.5rem;}
 .toLeft {margin-left:1.5rem;}
 
@@ -61,7 +61,7 @@ body,div,p,ul,li,header,form,fieldset{
 .shadeLayer{
 	position: fixed;
 	display: none;
-	z-index: 3;
+	z-index: 9;
 	top:0;
 	bottom:0;
 	left:0;
@@ -139,7 +139,7 @@ body,div,p,ul,li,header,form,fieldset{
 }
 
 /*for larger screens set the nav to the left and give the main content extra margin to compensate for it*/
-@media (min-width: 800px) {
+@media (min-width: 700px) {
 	header {position: relative;margin-left: 200px;}	
 /*	.loginshow{margin-left: 200px;}*/
     .flexheader {justify-content: flex-end;}

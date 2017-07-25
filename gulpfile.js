@@ -45,33 +45,7 @@ gulp.task('revImg',function(){
     gulp.src('img/**/*')
     .pipe(gulp.dest('dist/img'))
 });
-/*将css文件合并压缩转移到发布目录*/
-gulp.task('revCss',function(){  
-     gulp.src('css/*.css')
-    .pipe(contact('index.css'))
-    .pipe(minifyCss())//{compatibility: 'ie8'}
-    .pipe(rev())
-    .pipe(gulp.dest('dist/css'))
-    .pipe(rev.manifest({merge:true}))
-    .pipe(gulp.dest(""))
-});
 
-
-/*//去掉.js后缀，因为requirejs的引用一般都不带后缀
-gulp.task("repSuff",function (cb) {
-    gulp.src(['rev-manifest.json'])
-        .pipe(modify(replaceSuffix))            //- 去掉.js后缀
-        .pipe(gulp.dest(''))      
-        .on('end', cb);
-});*/
-/*由于对app.js重命名加入了md5序列号值，所以需要替换原始index.html中关于app.js与index.css的引用*/ 
-gulp.task("updateHtml",function (cb) {
-    gulp.src(['rev-manifest.json', 'index.html'])  
-        .pipe(revCollector())                   //- 替换为MD5后的文件名
-        .pipe(rename("index.html"))
-        .pipe(gulp.dest('dist'))
-        .on('end', cb);
-});
 
 gulp.task("clean",function () {
     return gulp.src([
@@ -111,19 +85,7 @@ gulp.task("JSreload",function(){
             browserSync.reload     
         );       
     }); 
-/*     gulp.watch('css/*.css',  function(){
-            runSequence(
-            "revCss",
-            browserSync.reload     
-        );       
-    });
-    gulp.watch('index.html',  function(){
-            runSequence(
-            "updateHtml", 
-            browserSync.reload    
-        );       
-    });  */
-});
+ })
 
 //gulp.task('default',['server']); 
 
@@ -217,17 +179,6 @@ gulp.task('revCSS',function(cb){
     .on('end',cb)
 });
 
-/* gulp.task('cssRev',()=>{
-        gulp.src('css/*.css')
-        .pipe(rev())
-        .pipe(format({  
-      prefix: '.', // 在版本号前增加字符  
-      suffix: '.cache', // 在版本号后增加字符  
-      lastExt: false  
-    }))
-    .pipe(rev.manifest())
-    .pipe(gulp.dest("dist/js"));
-}) */
 gulp.task('addv',['revJS','revCSS'] ,function() {  
     var manifest = gulp.src(["dist/rev-manifest.json"]);  
     function modifyUnreved(filename) {  
@@ -281,3 +232,21 @@ gulp.task('def',()=>{
         .pipe(htmlFilter.restore)
         .pipe(gulp.dest('dist/'))               
 })
+gulp.task('cls',()=>{
+   return gulp.src('dist')
+    .pipe(clean());
+});
+gulp.task('test',['cls'],(cb)=>{
+        gulp.src('css/*.css')
+        .pipe(contact('index.css'))
+        .pipe(gulp.dest("dist/css"))  
+        .pipe(rev())     
+        .pipe(rev.manifest())
+        .pipe(gulp.dest("dist"))
+        .on('end',cb)
+}) ;
+gulp.task('te',['test'],()=>{    
+    gulp.src(['dest/rev-manifest.json', 'index.html'])  
+        .pipe(revCollector())       
+        .pipe(gulp.dest('dist'));  
+}); 

@@ -1,9 +1,15 @@
 .defaulthide{display:none;}
 .listActive{display:block;}
 
-#itemName{font-size:1.25rem;padding-left:1.5rem;}
+#itemName{font-size:1.25rem;padding-left:1.5rem;}  
+ 
+article{border-top: 1px solid rgb(238, 238, 238);margin:1rem;position: relative;min-height: 400PX;}  
+.waitflag {font-size: 1rem;}
+.waitflag .waitLoad{position: absolute;z-index: 6; display: flex;justify-content: center;align-items: center;left:0;right:0;top:0;bottom:0;color: #1889C5; background: white;} 
+.waitLoad {display: none;transition: all .3s;}
+.waitLoad .spanCenter {font-size: 4rem;display:flex;justify-content: center;}
+.waitLoad .span1rem{font-size: 1rem;}
 
-article{border-top: 1px solid rgb(238, 238, 238);margin:1rem;}
 /*这里定义模板显示文章列表时的样式*/
 .arclist {margin-top:.5rem;padding-top:.5rem;border-top: 1px solid rgb(238, 238, 238);transition: all 0.4s;}
 .arclist:hover{background: #ddd;cursor:pointer;}
@@ -19,23 +25,26 @@ article{border-top: 1px solid rgb(238, 238, 238);margin:1rem;}
 .authInfo {width:60%;margin-left:.3rem;padding:.3rem;text-align: left;}
 .authInfo div:first-child{font-size: 1rem;font-weight:600 ;color:#009a61;}
 #editContent {cursor: pointer;display: none;margin-left: 1rem;font-size: .9rem;}
-.editEnable #editContent{display: inline-block;}
+.editEnable #editContent{display: inline-block;} 
 .authInfo div:last-child {font-size: 0.8rem;margin-top:.3rem}
-.arttitle {font-size: 1.2rem;margin-left:.3rem;padding:0.5rem .5rem;font-weight:600 ;overflow:hidden;  border-top: 1px solid rgb(238, 238, 238);}
+.arttitle {font-size:1.3rem;margin-left:.3rem;padding:.8rem .5rem .5rem;font-weight:bold;overflow:hidden;  border-top: 1px solid rgb(238, 238, 238);}
 .artcontent{background:rgb(248, 248, 248);padding:.5rem .5rem;}
-.artcontent ul,.artcontent li{overflow:visible ;margin:5px 10px;}
+.artcontent ol {margin:0;padding:0;}
+.artcontent li{overflow:visible ;margin:5px 1.3em;} 
+.artcontent h2{font-size:1.2rem; }  
 .artcontent a {color:blue;text-decoration: none;cursor: pointer;}
-.artcontent p+p {margin:1rem 0;}
+.artcontent p {line-height: 1.6rem;}
+.artcontent p+p {margin:1rem 0;}  
 .artcontent code {display:inline-block;margin:1rem 0;background: #f2f2f2;font-size: .9rem;width:99%;max-height:16rem;overflow:auto; }
 .artcontent img {display:block;max-width:95%;margin:.5rem auto;}
 /*这里定义模板详情页下方上下篇导航时的样式*/
 .relatedNav{padding:.3rem .1rem;border-top: 1px solid rgb(238, 238, 238); }
-.relatedNav div{display: flex;height:1.4rem;justify-content: space-between;color:rgba(88, 85, 88, 0.57);font-size:1rem }
+.relatedNav div{display: flex;height:1.4rem; justify-content: space-between;color:rgba(88, 85, 88, 0.57);font-size:1rem }
 .relatedNav div+div{ margin-top:.3rem;}
-.relatedNav a {color:rgba(88, 85, 88, 0.57);font-size: .9rem;transition: all .5s; }
+.relatedNav a {display:inline-block; max-width:49%;overflow: hidden; color:rgba(88, 85, 88, 0.57);font-size: .9rem;transition: all .5s; }
 .relatedNav a:hover{color:black;font-size: 1rem; }
 
-.item-list {margin:1rem 0;}
+.item-list {margin:1rem 0;}  
 .item-list + .item-list {margin-top: 2rem;}
 .item-list h3 {margin:0;}
 .item-list h3 label {display: inline-block;margin:.5rem;}
@@ -56,6 +65,17 @@ article{border-top: 1px solid rgb(238, 238, 238);margin:1rem;}
 .htmlimg::before {content:'';background: url('../img/front.png') no-repeat;background-size: 3rem;width:3rem;height:3rem;display: inline-block;vertical-align: middle;margin-right:.3rem}
 .htmlimg::after {content:'前端综合';}
 
+/*版本控制页面样式*/
+.skcontainer{color: blueviolet;margin:0 auto;;padding:60px 5px 0 8em;max-width:800px;} 
+.skitem {overflow-x: visible;box-sizing: border-box; padding-top:50px;min-height: 80px;margin-top:10px;position: relative;list-style-type: none;}
+.skborder {position: absolute;left:-18px;top: 0px; width: 30px;height: 30px;border: 5px solid blueviolet;border-radius: 50%;z-index: 1;} 
+.skline {display:block;height:80px;width:20px;border-left: 5px solid blueviolet;}
+.skitem:last-child .skline{border-left:0;}  
+.skdot {display: inline-block;position: relative;left:10px; width: 0;height: 0x;border-radius: 50%;z-index: 10;margin: 9px auto;border: 5px solid blueviolet;}
+.skcontent{position: absolute;display: inline-block;top:.1em;left:1.5em;font-size: 1.3rem;font-weight: 400;}
+.skversion {padding-right: .4em;}
+.skdate{position: absolute;left: -11.5em;top: 10px;text-align:right;width: 10em;color: blueviolet;font-size: 1em;} 
+
 /* .editorBox {border: 2px solid rgb(238, 238, 238);} 
 .editorBox li {display: inline-block;margin:1px 2px;padding:1px;height:auto;}
 .tagImg {cursor:pointer;display:block;width:20px;height: 20px;background-repeat: no-repeat;background-size: 380px 60px;
@@ -65,8 +85,8 @@ background-image: url(../img/editor@2x.png);background-position:0 0;text-indent:
 .contentBox textarea {display:block;width: 50%;font-size: 1rem;}
 .contentBox>div{width: 50%;border:1px solid #ccc;border-left: 0;min-height:350px;max-height:450px;overflow: auto;padding:0 .5rem;font-size: 16px;outline: none;}
  */
-@media (min-width: 800px) {
-    article{ width:90%;max-width: 900px;margin:1rem auto;}
-    .arttitle {font-size: 1.4rem;font-weight: 600;padding:0.5 1rem;}
+@media (min-width: 700px) {
+    article{ min-height: 600PX;width:90%;max-width: 900px;margin:1rem auto;}
+    .arttitle {font-size: 1.5rem;font-weight: 600;padding:0.5 1rem;}
     .artcontent{background:rgb(248, 248, 248);padding:0 1rem .5rem;}
 }

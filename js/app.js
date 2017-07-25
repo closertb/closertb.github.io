@@ -1,15 +1,15 @@
 requirejs.config({
     paths:{
         vueRouter:'lib/vue-router',    
+        fetchPoly:'lib/fetch',        
         editor:'component/editor',    
         temp:'component/template',
         resume:'component/resume'  ,       
         resize:'component/resizeWindow'                 
     }            
 });
-requirejs(['vueRouter','temp','resize','editor','resume'],function(VueRouter,tempModule,resizeWindow,editor,resume){   
-   // const reqUrl ='http://localhost:8089/StockAnalyse';   
-    const reqUrl ='/myBlog';  
+requirejs(['vueRouter','temp','resize','editor','resume','fetchPoly'],function(VueRouter,tempModule,resizeWindow,editor,resume,fetchPoly){   
+    const reqUrl ='/myBlog'; 
     window.onresize =resizeWindow.resizeWindow;   
     document.querySelector('.off-canvas-launcher').addEventListener('click', resizeWindow.showNav); 
     document.querySelector('aside.shadeLayer').addEventListener('click',resizeWindow.hideNav);  
@@ -162,6 +162,8 @@ requirejs(['vueRouter','temp','resize','editor','resume'],function(VueRouter,tem
         },
         beforeRouteEnter(to, from, next){
          next(function(k){  
+            const art =document.querySelector('.mcontent');  
+            art.classList.toggle('waitflag');             
             fetch(reqUrl+'/BlogServlet', fetchInitOption({flag:"getList"}))
             .then(function(response){
                     if(response.ok){
@@ -171,6 +173,7 @@ requirejs(['vueRouter','temp','resize','editor','resume'],function(VueRouter,tem
                     }
                 }).then(function(data){
                     k.items =data;
+                    art.classList.remove('waitflag');
                 })                
             });
         },
@@ -208,6 +211,8 @@ requirejs(['vueRouter','temp','resize','editor','resume'],function(VueRouter,tem
         },
         beforeRouteEnter(to, from, next){
          next(function(k){  
+            const art =document.querySelector('.mcontent');  
+            art.classList.toggle('waitflag');
             fetch(reqUrl+'/BlogServlet', fetchInitOption({flag:"getListByItem"}))
             .then(function(response){
                     if(response.ok){
@@ -217,6 +222,7 @@ requirejs(['vueRouter','temp','resize','editor','resume'],function(VueRouter,tem
                     }
                 }).then(function(data){
                     k.items =data;
+                    art.classList.remove('waitflag');
                 })                
             });
         }       
@@ -224,6 +230,31 @@ requirejs(['vueRouter','temp','resize','editor','resume'],function(VueRouter,tem
     /*注册文章详情页视图组件*/
     const email = {
         template:'<article><strong>地址：</strong><a>closertb@163.com</a></article>'
+    };
+    const version ={
+        render:function(createElement){
+            return tempModule.versionTemp(createElement,this.items);
+        },
+        data:function(){
+            return {items:[]}
+        },     
+        beforeRouteEnter(to, from, next){
+         next(function(k){  
+            const art =document.querySelector('.mcontent');  
+            art.classList.toggle('waitflag');
+            fetch(reqUrl+'/BlogServlet', fetchInitOption({flag:"getVersionInfo"}))
+            .then(function(response){
+                    if(response.ok){
+                        return response.json();
+                    } else {
+                        console.error('服务器繁忙，请稍后再试；\r\nCode:' + response.status)
+                    }
+                }).then(function(data){
+                    k.items =data;
+                    art.classList.remove('waitflag');
+                })                
+            });
+        }
     }
     const content = {
         render:function(createElement){
@@ -293,6 +324,8 @@ requirejs(['vueRouter','temp','resize','editor','resume'],function(VueRouter,tem
             fetchDataById:function(){
               let indexId = this.$route.query.arcindex;
               let that = this;
+            const art =document.querySelector('.mcontent');  
+            art.classList.toggle('waitflag');              
             fetch(reqUrl+'/BlogServlet', fetchInitOption({flag:"getContentById",queryId:indexId}))            
             .then(function(response){
                 if(response.ok){
@@ -303,6 +336,7 @@ requirejs(['vueRouter','temp','resize','editor','resume'],function(VueRouter,tem
             }).then(function(data){
                that.item =data;
                that.item.currentInfo.content = editor.toPreview(that.item.currentInfo.content);
+               art.classList.remove('waitflag');
                that = null;
             })  
             }
@@ -364,16 +398,19 @@ requirejs(['vueRouter','temp','resize','editor','resume'],function(VueRouter,tem
                } 
                if(msg==='email'){
                    router.push({path:'/email'});                                      
-               }                                                                 
+               }    
+                if(msg==='update'){
+                   router.push({path:'/version'});                                      
+               }                                                                          
         }
         }  
      });   
-    let test ='';
     const routes = [
     { path: '/', redirect: '/detInfo' },       
     { path: '/listbyItem',name:'listbyItem', component: listbyItem },
     { path: '/resume',name:'resume', component:myResume },   
-    { path: '/email',name:'email', component:email },    
+    { path: '/email',name:'email', component:email },   
+    { path: '/version',name:'version', component:version},      
     { path: '/detInfo',name:'detailInfo', component: listInfo },
     { path: '/conInfo',name:'conInfo', component: content},
     { path: '/markdown',name:'markdown', component: markdownEditor}
@@ -421,20 +458,23 @@ requirejs(['vueRouter','temp','resize','editor','resume'],function(VueRouter,tem
             if(/^conInfo/.test(path)){ 
                  this.activeTag="返回列表";        
             }  
-            if(/^detail/.test(path)){ 
-                 this.activeTag="文章列表";        
+            if(/^detail/.test(path)){   
+                 this.activeTag="文章列表";          
             }                  
             if(/^markdown/.test(path)){
                  this.activeTag="文章编辑" ;         
-            }  
+            }   
             if(/^listbyItem/.test(path)){
                  this.activeTag="分类列表" ;         
             }  
-            if(/^resume/.test(path)){
+            if(/^resume/.test(path)){ 
                  this.activeTag="个人简历" ;         
             } 
             if(/^email/.test(path)){
                  this.activeTag="我的邮箱" ;         
+            } 
+            if(/^version/.test(path)){
+                 this.activeTag="更新信息" ;         
             }                                              
         }
     }      
