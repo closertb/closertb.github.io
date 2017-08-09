@@ -229,7 +229,7 @@ define(["./component/marked.js"],function(marked){
     } 
     function makeFormHeader(createElement,arcticle){
         function makeSelect(){
-            const items =[{index:1,name:'JS'},{index:2,name:'CSS'},{index:3,name:'HTML'},{index:4,name:'综合'}]          
+            const items =[{index:1,name:'JS'},{index:2,name:'CSS'},{index:3,name:'HTML'},{index:4,name:'综合'},{index:5,name:'我的笔记'}]          
             return createElement('div',{
                 attrs:{
                     class:'multiSelect'

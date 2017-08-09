@@ -117,7 +117,7 @@ return {
         return createElement('article',[waitload(createElement),infoTemp(vm.item.currentInfo),titleTemp('h1','arttitle',vm.item.currentInfo.title),titleTemp('p','artcontent',vm.item.currentInfo.content),relatedNav(vm.item.relatedInfo)]);        
     },
     itemTemp:function(createElement,vm){
-        const stylelist = ['jsimg','cssimg','htmlimg','htmlimg'];
+        const stylelist = ['jsimg','cssimg','htmlimg','htmlimg','htmlimg'];
         function tagTemp(item,sty){
             return createElement('h3',[createElement('label',{
                 attrs:{

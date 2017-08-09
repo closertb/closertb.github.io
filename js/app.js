@@ -9,7 +9,8 @@ requirejs.config({
     }            
 });
 requirejs(['vueRouter','temp','resize','editor','resume','fetchPoly'],function(VueRouter,tempModule,resizeWindow,editor,resume,fetchPoly){   
-    const reqUrl ='/myBlog'; 
+  //  const reqUrl ='/myBlog'; 
+    const reqUrl ='http://localhost:8089/myBlog';
     window.onresize =resizeWindow.resizeWindow;   
     document.querySelector('.off-canvas-launcher').addEventListener('click', resizeWindow.showNav); 
     document.querySelector('aside.shadeLayer').addEventListener('click',resizeWindow.hideNav);  
@@ -33,8 +34,8 @@ requirejs(['vueRouter','temp','resize','editor','resume','fetchPoly'],function(V
         }    
         return {    
             method:'post',
-            mode:'no-cors', 
-         //   mode:'cors', 
+         //   mode:'no-cors', 
+            mode:'cors', 
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
@@ -44,6 +45,7 @@ requirejs(['vueRouter','temp','resize','editor','resume','fetchPoly'],function(V
     document.querySelector("#loginOut").addEventListener('click',function(){
        document.querySelector("#showInfo").classList.remove("isLogin");
        document.querySelector("#addAction").style.display ='none';
+       document.querySelector("#noteControl").style.display ='none';
        sessionStorage.removeItem("token");  
     });     
     /*此处设置vue-resource 拦截器，用于设置http请求头*/
@@ -211,9 +213,12 @@ requirejs(['vueRouter','temp','resize','editor','resume','fetchPoly'],function(V
         },
         beforeRouteEnter(to, from, next){
          next(function(k){  
+        //    let flag = k.$route.query;
+            let flag = k.$route.query.flag;
             const art =document.querySelector('.mcontent');  
+            console.log(flag);
             art.classList.toggle('waitflag');
-            fetch(reqUrl+'/BlogServlet', fetchInitOption({flag:"getListByItem"}))
+            fetch(reqUrl+'/BlogServlet', fetchInitOption({flag:flag}))
             .then(function(response){
                     if(response.ok){
                         return response.json();
@@ -369,13 +374,7 @@ requirejs(['vueRouter','temp','resize','editor','resume','fetchPoly'],function(V
      var vm = new Vue({
         el:"#linkList",
         data:{
-            navlist:[
-                    {"cname":"个人简介"},
-                    {"cname":"项目经验"},   
-                    {"cname":"个人经历"},
-                    {"cname":"所获荣誉"},
-                    {"cname":"插件演示"}                                                      
-                ],
+            state:false,
             detCount:[
                 {"count":18},
                 {"count":21},
@@ -385,8 +384,11 @@ requirejs(['vueRouter','temp','resize','editor','resume','fetchPoly'],function(V
         methods:{     
             btnClick:function(msg){               
                if(msg==='item'){
-                   router.push({path: '/listbyItem'});                                    
+                   router.push({path: '/listbyItem',query:{flag:'getListByItem'}});                                    
                }
+               if(msg==='notes'){
+                   router.push({path: '/listbyItem',query:{flag:'getNoteLists'}});                                    
+               }                
                if(msg==='list'){ 
                    router.push({path: '/detInfo'});                                    
                } 
@@ -422,8 +424,9 @@ requirejs(['vueRouter','temp','resize','editor','resume','fetchPoly'],function(V
     router.beforeEach((to,from,next)=>{
         let token =sessionStorage.getItem('token');
         let addEdit = document.querySelector("#addAction");
+        let noteControl = document.querySelector("#noteControl");
         if(token!==null&&token.length>10&&addEdit.style.display===''){
-            addEdit.style.display ='flex';
+            addEdit.style.display ='flex'; 
         }
         next(()=>{ 
             console.log("go");
@@ -540,6 +543,7 @@ var login = new Vue({
                         document.querySelector("#showInfo").classList.toggle("isLogin");
                         document.querySelector("#showrName").innerHTML=that.userInfo.userName;
                         document.querySelector("#addAction").style.display ='flex';
+                        document.querySelector("#noteControl").style.display ='flex';
                         that = null;
                     }else{
                         alert('请输入与用户名匹配的密码');

@@ -84,7 +84,8 @@ body,div,p,ul,li,header,form,fieldset{
 .nav-link + .nav-link {
 	border-top: 1px solid #aaa;
 }
-#addAction{display: none;}
+#noteControl,#addAction{display: none;}
+
 .nav-link:last-child{border-bottom: 1px solid #aaa;}
 .nav-link:hover {
 	background-color: #4d90fe;
