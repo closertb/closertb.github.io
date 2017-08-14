@@ -1,186 +1,98 @@
     var gulp = require('gulp'),
     reqOptimize =require('gulp-requirejs-optimize'),
+    babel = require('gulp-babel'),
+    presets = require('babel-preset-es2015'),
     rename = require("gulp-rename"),
-    changed = require("gulp-changed"),
     contact =require('gulp-concat'),
     rev =require('gulp-rev'),
-    useref = require('gulp-useref'),    
-    filter = require('gulp-filter'),
     replace =  require('gulp-replace'),
-    revReplace =  require('gulp-rev-replace'),
- RevAll = require('gulp-rev-all'),   
-    format =require('gulp-rev-format'),
-    through2 = require('through2'),
+    revReplace =  require('gulp-rev-replace'),   
+    format =require('gulp-rev-format'), 
+    gutil = require('gulp-util'),   
     revCollector = require('gulp-rev-collector'),
     clean = require('gulp-clean'),
     uglify = require('gulp-uglify'),
     runSequence = require('run-sequence'),
     minifyCss = require('gulp-minify-css'),
-    webserver = require('gulp-webserver');
-var livereload = require('gulp-livereload');
+    autoprefixer = require('gulp-autoprefixer');
+//var livereload = require('gulp-livereload');
 var browserSync = require("browser-sync").create();//创建服务 
-var basePath ='../../gruntLearn/'
-/*var flatten = require('gulp-flatten')*/
-function modify(modifier) {
-    console.log("modify");
-    return through2.obj(function(file, encoding, done) {
-        var content = modifier(String(file.contents));    
-        file.contents = new Buffer(content);
-        this.push(file);
-        done();
-    });
-}
+//var basePath ='../myBlog'
+var basePath ='dist'
 
-function replaceSuffix(data) {
-    return data.replace(/\.js/gmi, "");
-}
-/*将requireJs文件转移到发布目录*/+9-
-gulp.task('revJs',function(){
-    gulp.src('js/main/*.js')
-    .pipe(uglify())
-    .pipe(gulp.dest('dist/js'))
-});
 /*将所有的图片转移到发布目录*/
 gulp.task('revImg',function(){
-    gulp.src('img/**/*')
-    .pipe(gulp.dest('dist/img'))
+   return gulp.src('img/**/*')
+    .pipe(gulp.dest(basePath+'/img'));
 });
-
 
 gulp.task("clean",function () {
     return gulp.src([
-        'rev-manifest.json',
-        'dist/js/*.js',
-        'dist/css/*.css',
-        'dist/index.html'
+        'rev-manifest.json'
     ]).pipe(clean());
 });
-gulp.task("JSreload",function(){
-    return gulp.src(
-        ['rev-manifest.json', 'dist/css/*.cs','dist/js/*.js','dist/index.html']).pipe(clean());
-})
-
-//启动热更新  
- gulp.task('default', ['clean'], function() {  
-    runSequence(       
-        "revImg",
-        "revCss",
-        "optimizeJS",                  //- 文件合并与md5
-        "updateHtml",                  //- 文件合并与md5
-        "updateHtml");      //- 替换index.html文件名
-     browserSync.init({  
-        port: 80,  
-        server: {  
-            baseDir: ['dist']  
-        }   
-    });  
-  //监控文件变化，自动更新 
-    gulp.watch(['js/app.js','css/*.css','index.html'], function(){
-            runSequence(
-            "JSreload",
-            "revCss",
-            'optimizeJS',           
-            "updateHtml", 
-            "updateHtml",
-            browserSync.reload     
-        );       
-    }); 
- })
-
-//gulp.task('default',['server']); 
-
-gulp.task("startServer",function(){
-    gulp.src('dist')
-    .pipe(webserver({
-        port:80,
-        host:'127.0.0.1',
-        liveload:true,
-        directoryListing:{
-            path:'index.html',
-            enable:true
-        }
-    }))
-});
-    /*将主文件依赖管理合并、压缩、重命名、并去掉.js操作，然后转移到发布目录*/ 
-
-gulp.task('optimizeJS', function (cb) {
-    gulp.src('js/app.js')
-    .pipe(reqOptimize({
-    optimize:"none",
-    paths:{
-        vueRouter:'lib/vue-router',
-        marked:'component/marked.js',
-        editor:'component/editor',
-        temp:'component/template',
-        resume:'component/resume',         
-        resize:'component/resizeWindow'
-    }
-    })) 
-    .pipe(rev())
-    .pipe(format({  
-      prefix: '.', // 在版本号前增加字符  
-      suffix: '.cache', // 在版本号后增加字符  
-      lastExt: false  
-    }))   
-    .pipe(gulp.dest('dist/js'))
-    .pipe(rev.manifest({
-        base:'dist',
-        merge:true
-    }))
-  //  .pipe(modify(replaceSuffix))            //- 去掉.js后缀
-    .pipe(gulp.dest('dist/'))       
-    .on('end',cb);   
-}); 
-
 gulp.task('revJS', function (cb) {
     gulp.src('js/app.js')
     .pipe(reqOptimize({
     optimize:"none",
     paths:{
         vueRouter:'lib/vue-router',
-        marked:'component/marked.js',
+        fetchPoly:'lib/fetch',
+        marked:'component/marked',
         editor:'component/editor',
         temp:'component/template',
         resume:'component/resume',         
         resize:'component/resizeWindow'
     }
-    })) 
+    }))
+    .pipe(babel({  
+            presets: ['es2015']  
+        }))
+    .pipe(uglify().on('error',function(err){
+            gutil.log(err);
+            this.emit('end');        
+    }))
+    .pipe(gulp.dest(basePath+'/js'))
+  //  .pipe(uglify())
     .pipe(rev())
     .pipe(format({  
       prefix: '.', // 在版本号前增加字符  
       suffix: '.cache', // 在版本号后增加字符  
       lastExt: false  
     }))   
-    .pipe(gulp.dest('dist/js'))
     .pipe(rev.manifest({
         merge:true
     }))
   //  .pipe(modify(replaceSuffix))            //- 去掉.js后缀
-    .pipe(gulp.dest('dist/'))       
+    .pipe(gulp.dest(''))       
     .on('end',cb);   
 });
 
 gulp.task('revCSS',function(cb){  
      gulp.src('css/*.css')
+    .pipe(autoprefixer({
+            browsers: ['last 3 Safari versions'],
+            cascade: true, //是否美化属性值 默认：true 像这样：
+            remove:true //是否去掉不必要的前缀 默认：true
+        }) )   
     .pipe(contact('index.css'))
-    .pipe(minifyCss())//{compatibility: 'ie8'}
+    .pipe(minifyCss())
+    .pipe(gulp.dest( basePath+'/css'))    
     .pipe(rev())
     .pipe(format({  
       prefix: '.', // 在版本号前增加字符  
       suffix: '.cache', // 在版本号后增加字符  
       lastExt: false  
     }))  
-    .pipe(gulp.dest('dist/css'))
     .pipe(rev.manifest({
-        base:'dist',
         merge:true
     }))
-    .pipe(gulp.dest("dist"))
+    .pipe(gulp.dest(""))
     .on('end',cb)
 });
 
-gulp.task('addv',['revJS','revCSS'] ,function() {  
-    var manifest = gulp.src(["dist/rev-manifest.json"]);  
+gulp.task('updateHtml',function() {  
+    var manifest = gulp.src(["rev-manifest.json"]);  
     function modifyUnreved(filename) {  
       return filename;  
     }  
@@ -201,52 +113,72 @@ gulp.task('addv',['revJS','revCSS'] ,function() {
     }  
     gulp.src('index.html')   
       // 删除原来的版本   
-      .pipe(replace(/(\.[a-z]+)\?(v=)?[^\'\"\&]*/g,"$1"))   
+     // .pipe(replace(/(\.[a-z]+)\?(v=)?[^\'\"\&]*/g,"$1"))   
       .pipe(revReplace({  
       manifest: manifest,  
       modifyUnreved: modifyUnreved,  
       modifyReved: modifyReved  
     }))    
-    .pipe(gulp.dest('dist'));  
-});  
-gulp.task('com',()=>{
-    runSequence('revJS','revCSS','addv');
-})
-gulp.task('def',()=>{
-        var jsFilter = filter('**/app.js',{restore:true}),
-        cssFilter = filter('**/index.css',{restore:true}),
-        htmlFilter = filter(['**/index.html'],{restore:true});
-        gulp.src('index.html')
-        .pipe(useref())
-        .pipe(jsFilter)
-        .pipe(uglify())
-        .pipe(jsFilter.restore)
-        .pipe(cssFilter)                        // 过滤所有css
-        .pipe(minifyCss())                           // 压缩优化css
-        .pipe(cssFilter.restore)
-        .pipe(RevAll.revision({                 // 生成版本号
-            dontRenameFile: ['.html'],          // 不给 html 文件添加版本号
-            dontUpdateReference: ['.html']      // 不给文件里链接的html加版本号
-        }))
-        .pipe(htmlFilter)                       // 过滤所有html                     // 压缩html
-        .pipe(htmlFilter.restore)
-        .pipe(gulp.dest('dist/'))               
-})
-gulp.task('cls',()=>{
-   return gulp.src('dist')
-    .pipe(clean());
-});
-gulp.task('test',['cls'],(cb)=>{
-        gulp.src('css/*.css')
-        .pipe(contact('index.css'))
-        .pipe(gulp.dest("dist/css"))  
-        .pipe(rev())     
-        .pipe(rev.manifest())
-        .pipe(gulp.dest("dist"))
-        .on('end',cb)
-}) ;
-gulp.task('te',['test'],()=>{    
-    gulp.src(['dest/rev-manifest.json', 'index.html'])  
-        .pipe(revCollector())       
-        .pipe(gulp.dest('dist'));  
+    .pipe(gulp.dest(basePath));  
 }); 
+
+//启动热更新  
+ gulp.task('default', ['clean'], function() {  
+    runSequence(       
+        ["revImg",'revJS','revCSS'], 
+        "updateHtml");      //- 替换index.html文件名
+     browserSync.init({  
+        port: 80,  
+        server: {  
+            baseDir: [basePath]  
+        }   
+    });  
+  //监控文件变化，自动更新 
+    gulp.watch(['js/app.js'], function(){
+            runSequence(
+            "revJS",                    
+            "updateHtml", 
+            browserSync.reload     
+        );       
+    }); 
+    gulp.watch('css/*.css',  function(){
+            runSequence(
+            "revCSS",                    
+            "updateHtml",
+            browserSync.reload     
+        );       
+    });
+    gulp.watch('index.html',  function(){
+            runSequence(
+            "updateHtml", 
+            browserSync.reload    
+        );       
+    });
+});
+
+/*以下代码非构建代码，为算法速度测试*/
+gulp.task('ug',()=>{
+    return gulp.src('js/component/resizeWindow.js')
+    .pipe(babel({  
+            presets: ['es2015']  
+        }))
+    .pipe(uglify().on('error',function(err){
+            gutil.log(err);
+            this.emit('end');        
+    }))
+    .pipe(gulp.dest('dist'));
+})
+gulp.task('fun',()=>{
+/*     console.log('satat');
+    console.log(foo);
+    var foo ='sabi';
+    function foo(){
+        console.log('first');
+    }
+    console.log('end');
+    console.log(foo) */
+    var arr = [1,2,3,4,5];
+    console.log(arr.concat(arr));
+})
+
+

@@ -9,8 +9,8 @@ requirejs.config({
     }            
 });
 requirejs(['vueRouter','temp','resize','editor','resume','fetchPoly'],function(VueRouter,tempModule,resizeWindow,editor,resume,fetchPoly){   
-  //  const reqUrl ='/myBlog'; 
-    const reqUrl ='http://localhost:8089/myBlog';
+ //    const reqUrl ='/myBlog'; 
+   const reqUrl ='http://localhost:8089/myBlog';
     window.onresize =resizeWindow.resizeWindow;   
     document.querySelector('.off-canvas-launcher').addEventListener('click', resizeWindow.showNav); 
     document.querySelector('aside.shadeLayer').addEventListener('click',resizeWindow.hideNav);  
@@ -23,6 +23,13 @@ requirejs(['vueRouter','temp','resize','editor','resume','fetchPoly'],function(V
     application/x-www-form-urlencoded格式，然后在传给body*/
     function fetchInitOption(json){
         let sendData; 
+
+        if(!json.hasOwnProperty('token')){
+            let token ='';
+            let id = json.token=sessionStorage.getItem('token');
+            (id)&&(token=id);
+            json.token=id;
+        }
         if(json instanceof Object) {  
             let res=new Array();   
             for(let item in json){          
@@ -74,7 +81,8 @@ requirejs(['vueRouter','temp','resize','editor','resume','fetchPoly'],function(V
                         itemId:3,
                         tags:'',
                         content:''
-                }
+                },
+                token:''
              }  
          },
         methods:{
@@ -109,17 +117,16 @@ requirejs(['vueRouter','temp','resize','editor','resume','fetchPoly'],function(V
                        callback(reqUrl+data);//函数回调
                     })
             },
-            editContent:function(data){
-                let token =sessionStorage.getItem('token');
-                if(token===null){
+            editContent:function(data){               
+                if(this.token===null){
                     alert("请先登录");
                     return ;
                 }
-                if(token.length<10){
+                if(this.token.length<10){
                     alert("请确保你已正确登录");
                     return ;                   
                 }
-                data.token = token ;
+                data.token = this.token;
                     fetch(reqUrl+'/BlogServlet',fetchInitOption(data))
                     .then(function(response){
                         if(response.ok){
@@ -138,7 +145,13 @@ requirejs(['vueRouter','temp','resize','editor','resume','fetchPoly'],function(V
             }
         },
         beforeRouteEnter(to, from, next){
+            let token =sessionStorage.getItem('token');
+            if(token===null){
+                alert('你的token已失效')
+                return;
+            }
             next(function(k){
+                k.token = token;
                 let query = k.$route.query
                 if(query.hasOwnProperty('arcindex')){
                   k.fetchDataById(query.arcindex,k);
@@ -216,7 +229,6 @@ requirejs(['vueRouter','temp','resize','editor','resume','fetchPoly'],function(V
         //    let flag = k.$route.query;
             let flag = k.$route.query.flag;
             const art =document.querySelector('.mcontent');  
-            console.log(flag);
             art.classList.toggle('waitflag');
             fetch(reqUrl+'/BlogServlet', fetchInitOption({flag:flag}))
             .then(function(response){
@@ -288,8 +300,10 @@ requirejs(['vueRouter','temp','resize','editor','resume','fetchPoly'],function(V
                         index:''
                     }
                 }
-             }
-        }},
+             },
+            token:''
+        }
+     },
         methods:{
             gotodetail:function(num){
                 if(num>0){
@@ -314,11 +328,11 @@ requirejs(['vueRouter','temp','resize','editor','resume','fetchPoly'],function(V
                 } 
             },
             setEditEnable:function(){
-                let token =sessionStorage.getItem('token');
-                if(token!==null&&token.length>10){
+                if(this.token!==''&&this.token.length>10){
                     document.querySelector('.artheader').classList.toggle('editEnable');
                 }else{
-                    (document.querySelector('.artheader').classList.contains('editEnable'))&&(
+                    (
+                        document.querySelector('.artheader').classList.contains('editEnable'))&&(
                         document.querySelector('.artheader').classList.remove('editEnable')
                     );
                 }
@@ -327,8 +341,10 @@ requirejs(['vueRouter','temp','resize','editor','resume','fetchPoly'],function(V
                router.push({path:'/markdown',query:{arcindex:index}}) 
             }, 
             fetchDataById:function(){
-              let indexId = this.$route.query.arcindex;
-              let that = this;
+            let indexId = this.$route.query.arcindex;
+            let token = sessionStorage.getItem('token');
+            (token)&&(this.token=token);
+            let that = this;
             const art =document.querySelector('.mcontent');  
             art.classList.toggle('waitflag');              
             fetch(reqUrl+'/BlogServlet', fetchInitOption({flag:"getContentById",queryId:indexId}))            
@@ -426,7 +442,9 @@ requirejs(['vueRouter','temp','resize','editor','resume','fetchPoly'],function(V
         let addEdit = document.querySelector("#addAction");
         let noteControl = document.querySelector("#noteControl");
         if(token!==null&&token.length>10&&addEdit.style.display===''){
+      //      document.querySelector("#showInfo").classList.toggle("isLogin");
             addEdit.style.display ='flex'; 
+            noteControl.style.display ='flex'; 
         }
         next(()=>{ 
             console.log("go");
@@ -516,6 +534,7 @@ var login = new Vue({
                             } 
                         }).then(function(data){
                             that.userInfo = data;
+                            console.log(data);
                             document.querySelector("#showInfo").classList.toggle("isLogin");
                             document.querySelector("#showrName").innerHTML=that.userInfo.userName;                 
                             that =null;
