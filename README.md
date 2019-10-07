@@ -19,7 +19,7 @@
  - [GitHub API][4]  
 
 ## 关于构建部署
-生成秘钥对： ssh-keygen -t rsa -b 4096 -C "$(git config closertb@sina.com)" -f gh-pages -N ""
+生成秘钥对： ssh-keygen -t rsa -b 4096 -C "$(git config user.email)" -f gh-pages -N ""
 
 [1]: https://www.npmjs.com/package/@doddle/doddle-build
 [2]: https://www.apollographql.com/docs/react/
