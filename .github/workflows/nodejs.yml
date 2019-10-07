@@ -1,0 +1,25 @@
+name: Deploy blog source to github pages
+
+on: 
+  push:
+    branches:
+      - react
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@master
+      
+    - name: build
+      run: npm install && npm run pub
+
+    - name: deploy
+      uses: peaceiris/actions-gh-pages@v2.5.0
+      env:
+          ACTIONS_DEPLOY_KEY: ${{ secrets.Deploy_Access_Token }}
+          PUBLISH_BRANCH: master
+          PUBLISH_DIR: './dist'

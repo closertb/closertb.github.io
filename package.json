@@ -1,38 +1,39 @@
 {
-  "name": "My-Blog",
+  "name": "blog",
+  "title": "吃饭不洗碗",
   "version": "1.0.0",
-  "description": "This is for study gulp project !",
-  "main": "gulpfile.js",
+  "description": "a dva project template with doddle plugins",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "http-server"
+    "pub": "doddle-build pub",
+    "start": "doddle-build start --port 8905"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/closertb/closertb.github.io.git"
+  },
+  "homepage": "https://closertb.github.io",
   "keywords": [],
-  "author": "",
+  "author": "doddle",
   "license": "ISC",
   "devDependencies": {
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-es2015-node5": "^1.2.0",
-    "browser-sync": "^2.18.12",
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^4.0.0",
-    "gulp-babel": "^6.1.2",
-    "gulp-changed": "^3.1.0",
-    "gulp-clean": "^0.3.2",
-    "gulp-concat": "^2.6.1",
-    "gulp-flatten": "^0.3.1",
-    "gulp-livereload": "^3.8.1",
-    "gulp-minify-css": "^1.2.4",
-    "gulp-rename": "^1.2.2",
-    "gulp-requirejs-optimize": "^1.2.0",
-    "gulp-rev": "^7.1.2",
-    "gulp-rev-collector": "^1.2.2",
-    "gulp-sequence": "^0.4.6",
-    "gulp-uglify": "^3.0.0",
-    "gulp-util": "^3.0.8",
-    "gulp-webserver": "^0.9.1",
-    "http-server": "^0.10.0",
-    "run-sequence": "^1.2.2",
-    "through2": "^2.0.3"
+    "@doddle/doddle-build": "^1.1.0",
+    "@doddle/eslint-config-doddle": "~0.0.13"
+  },
+  "dependencies": {
+    "@apollo/react-hooks": "^3.1.1",
+    "apollo-cache-inmemory": "^1.6.3",
+    "apollo-client": "^2.6.4",
+    "apollo-link-context": "^1.0.19",
+    "apollo-link-http": "^1.5.16",
+    "graphql": "^14.5.8",
+    "graphql-tag": "^2.10.1",
+    "react": "^16.2.0",
+    "react-apollo": "^2.1.8",
+    "react-dom": "^16.2.0",
+    "react-router-dom": "^5.1.1"
+  },
+  "webpack": {
+    "copyPublic": true
   }
 }

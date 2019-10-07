@@ -1,0 +1,9 @@
+{
+    "extends": ["@doddle/eslint-config-doddle"],
+    "parserOptions": {
+        "sourceType": "module"
+    },
+    "rules": {
+        "operator-linebreak": ["error", "after"]
+    }
+}
