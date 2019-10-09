@@ -16,7 +16,7 @@ export default function List({ totalCount = 0, edges = [] }) {
             </h4>
             <div className="info">
               <div className="reactions">
-                <a href={url} target="_blank" rel="noopener noreferrer">原文链接</a>
+                <a href={url} target="_blank" rel="noopener noreferrer">Issue链接</a>
               </div>
               <span className="create-time">
                 {DateFormat(createdAt)}

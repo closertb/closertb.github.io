@@ -32,7 +32,7 @@ export default function BlogDetail({ location: { pathname, search = '' } }) {
           <div className="header">
             <h3 className="title">{title}</h3>
             <div className="info">
-              <a href={url} target="_blank" rel="noopener noreferrer">原文链接</a>
+              <a href={url} target="_blank" rel="noopener noreferrer">Issue链接</a>
               <span>更新于：{DateFormat(updatedAt)}</span>
             </div>
           </div>

@@ -2,7 +2,7 @@
   "name": "blog",
   "title": "吃饭不洗碗",
   "version": "1.0.0",
-  "description": "a dva project template with doddle plugins",
+  "description": "a github blog template with doddle plugins",
   "main": "index.js",
   "scripts": {
     "pub": "doddle-build pub",
