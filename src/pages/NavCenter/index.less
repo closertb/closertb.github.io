@@ -27,12 +27,28 @@
       width: 100%;
       margin-top: 10px;
       box-sizing: border-box;
-      border: 2px solid yellowgreen;
+      border: 2px solid #ddcaea;
       border-radius: 5px;
     }
+    .block-title {
+      position: relative;
+      display: inline-block;
+    }
+    .small-git {
+      position: absolute;
+      right: -16px;
+      top: -8px;
+      font-size: 14px;
+      color: #ff0000a1;
+      &:hover {
+        color: yellowgreen;
+      }
+    }
     @media (max-width: 767px) {
+      // flex-direction: column;
+      align-items: center;
       .block {
-        margin: 10px auto;
+        margin: 20px 0 0;
       }
     }
   }

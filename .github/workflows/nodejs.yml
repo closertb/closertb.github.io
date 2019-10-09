@@ -3,7 +3,7 @@ name: Deploy blog source to github pages
 on: 
   push:
     branches:
-      - master
+      - blog
 
 jobs:
   build:
@@ -21,6 +21,5 @@ jobs:
       uses: peaceiris/actions-gh-pages@v2.5.0
       env:
           ACTIONS_DEPLOY_KEY: ${{ secrets.Deploy_Access_Token }}
-          EXTERNAL_REPOSITORY: closertb/closertb.github.io
           PUBLISH_BRANCH: master
           PUBLISH_DIR: './dist'

@@ -23,10 +23,11 @@
 关于deploy-action: [参考文档][5]
 
 ## 快速搭建属于你的博客
-可查看当前目录下的realtedArticle文件  
+可查看[相关文章][6]  
 
 [1]: https://www.npmjs.com/package/@doddle/doddle-build
 [2]: https://www.apollographql.com/docs/react/
 [3]: http://graphql.cn/learn/
 [4]: https://developer.github.com/v4/explorer/
 [5]: https://github.com/marketplace/actions/deploy-action-for-github-pages
+[6]: https://github.com/closertb/MyBlog/issues/34
