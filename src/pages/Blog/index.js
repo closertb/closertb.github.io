@@ -1,14 +1,14 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { PAGE_SIZE } from '../../configs/constants';
 import QueryWithLoading from '../../components/QueryWithLoading';
-import { sql } from './model';
+import { sql } from './sql';
 import List from './List';
 import style from './index.less';
 
 
 export default function Blog() {
   const [param, setParam] = useState({ pageFirst: PAGE_SIZE, current: 1 });
-  const pageRef = useRef({ pn: 1 });
+  const pageRef = useRef();
   const setCursorBack = useCallback((data) => {
     const { repository: { issues: { edges } } } = data;
     pageRef.current = {

@@ -9,7 +9,7 @@ query Blog($pageFirst: Int, $pageLast: Int, $pageBefore: String, $pageAfter: Str
       field: CREATED_AT
       direction: DESC
     }, filterBy: {
-      createdBy: "closertb"
+      createdBy: ${OWNER}
     }) {
       totalCount
       edges {

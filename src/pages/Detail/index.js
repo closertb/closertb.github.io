@@ -1,33 +1,30 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import QueryWithLoading from '../../components/QueryWithLoading';
-import { sql } from './model';
+import { DateFormat } from '../../configs/utils';
+import { sql } from './sql';
 import style from './index.less';
 
 function RelateLink({ data, className }) {
-  const { eddges = [ ] } = data;
-  if (eddges.length === 0) {
+  const { edges = [] } = data;
+  if (edges.length === 0) {
     return null;
   }
-  const { cursor, node: { title, url } } = eddges[0];
-  return <Link className={className} to={`/blog/${url.replace(/.*issues\//, '')}?cursor=${cursor}`}>{title}</Link>
+  const { cursor, node: { title, url } } = edges[0];
+  return (<Link className={className} to={`/blog/${url.replace(/.*issues\//, '')}?cursor=${cursor}`}>{title}</Link>);
 }
-export default function BlogDetail({ location: { pathname } }) {
+export default function BlogDetail({ location: { pathname, search = '' } }) {
   const number = pathname.replace('/blog/', '');
   if (typeof number !== 'string' && typeof +number !== 'number') {
     return <div className="content-waring">路径无效</div>;
   }
+  // 提取cursor
+  const cursor = search ?
+    search.slice(1).split('&').find(item => item.includes('cursor=')).replace('cursor=', '') :
+    undefined;
 
-  const param = { number: +number };
+  const param = { number: +number, cursor };
   // const { loading, error, data = {} } = useQuery(query({ number }));
-
-  // if (loading) return <p>Loading...</p>;
-  // if (error) return <p>Error :(</p>;
-
-  // const { repository: { issue: { title, url, bodyHTML, updatedAt } } } = data;
-
-  // if (bodyHTML === '') {
-  //   return <div className="content-waring">暂无内容</div>;
-  // }
   return (
     <QueryWithLoading sql={sql} query={param}>
       {({ repository: { issue: { title, url, bodyHTML, updatedAt }, last = {}, next = {} } }) => (
@@ -36,7 +33,7 @@ export default function BlogDetail({ location: { pathname } }) {
             <h3 className="title">{title}</h3>
             <div className="info">
               <a href={url} target="_blank" rel="noopener noreferrer">原文链接</a>
-              <span>{updatedAt}</span>
+              <span>更新于：{DateFormat(updatedAt)}</span>
             </div>
           </div>
           <div className="markdown-body" dangerouslySetInnerHTML={{ __html: bodyHTML }} />
@@ -47,6 +44,5 @@ export default function BlogDetail({ location: { pathname } }) {
         </div>
       )}
     </QueryWithLoading>
-
   );
 }

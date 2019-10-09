@@ -22,6 +22,9 @@
 生成秘钥对： ssh-keygen -t rsa -b 4096 -C "$(git config user.email)" -f gh-pages -N ""
 关于deploy-action: [参考文档][5]
 
+## 快速搭建属于你的博客
+可查看当前目录下的realtedArticle文件  
+
 [1]: https://www.npmjs.com/package/@doddle/doddle-build
 [2]: https://www.apollographql.com/docs/react/
 [3]: http://graphql.cn/learn/

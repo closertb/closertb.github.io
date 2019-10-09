@@ -9,7 +9,7 @@ export default function List({ totalCount = 0, edges = [] }) {
   return (
     <div className="list-wrapper">
       <ul>
-        {edges.map(({ cursor, node: { title, url, updatedAt } }) => (
+        {edges.map(({ cursor, node: { title, url, createdAt } }) => (
           <li className="block" key={url}>
             <h4 className="title">
               <Link to={`/blog/${url.replace(/.*issues\//, '')}?cursor=${cursor}`}>{title}</Link>
@@ -19,7 +19,7 @@ export default function List({ totalCount = 0, edges = [] }) {
                 <a href={url} target="_blank" rel="noopener noreferrer">原文链接</a>
               </div>
               <span className="create-time">
-                {DateFormat(updatedAt)}
+                {DateFormat(createdAt)}
               </span>
             </div>
           </li>

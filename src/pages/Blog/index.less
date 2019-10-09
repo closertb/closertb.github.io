@@ -11,7 +11,6 @@
     .block {
       margin-bottom: 25px;
       padding-bottom: 5px;
-      border-bottom: 1px dashed #ddd;
       .title {
         position: relative;
         padding: 2px 20px; 
@@ -40,42 +39,6 @@
       }
       &:last-child {
         margin-bottom: 10px;
-      }
-    }
-    .page-jump {
-      position: relative;
-      height: 30px;
-      padding: 5px 10px;
-      a {
-        color: @mian-color;
-        text-decoration: none;
-        &:hover {
-          color: rgb(0, 0, 238);
-          cursor: pointer;
-          text-decoration: rgb(0, 0, 238);
-        }
-      }
-      .next {
-        position: absolute;
-        right: 5px;
-        &::after {
-          content: '→';
-          position: absolute;
-          left: 27px;
-          right: 0;
-          bottom: -17px;
-        }
-      }
-      .last {
-        position: absolute;
-        left: 5px;
-        &::after {
-          content: '←';
-          position: absolute;
-          left: 7px;
-          right: 0;
-          bottom: -17px;
-        }
       }
     }
   }
