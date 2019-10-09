@@ -26,5 +26,33 @@ export const sql = gql`query BlogDetail($number: Int!) {
         }
       }
     }
+    last: issues(last: 1, before: "Y3Vyc29yOnYyOpK5MjAxOS0xMC0wM1QyMjo1Mjo1MSswODowMM4d7bB-", orderBy: {
+      field: CREATED_AT
+      direction: DESC
+    }, filterBy: {
+      createdBy: "closertb"
+    }) {
+      edges {
+        cursor
+        node {
+          title
+          url
+        }
+      }
+    }
+    next: issues(first: 1, after: "Y3Vyc29yOnYyOpK5MjAxOS0xMC0wM1QyMjo1Mjo1MSswODowMM4d7bB-", orderBy: {
+      field: CREATED_AT
+      direction: DESC
+    }, filterBy: {
+      createdBy: "closertb"
+    }) {
+      edges {
+        cursor
+        node {
+          title
+          url
+        }
+      }
+    }
   }
 }`;

@@ -3,6 +3,14 @@ import QueryWithLoading from '../../components/QueryWithLoading';
 import { sql } from './model';
 import style from './index.less';
 
+function RelateLink({ data, className }) {
+  const { eddges = [ ] } = data;
+  if (eddges.length === 0) {
+    return null;
+  }
+  const { cursor, node: { title, url } } = eddges[0];
+  return <Link className={className} to={`/blog/${url.replace(/.*issues\//, '')}?cursor=${cursor}`}>{title}</Link>
+}
 export default function BlogDetail({ location: { pathname } }) {
   const number = pathname.replace('/blog/', '');
   if (typeof number !== 'string' && typeof +number !== 'number') {
@@ -22,7 +30,7 @@ export default function BlogDetail({ location: { pathname } }) {
   // }
   return (
     <QueryWithLoading sql={sql} query={param}>
-      {({ repository: { issue: { title, url, bodyHTML, updatedAt } } }) => (
+      {({ repository: { issue: { title, url, bodyHTML, updatedAt }, last = {}, next = {} } }) => (
         <div className={style.Detail}>
           <div className="header">
             <h3 className="title">{title}</h3>
@@ -32,6 +40,10 @@ export default function BlogDetail({ location: { pathname } }) {
             </div>
           </div>
           <div className="markdown-body" dangerouslySetInnerHTML={{ __html: bodyHTML }} />
+          <div className="page-jump">
+            <RelateLink data={last} className="last" />
+            <RelateLink data={next} className="next" />
+          </div>
         </div>
       )}
     </QueryWithLoading>

@@ -9,10 +9,10 @@ export default function List({ totalCount = 0, edges = [] }) {
   return (
     <div className="list-wrapper">
       <ul>
-        {edges.map(({ node: { title, url, updatedAt } }) => (
+        {edges.map(({ cursor, node: { title, url, updatedAt } }) => (
           <li className="block" key={url}>
             <h4 className="title">
-              <Link to={`/blog/${url.replace(/.*issues\//, '')}`}>{title}</Link>
+              <Link to={`/blog/${url.replace(/.*issues\//, '')}?cursor=${cursor}`}>{title}</Link>
             </h4>
             <div className="info">
               <div className="reactions">

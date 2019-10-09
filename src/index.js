@@ -23,7 +23,7 @@ const authLink = setContext((_, { headers }) => ({
   }
 }));
 const httpLink = new HttpLink({
-  uri: `https://api.github.com/graphql?_graphql_explorer_session=${token}`,
+  uri: 'https://api.github.com/graphql',
   batchInterval: 10,
   opts: {
     credentials: 'cross-origin',
@@ -31,7 +31,7 @@ const httpLink = new HttpLink({
 });
 const client = new ApolloClient({
   clientState: { resolvers, defaults, cache, typeDefs },
-  cache, // 本地数据存储
+  cache, // 本地数据存储, 暂时用不上
   link: authLink.concat(httpLink)
 });
 
