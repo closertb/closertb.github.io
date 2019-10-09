@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { PAGE_SIZE } from '../../configs/constants';
-import QueryWithLoading from '../../components/QueryWithLoading';
+import { PAGE_SIZE } from 'configs/constants';
+import QueryWithLoading from 'components/QueryWithLoading';
 import { sql } from './sql';
 import List from './List';
 import style from './index.less';

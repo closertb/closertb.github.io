@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import QueryWithLoading from '../../components/QueryWithLoading';
-import { DateFormat } from '../../configs/utils';
+import QueryWithLoading from 'components/QueryWithLoading';
+import { DateFormat } from 'configs/utils';
 import { sql } from './sql';
 import style from './index.less';
 

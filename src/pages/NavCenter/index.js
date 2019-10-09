@@ -1,6 +1,6 @@
 /* eslint-disable react/button-has-type */
 import React from 'react';
-import { NavMenu } from '../../configs/menu';
+import { NavMenu } from 'configs/menu';
 import style from './index.less';
 
 export default function NavCenter() {

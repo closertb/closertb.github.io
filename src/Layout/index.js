@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Switch, Route, NavLink, Redirect } from 'react-router-dom';
-import { SITE_NAME, SITE_MOTTO, SITE_ADDRESS, GITHUB_URL, GITHUB_FORK_IMG } from '../configs/constants';
-import { Menu, Routes } from '../configs/menu';
+import { SITE_NAME, SITE_MOTTO, SITE_ADDRESS, GITHUB_URL, GITHUB_FORK_IMG } from 'configs/constants';
+import { Menu, Routes } from 'configs/menu';
 import Pages from '../pages';
 import styles from './index.less';
 

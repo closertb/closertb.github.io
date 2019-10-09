@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { DateFormat } from '../../configs/utils';
+import { DateFormat } from 'configs/utils';
 
 export default function List({ totalCount = 0, edges = [] }) {
   if (totalCount === 0) {
