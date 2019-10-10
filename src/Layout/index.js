@@ -52,6 +52,10 @@ export default function Layout(props) {
       </div>
       <footer className="foot">
         <div>Copyright © 2019-2050 吃饭不洗碗 | 蜀ICP备19031041号-1</div>
+        <div>
+          <span id="busuanzi_container_site_pv">本站总访问量：<span id="busuanzi_value_site_pv" />次</span>
+          <span className="pl-30" id="busuanzi_container_site_uv">访问人数：<span id="busuanzi_value_site_uv" />次</span>
+        </div>
       </footer>
     </div>
   );
