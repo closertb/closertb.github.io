@@ -1,14 +1,8 @@
 ## Blog
 分享工作与生活中的点滴
 
-## 新建步骤
-1. git clone -b blog  https://github.com/closertb/closertb.github.io.git // 下载
-
-2. npm install // 安装依赖
-
-3. npm start // 开启本地在线调试
-
-4. npm pub // 打包发布你的应用  
+## 快速搭建属于你的博客
+可查看[相关文章][6]
 
 ## 关于doddle-build
 详情请查看[README][1]
@@ -21,9 +15,7 @@
 ## 关于构建部署
 生成秘钥对： ssh-keygen -t rsa -b 4096 -C "$(git config user.email)" -f gh-pages -N ""
 关于deploy-action: [参考文档][5]
-
-## 快速搭建属于你的博客
-可查看[相关文章][6]  
+ 
 
 [1]: https://www.npmjs.com/package/@doddle/doddle-build
 [2]: https://www.apollographql.com/docs/react/
