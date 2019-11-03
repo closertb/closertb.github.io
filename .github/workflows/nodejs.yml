@@ -18,8 +18,10 @@ jobs:
       run: npm install && npm run pub
 
     - name: deploy
-      uses: peaceiris/actions-gh-pages@v2.5.0
-      env:
-          ACTIONS_DEPLOY_KEY: ${{ secrets.Deploy_Access_Token }}
-          PUBLISH_BRANCH: master
-          PUBLISH_DIR: './dist'
+      uses: closertb/deploy-static-action@master
+      with:
+        name: 'doddle'
+        token: ${{ secrets.Deploy_Token }}
+        requestUrl: 'http://114.55.38.249:8080/operate/deploy'
+        dist: 'dist'
+        target: 'blog'
