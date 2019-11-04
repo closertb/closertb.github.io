@@ -7,7 +7,8 @@
 ## 我的开源项目
  - [ant-doddle](http://doc.closertb.site): 一个替代antd中后台开发频繁复制粘贴的简易方案库；
  - [deploy-static-action](https://github.com/closertb/deploy-static-action): 一个前端打包部署Action（Github CI/CD）
- - [@doddle](): 一套可共参考的前端工程化方案；
+ - [@doddle](https://github.com/closertb/doddle): 一套可供参考的前端工程化方案；
+ - [Dva SSR](https://github.com/closertb/template): 基于React + Koa + Dva-Core的一套前端服务端渲染同构方案；
  - github blog: 见下面一段；
 
 ## 如果你也想快速搭建属于你的博客
