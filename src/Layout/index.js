@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Switch, Route, NavLink, Redirect } from 'react-router-dom';
-import { SITE_NAME, SITE_MOTTO, SITE_ADDRESS, GITHUB_URL, GITHUB_FORK_IMG } from 'configs/constants';
+import { SITE_NAME, SITE_MOTTO, SITE_ADDRESS, GITHUB_URL, GITHUB_FORK_IMG, ICP_CODE } from 'configs/constants';
 import { Menu, Routes } from 'configs/menu';
 import Pages from '../pages';
 import styles from './index.less';
@@ -51,7 +51,12 @@ export default function Layout(props) {
         </Switch>
       </div>
       <footer className="foot">
-        <div>Copyright © 2019-2050 吃饭不洗碗 | 蜀ICP备19031041号-1</div>
+        <div>
+          Copyright © 2019-2050 吃饭不洗碗 |
+          <a className="icp" href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">
+            {ICP_CODE}
+          </a>
+        </div>
         <div>
           <span id="busuanzi_container_site_pv">本站总访问量：<span id="busuanzi_value_site_pv" />次</span>
           <span className="pl-30" id="busuanzi_container_site_uv">访问人数：<span id="busuanzi_value_site_uv" />次</span>
