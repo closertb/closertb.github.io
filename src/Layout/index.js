@@ -52,7 +52,7 @@ export default function Layout(props) {
       </div>
       <footer className="foot">
         <div>
-          Copyright © 2019-2050 吃饭不洗碗 |
+          Copyright © 2017-{new Date().getFullYear()} 吃饭不洗碗 |
           <a className="icp" href="http://www.beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">
             {ICP_CODE}
           </a>
