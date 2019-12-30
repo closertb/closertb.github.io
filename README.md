@@ -1,8 +1,18 @@
-## Blog
-分享工作与生活中的点滴
+## 吃饭不洗碗
+一个造战斗机转行的前端工程师，成长的点点滴滴
 
-## 快速搭建属于你的博客
-可查看[相关文章][6]
+## 在线地址
+**[closertb.site](http://closertb.site)**
+
+## 我的开源项目
+ - [ant-doddle](http://doc.closertb.site): 一个替代antd中后台开发频繁复制粘贴的简易方案库；
+ - [deploy-static-action](https://github.com/closertb/deploy-static-action): 一个前端打包部署Action（Github CI/CD）
+ - [@doddle](https://github.com/closertb/doddle): 一套可供参考的前端工程化方案；
+ - [Dva SSR](https://github.com/closertb/template): 基于React + Koa + Dva-Core的一套前端服务端渲染同构方案；
+ - github blog: 见下面一段；
+
+## 如果你也想快速搭建属于你的博客
+本博客基于github issues提供数据，github pages提供前端展示，应用github action自动部署。让私人定制化博客不再是你的门槛，可查看[相关文章][6]进一步了解
 
 ## 关于doddle-build
 详情请查看[README][1]
