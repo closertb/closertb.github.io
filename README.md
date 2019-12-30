@@ -23,7 +23,7 @@
  - [GitHub API][4]  
 
 ## 关于构建部署
-生成秘钥对： ssh-keygen -t rsa -b 4096 -C "$(git config user.email)" -f gh-pages -N ""
+生成秘钥对： ssh-keygen -t rsa -b 4096 -C "$(git config user.email)" -f gh-pages -N ""  
 关于deploy-action: [参考文档][5]
  
 
