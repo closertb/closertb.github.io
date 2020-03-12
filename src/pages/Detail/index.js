@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import QueryWithLoading from 'components/QueryWithLoading';
 import { DateFormat } from 'configs/utils';
@@ -24,6 +24,20 @@ export default function BlogDetail({ location: { pathname, search = '' } }) {
     undefined;
 
   const param = { number: +number, cursor };
+
+  const callback = useCallback((e) => {
+    const href = (e.target && e.target.href) || '';
+    if (href.includes('closertb.github.io/issues/')) {
+      e.preventDefault();
+      window.location.href = `/#/blog/${href.split('/').pop()}`;
+    }
+  });
+  useEffect(() => {
+    document.addEventListener('click', callback);
+    return () => {
+      document.removeEventListener('click', callback);
+    };
+  }, []);
   // const { loading, error, data = {} } = useQuery(query({ number }));
   return (
     <QueryWithLoading sql={sql} query={param} path={pathname}>
