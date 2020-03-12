@@ -9,6 +9,7 @@ import style from './index.less';
 export default function Blog() {
   const [param, setParam] = useState({ pageFirst: PAGE_SIZE, current: 1 });
   const pageRef = useRef();
+  // 获取锚点，并缓存锚点
   const setCursorBack = useCallback((data) => {
     const { repository: { issues: { edges } } } = data;
     pageRef.current = {

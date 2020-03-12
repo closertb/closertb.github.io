@@ -26,7 +26,7 @@ export default function BlogDetail({ location: { pathname, search = '' } }) {
   const param = { number: +number, cursor };
   // const { loading, error, data = {} } = useQuery(query({ number }));
   return (
-    <QueryWithLoading sql={sql} query={param}>
+    <QueryWithLoading sql={sql} query={param} path={pathname}>
       {({ repository: { issue: { title, url, bodyHTML, updatedAt }, last = {}, next = {} } }) => (
         <div className={style.Detail}>
           <div className="header">

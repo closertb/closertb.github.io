@@ -9,7 +9,8 @@ query Blog($pageFirst: Int, $pageLast: Int, $pageBefore: String, $pageAfter: Str
       field: CREATED_AT
       direction: DESC
     }, filterBy: {
-      createdBy: ${OWNER}
+      createdBy: ${OWNER},
+      labels: ["CI/CD", "Server", "react", "network", "FE Engineering"]
     }) {
       totalCount
       edges {
