@@ -1,6 +1,8 @@
 import gql from 'graphql-tag';
 import { OWNER, PROJECT } from '../../configs/constants';
 
+// labels: ["CI/CD", "Server", "react", "network", "FE Engineering"]
+
 export const sql = gql`
 query Blog($pageFirst: Int, $pageLast: Int, $pageBefore: String, $pageAfter: String){
   repository(owner: ${OWNER}, name: ${PROJECT}) {
@@ -9,8 +11,7 @@ query Blog($pageFirst: Int, $pageLast: Int, $pageBefore: String, $pageAfter: Str
       field: CREATED_AT
       direction: DESC
     }, filterBy: {
-      createdBy: ${OWNER},
-      labels: ["CI/CD", "Server", "react", "network", "FE Engineering"]
+      createdBy: ${OWNER}
     }) {
       totalCount
       edges {
