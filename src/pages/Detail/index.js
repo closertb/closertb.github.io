@@ -8,7 +8,18 @@ import style from './index.less';
 const marked = window.markdownit({
   html: true,
   linkify: true,
-  typographer: true
+  typographer: true,
+  highlight: (str, lang) => {
+    if (lang && window.hljs.getLanguage(lang)) {
+      try {
+        return window.hljs.highlight(lang, str).value;
+      } catch (__) {
+        return str;
+      }
+    }
+
+    return str; // use external default escaping
+  }
 });
 
 function RelateLink({ data, className }) {
@@ -47,7 +58,7 @@ export default function BlogDetail({ location: { pathname, search = '' } }) {
   // const { loading, error, data = {} } = useQuery(query({ number }));
   return (
     <QueryWithLoading sql={sql} query={param} path={pathname}>
-      {({ repository: { issue: { title, url, bodyHTML, body, updatedAt }, last = {}, next = {} } }) => (
+      {({ repository: { issue: { title, url, body, updatedAt }, last = {}, next = {} } }) => (
         <div className={style.Detail}>
           <div className="header">
             <h3 className="title">{title}</h3>
