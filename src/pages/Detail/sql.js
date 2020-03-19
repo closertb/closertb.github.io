@@ -10,7 +10,7 @@ export const sql = gql`query BlogDetail($number: Int!, $cursor: String) {
     issue(number: $number) {
       title
       url
-      bodyHTML
+      body
       updatedAt
       comments(first:100) {
         totalCount

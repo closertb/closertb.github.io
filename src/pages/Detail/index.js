@@ -5,6 +5,12 @@ import { DateFormat } from 'configs/utils';
 import { sql } from './sql';
 import style from './index.less';
 
+const marked = window.markdownit({
+  html: true,
+  linkify: true,
+  typographer: true
+});
+
 function RelateLink({ data, className }) {
   const { edges = [] } = data;
   if (edges.length === 0) {
@@ -41,7 +47,7 @@ export default function BlogDetail({ location: { pathname, search = '' } }) {
   // const { loading, error, data = {} } = useQuery(query({ number }));
   return (
     <QueryWithLoading sql={sql} query={param} path={pathname}>
-      {({ repository: { issue: { title, url, bodyHTML, updatedAt }, last = {}, next = {} } }) => (
+      {({ repository: { issue: { title, url, bodyHTML, body, updatedAt }, last = {}, next = {} } }) => (
         <div className={style.Detail}>
           <div className="header">
             <h3 className="title">{title}</h3>
@@ -50,7 +56,7 @@ export default function BlogDetail({ location: { pathname, search = '' } }) {
               <span>更新于：{DateFormat(updatedAt)}</span>
             </div>
           </div>
-          <div className="markdown-body" dangerouslySetInnerHTML={{ __html: bodyHTML }} />
+          <div className="markdown-body" dangerouslySetInnerHTML={{ __html: marked.render(body) }} />
           <div className="page-jump">
             <RelateLink data={last} className="last" />
             <RelateLink data={next} className="next" />
