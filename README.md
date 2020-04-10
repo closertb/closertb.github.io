@@ -2,7 +2,9 @@
 一个造战斗机转行的前端工程师，成长的点点滴滴
 
 ## 在线地址
-**[closertb.site](http://closertb.site)**
+**[closertb.site](http://closertb.site)**  
+
+项目采用Service Worker，支持了静态资源的离线缓存
 
 ## 我的开源项目
  - [ant-doddle](http://doc.closertb.site): 一个替代antd中后台开发频繁复制粘贴的简易方案库；

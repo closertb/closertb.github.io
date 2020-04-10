@@ -10,7 +10,7 @@ if (workbox) {
   workbox.skipWaiting();
   workbox.clientsClaim();
   workbox.routing.registerRoute(/https:\/\/closertb.site\/.+\.(css|js)$/,
-    workbox.strategies.staleWhileRevalidate({
+    workbox.strategies.cacheFirst({
       cacheName: 'doddle:static',
       plugins: [
         new workbox.expiration.Plugin({
