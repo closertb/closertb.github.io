@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "pub": "doddle-build pub",
-    "start": "doddle-build start --port 8905"
+    "start": "doddle-build start --port 8905 --publicPath http://localhost:8905/"
   },
   "repository": {
     "type": "git",

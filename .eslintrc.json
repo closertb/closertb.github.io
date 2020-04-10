@@ -3,6 +3,9 @@
     "parserOptions": {
         "sourceType": "module"
     },
+    "globals": {
+        "navigator": true
+    },
     "rules": {
         "operator-linebreak": ["error", "after"]
     }
