@@ -12,6 +12,13 @@
   </head>
   <body>
     <div id="app" class="home"></div>
+    <script>
+      navigator.serviceWorker && navigator.serviceWorker.register('/worker.js', {
+        name: 'doddle-sw'
+      }).then(() => {
+        console.log('Service Worker 注册成功');
+      });
+    </script>
     <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     <script src="https://cdn.bootcss.com/highlight.js/9.18.1/highlight.min.js"></script>
     <script src="https://cdn.bootcss.com/markdown-it/10.0.0/markdown-it.js"></script>
