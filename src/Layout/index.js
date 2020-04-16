@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Switch, Route, NavLink, Redirect } from 'react-router-dom';
-import { SITE_NAME, SITE_MOTTO, SITE_ADDRESS, GITHUB_URL, GITHUB_FORK_IMG, ICP_CODE } from 'configs/constants';
+import { SITE_NAME, SITE_MOTTO, LINK_ADDRESS, GITHUB_URL, GITHUB_FORK_IMG, ICP_CODE } from 'configs/constants';
 import { Menu, Routes } from 'configs/menu';
 import Pages from '../pages';
 import styles from './index.less';
@@ -28,7 +28,7 @@ export default function Layout(props) {
         <h3 className="site">
           <div className="name">{SITE_NAME}</div>
           <div className="address">
-            <a href={SITE_ADDRESS} target="_blank" rel="noopener noreferrer">{SITE_MOTTO}</a>
+            <a href={LINK_ADDRESS} target="_blank" rel="noopener noreferrer">{SITE_MOTTO}</a>
           </div>
         </h3>
         <span className="menu-toggle" onClick={() => setActive(!active)} type="button" />

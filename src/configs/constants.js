@@ -1,7 +1,7 @@
 export const GENERATE_ARRAY = [1, 2, 3];
 /* Github个人信息相关 */
 export const SITE_NAME = '吃饭不洗碗'; // 网站标题
-export const SITE_ADDRESS = 'http://closer.site'; // 网站地址，可为空
+export const LINK_ADDRESS = 'https://segmentfault.com/u/denzel'; // 网站地址，可为空
 export const ICP_CODE = '蜀ICP备19031041号-1';
 export const SITE_MOTTO = '不要假装很努力，因为结果不会陪你演戏'; // 一句段子
 export const OWNER = '"closertb"'; // 你github name
