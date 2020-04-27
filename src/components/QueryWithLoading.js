@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 import Styles from './index.less';
 import Loading from './Loading';
 import Error from './Error';
+import { SITE_NAME, LINK_ADDRESS } from '../configs/constants';
 
 export default function CacheQuery({ sql, query, children, callback, pathname }) {
   const { loading, error, data } = useQuery(sql, {
@@ -19,7 +20,7 @@ export default function CacheQuery({ sql, query, children, callback, pathname })
     if (!loading && data && data.repository) {
       document.title = data.repository.issue ? data.repository.issue.title : '吃饭不洗碗';
     }
-    return () => { document.title = '吃饭不洗碗'; };
+    return () => { document.title = SITE_NAME; };
   }, [pathname, loading]);
 
   return (
@@ -33,6 +34,10 @@ export default function CacheQuery({ sql, query, children, callback, pathname })
         <span className="error-wrap">
           <Error />
           <p>{error.message || '未知错误'}</p>
+          <p>
+            不可见人的小秘密：
+            <a href={LINK_ADDRESS}>囧</a>
+          </p>
         </span>
       </p>}
       {!loading && !error && children(data)}
