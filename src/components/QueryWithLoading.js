@@ -35,8 +35,8 @@ export default function CacheQuery({ sql, query, children, callback, pathname })
           <Error />
           <p>{error.message || '未知错误'}</p>
           <p>
-            不可见人的小秘密：
-            <a href={LINK_ADDRESS}>囧</a>
+            github抽风了：
+            <a href={LINK_ADDRESS}>点击进入我的segmentfault小站</a>
           </p>
         </span>
       </p>}
