@@ -8,7 +8,7 @@ export const OWNER = '"closertb"'; // 你github name
 export const PROJECT = '"closertb.github.io"'; // 你issue项目名
 // because of github protect privacy, the token compile with a funciton to encrypted；
 // 由于github安全保护规则，token不能暴露到仓库中，但又因为我们申请的token只是一个只读token，所以这里使用了简单函数进行了对称加解密绕开规则；
-export const TOKEN = 'qÈÇÅghÅÄpjhilÇÉhfigmjekÇfi';
+export const TOKEN = 'ÄcbdÊniÆÇÉÇÈÈjkgelÈ';
 export const GITHUB_URL = 'https://github.com/closertb';
 /* 博客展示相关 */
 export const PAGE_SIZE = 10;
