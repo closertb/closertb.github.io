@@ -17,7 +17,7 @@
   "author": "doddle",
   "license": "ISC",
   "devDependencies": {
-    "@doddle/doddle-build": "^1.1.1",
+    "@doddle/doddle-build": "^1.3.6",
     "@doddle/eslint-config-doddle": "~0.0.13"
   },
   "dependencies": {

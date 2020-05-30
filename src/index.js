@@ -7,6 +7,7 @@ import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { TOKEN } from 'configs/constants';
 import { unCompileParam } from 'configs/utils';
+import graphqlUri from 'configs/server';
 import { resolvers, typeDefs, defaults } from './client/index';
 import LayoutRouter from './router';
 import './style/index.less';
@@ -16,6 +17,7 @@ const token = unCompileParam(TOKEN);
 
 // Initialize
 const cache = new InMemoryCache();
+
 const authLink = setContext((_, { headers }) => ({
   headers: {
     ...headers,
@@ -23,7 +25,7 @@ const authLink = setContext((_, { headers }) => ({
   }
 }));
 const httpLink = new HttpLink({
-  uri: 'https://api.github.com/graphql',
+  uri: graphqlUri,
   batchInterval: 10,
   opts: {
     credentials: 'cross-origin',
