@@ -59,10 +59,27 @@
       z-index: 3;
 
       .name {
+        position: relative;
         font-size: 20px;
         line-height: 20px;
         color: #333333;
         letter-spacing: 0.75px;
+        img {
+          width: 18px;
+          position: absolute;
+          top: -5px;
+          padding-left: 10px;
+        }
+        a:hover {
+          &:after {
+            position: absolute;
+            font-size: 12px;
+            top: -5px;
+            left: 135px;
+            color: #629e8e;
+            content: '点击前往我的Segmentfault小站'
+          }
+        }
       }
 
       .address {

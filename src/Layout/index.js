@@ -26,7 +26,12 @@ export default function Layout(props) {
       </a>}
       <header className="head">
         <h3 className="site">
-          <div className="name">{SITE_NAME}</div>
+          <div className="name">
+            <span>{SITE_NAME}</span>
+            <a href={LINK_ADDRESS} target="_blank" rel="noopener noreferrer">
+              <img alt="segmentfault 专栏" src="https://doddle.oss-cn-beijing.aliyuncs.com/oldNotes/20200531231700.png" />
+            </a>
+          </div>
           <div className="address">
             <a href={LINK_ADDRESS} target="_blank" rel="noopener noreferrer">{SITE_MOTTO}</a>
           </div>
