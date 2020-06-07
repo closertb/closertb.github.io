@@ -18,7 +18,7 @@ export default function CacheQuery({ sql, query, children, callback, pathname })
   useEffect(() => {
     // 加载完成，重置title
     if (!loading && data && data.repository) {
-      document.title = data.repository.issue ? data.repository.issue.title : '吃饭不洗碗';
+      document.title = data.repository.issue ? data.repository.issue.title : '吃饭不洗...';
     }
     return () => { document.title = SITE_NAME; };
   }, [pathname, loading]);
