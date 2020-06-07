@@ -141,6 +141,7 @@ let app = new Vue({
       if (!graph) {
         return;
       }
+      $('#loading').show();
       fetch('https://closertb.site/arcticle/graphql', {
         method: 'post',
         headers: {
@@ -148,8 +149,8 @@ let app = new Vue({
           'content-type': 'application/json'
         },
         body: JSON.stringify({
-          operationName: "BlogDetail",
-          query: `query BlogDetail($number: Int!) {
+          operationName: "BlogDetailForEdit",
+          query: `query BlogDetailForEdit($number: Int!) {
                     repository(owner: "closertb", name: "closertb.github.io") {
                       issue(number: $number) {
                         title
@@ -162,12 +163,15 @@ let app = new Vue({
           variables: { number: graph }
         })
       }).then(res => res.json()).then((resp) => {
+        $('#loading').hide();
         if (resp.data) {
           const { repository: { issue: { body, title, url }}} = resp.data;
           this.editor.setValue(body);
           return;
         }
         console.log('some error happend');
+      }).catch(() => {
+        $('#loading').hide();
       });
     },
 /*     themeChanged: function (themeName) {

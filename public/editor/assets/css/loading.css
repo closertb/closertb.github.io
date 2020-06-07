@@ -6,6 +6,7 @@
   overflow: hidden;
   z-index: 99999;
   background-color: #f2f2f2;
+  opacity: 0.5;
 }
 
 .loading-wrapper {
