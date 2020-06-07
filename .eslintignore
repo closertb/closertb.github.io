@@ -2,3 +2,4 @@
 proxy.config.js
 webpack.config.js
 mock/**
+public/
