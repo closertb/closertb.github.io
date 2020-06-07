@@ -11,6 +11,10 @@ function unCompileParam(code = '') {
 const token = unCompileParam(TOKEN);
 const defaultPargh = { title: '示例文章', number: 0, key: 'closertb' };
 
+function getDefault () {
+  return fetch('/editor/assets/default-content.md')
+  .then(res => res.text());
+}
 let app = new Vue({
   el: '#app',
   data: function () {
@@ -86,11 +90,10 @@ let app = new Vue({
       }).then(resp => {
         self.editor.setValue(resp.data)
       }); */
-      fetch('/editor/assets/default-content.md')
-      .then(res => res.text())
+      getDefault()
       .then(data => {
         self.editor.setValue(data)
-      })
+      });
     }
     fetch('https://closertb.site/arcticle/getListAll', {
       method: 'post',
@@ -139,6 +142,10 @@ let app = new Vue({
         graph: graph
       });
       if (!graph) {
+        getDefault()
+        .then(data => {
+          this.editor.setValue(data);
+        });
         return;
       }
       $('#loading').show();
