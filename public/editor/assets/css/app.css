@@ -158,7 +158,6 @@ section {
 
 .code-snippet__fix {
   word-wrap: break-word !important;
-  max-height: 400px;
   font-size: 14px;
   margin: 10px 0;
   color: #333;
