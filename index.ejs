@@ -5,13 +5,15 @@
     <meta name="viewport" content="width = device-width,initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
     <meta name="format-detection" content="email=no">
-    <meta name="keywords" content="github graphql API,graphql, closertb.site, doddle's blog, 前端饭团">
+    <meta name="keywords" content="github graphql API,graphql, closertb.site, doddle's blog">
     <meta name="discription" content="a frontend blog to record doddle technical life, 一个记录前端程序员成长的博客">
     <meta name="author" content="doddle,closertb@163.com">
     <title><%= htmlWebpackPlugin.options.title%></title>
   </head>
   <body>
     <div id="app" class="home"></div>
+    <!-- 百度统计 -->
+    <script src="https://hm.baidu.com/hm.js?d4b1cd36e22d08959f409336c0c57d98" defer></script>
     <script>
       navigator.serviceWorker && navigator.serviceWorker.register('/worker.js', {
         name: 'doddle-sw'
