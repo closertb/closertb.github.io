@@ -24,7 +24,7 @@ const authLink = setContext((_, { headers }) => ({
   }
 }));
 const httpLink = new HttpLink({
-  uri: process.env.NODE_ENV === 'production' ? 'http://localhost:127.0.0.1:3000' : graphqlUri,
+  uri: process.env.NODE_ENV === 'production' ? 'http://127.0.0.1:3000/arcticle/graphql' : graphqlUri,
   batchInterval: 10,
   fetch,
   opts: {
