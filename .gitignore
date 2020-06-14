@@ -3,4 +3,5 @@
 draft.md
 node_modules/
 dist/
+logs/
 .deploy*/
