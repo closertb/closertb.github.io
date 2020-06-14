@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { DateFormat } from 'configs/utils';
+import { DateFormat } from '../../configs/utils';
 
 export default function List({ totalCount = 0, edges = [] }) {
   if (totalCount === 0) {
@@ -9,7 +9,7 @@ export default function List({ totalCount = 0, edges = [] }) {
   const isShowAction = ((query = '') => {
     const show = query.split('&').find(item => item.includes('show'));
     return show ? show.split('=')[1] === 'true' : false;
-  })(window.location.href.split('?')[1]);
+  })(typeof window !== 'undefined' ? window.location.href.split('?')[1] : '');
   return (
     <div className="list-wrapper">
       <ul>

@@ -1,18 +1,20 @@
 import React, { useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import QueryWithLoading from 'components/QueryWithLoading';
-import { DateFormat } from 'configs/utils';
+import markdownit from 'markdown-it';
+import hljs from 'highlight.js';
+import QueryWithLoading from '../../components/QueryWithLoading';
+import { DateFormat } from '../../configs/utils';
 import { sql } from './sql';
 import style from './index.less';
 
-const marked = window.markdownit({
+const marked = markdownit({
   html: true,
   linkify: true,
   typographer: true,
   highlight: (str, lang) => {
-    if (lang && window.hljs.getLanguage(lang)) {
+    if (lang && hljs.getLanguage(lang)) {
       try {
-        return window.hljs.highlight(lang, str).value;
+        return hljs.highlight(lang, str).value;
       } catch (__) {
         return str;
       }

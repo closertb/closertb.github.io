@@ -2,4 +2,5 @@
 *.log
 draft.md
 node_modules/
+dist/
 .deploy*/

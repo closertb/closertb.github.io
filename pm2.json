@@ -1,0 +1,12 @@
+{
+  "apps": [
+    {
+      "name": "blog",
+      "script": "./server/index.js",
+      "exec_mode": "cluster",
+      "instances": 0,
+      "watch": ["./server", "./src"],
+      "log_date_format": "YYYY-MM-DD HH:mm Z"
+    }
+  ]
+}
