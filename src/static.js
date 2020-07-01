@@ -37,7 +37,17 @@ export default function createInstance(url) {
     clientState: { resolvers, defaults, cache, typeDefs },
     ssrMode: true,
     cache, // 本地数据存储, 暂时用不上
-    link: authLink.concat(httpLink)
+    link: authLink.concat(httpLink),
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: 'network-only',
+        errorPolicy: 'ignore',
+      },
+      query: {
+        fetchPolicy: 'network-only',
+        errorPolicy: 'all',
+      }
+    }
   });
 
   const App = (
