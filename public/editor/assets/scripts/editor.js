@@ -22,6 +22,7 @@ let app = new Vue({
       aboutOutput: '',
       output: '',
       source: '',
+      loading: false,
       editorThemes: [
         { label: 'base16-light', value: 'base16-light' },
       ],
@@ -121,6 +122,24 @@ let app = new Vue({
         output += this.wxRenderer.buildAddition();
       }
       return output
+    },
+    refreshList() {
+      console.log('refresh');
+      this.loading = true;
+      fetch('https://closertb.site/arcticle/getListAll', {
+        method: 'post',
+        headers: {
+          Authorization: `bearer ${token}`,
+        }
+      }).then(res => res.json()).then((resp) => {
+        this.loading = false;
+        if (resp.data) {
+          const { repository: { issues: { totalCount, edges }}} = resp.data;
+          self.graphList = [defaultPargh].concat(edges.map(({ node }) => node));
+          return;
+        }
+        console.log('some error happend');
+      });
     },
 /*     editorThemeChanged: function (editorTheme) {
       this.editor.setOption('theme', editorTheme)

@@ -79,6 +79,7 @@
                 <span>{{ graph.title }}</span>
               </el-option>
             </el-select>
+            <img class="refresh" :class="{ 'loading': loading }" @click="refreshList" src="/editor/assets/images/refresh.png"/>
           </el-form-item>
         </el-form>
         <el-button class="about" @click="aboutDialogVisible = true">关于</el-button>
