@@ -124,7 +124,6 @@ let app = new Vue({
       return output
     },
     refreshList() {
-      console.log('refresh');
       this.loading = true;
       fetch('https://closertb.site/arcticle/getListAll', {
         method: 'post',

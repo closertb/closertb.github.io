@@ -17,7 +17,7 @@ export default function NavCenter() {
               <img className="show-img" src={imgUrl} alt={name} />
             </div>
             <div>
-              <a href={`${path}/index.html`} className="button" target="_blank" rel="noopener noreferrer">查看演示</a>
+              <a href={path} className="button" target="_blank" rel="noopener noreferrer">查看演示</a>
             </div>
           </div>
         </div>
