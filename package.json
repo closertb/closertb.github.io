@@ -11,8 +11,8 @@
     "serve": "NODE_ENV=dev nodemon ./server",
     "server": "npm run dev:ssr && NODE_ENV=dev nodemon ./server",
     "client": "NODE_ENV=production pm2 start pm2.json",
-    "restart": "pm2 restart closertb",
-    "update": "git pull && npm run pub && pm2 restart closertb"
+    "restart": "pm2 restart blog",
+    "update": "git pull && npm run pub && pm2 restart blog"
   },
   "repository": {
     "type": "git",
