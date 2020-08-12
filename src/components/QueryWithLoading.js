@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import Styles from './index.less';
 import Loading from './Loading';
 import Error from './Error';

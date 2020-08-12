@@ -1,10 +1,7 @@
 import React from 'react';
-import { ApolloProvider } from '@apollo/react-hooks';
-import { ApolloClient } from 'apollo-client';
-import { setContext } from 'apollo-link-context';
-import { HttpLink } from 'apollo-link-http';
+import { HttpLink, ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import fetch from 'node-fetch';
-import { InMemoryCache } from 'apollo-cache-inmemory';
 import { StaticRouter as Router, Route } from 'react-router-dom';
 import { TOKEN } from './configs/constants';
 import { unCompileParam } from './configs/utils';

@@ -50,6 +50,11 @@
   margin-bottom: 16px
 }
 
+.markdown-body blockquote {
+  padding: 0 .5em;
+  margin-inline-start: 10px;
+}
+
 .markdown-body hr {
   height: .25em;
   padding: 0;
