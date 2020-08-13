@@ -38,6 +38,7 @@ export default function createInstance(url) {
     ssrMode: true,
     cache, // 本地数据存储, 暂时用不上
     link: authLink.concat(httpLink),
+    queryDeduplication: false,
     defaultOptions: {
       watchQuery: {
         fetchPolicy: 'network-only',
