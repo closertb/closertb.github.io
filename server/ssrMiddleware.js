@@ -1,5 +1,5 @@
 const { renderToString } = require('react-dom/server');
-const { getDataFromTree } = require('@apollo/react-ssr');
+const { getDataFromTree } = require('@apollo/client/react/ssr');
 const fs = require('fs');
 const path = require('path');
 const create = require('../src/static').default;

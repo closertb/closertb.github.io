@@ -1,10 +1,7 @@
 import React from 'react';
 import { hydrate as render } from 'react-dom';
-import { ApolloProvider } from '@apollo/react-hooks';
-import { ApolloClient } from 'apollo-client';
-import { setContext } from 'apollo-link-context';
-import { HttpLink } from 'apollo-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { HttpLink, ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { TOKEN } from './configs/constants';
 import { unCompileParam } from './configs/utils';
