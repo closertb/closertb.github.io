@@ -11,9 +11,6 @@ import Layout from './Layout';
 
 const token = unCompileParam(TOKEN);
 
-// 这里保证每次刷新，服务端缓存都能刷新；
-const cache = new InMemoryCache({}).restore({});
-
 const authLink = setContext((_, { headers }) => ({
   headers: {
     ...headers,
@@ -30,6 +27,8 @@ const httpLink = new HttpLink({
 });
 
 export default function createInstance(url) {
+  // 这里保证每次刷新，服务端缓存都能刷新；
+  const cache = new InMemoryCache({}).restore({});
   const client = new ApolloClient({
     clientState: { resolvers, defaults, cache, typeDefs },
     ssrMode: true,
