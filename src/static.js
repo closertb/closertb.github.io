@@ -11,8 +11,8 @@ import Layout from './Layout';
 
 const token = unCompileParam(TOKEN);
 
-// Initialize
-const cache = new InMemoryCache();
+// 这里保证每次刷新，服务端缓存都能刷新；
+const cache = new InMemoryCache({}).restore({});
 
 const authLink = setContext((_, { headers }) => ({
   headers: {
