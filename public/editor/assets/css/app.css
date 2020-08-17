@@ -76,6 +76,19 @@ section {
   padding-bottom: 10px;
 }
 
+.main-body .el-col {
+  position: relative;
+}
+
+.md-copy-link {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  right: 5px;
+  width: 20px;
+  height: 20px;
+}
+
 .ctrl {
   flex-basis: 60px;
   flex-grow: 1;
@@ -84,11 +97,16 @@ section {
   align-items: center;
 }
 
+.ctrl .ml-10 {
+  margin-left: 15px;
+}
+
 .ctrl .refresh {
   position: relative;
   width: 16px;
   height: 16px;
-  top: 5px;}
+  top: 5px;
+}
 
 .ctrl .refresh.loading {
   animation: loading 1s infinite linear;

@@ -15,7 +15,8 @@ function getDefault () {
   return fetch('/editor/assets/default-content.md')
   .then(res => res.text());
 }
-let app = new Vue({
+
+const app = new Vue({
   el: '#app',
   data: function () {
     let d = {
@@ -27,6 +28,7 @@ let app = new Vue({
         { label: 'base16-light', value: 'base16-light' },
       ],
       editor: null,
+      selectedItem: {},
       builtinFonts: [
         {
           label: '无衬线',
@@ -60,7 +62,7 @@ let app = new Vue({
     return d;
   },
   mounted() {
-    let self = this;
+    const self = this;
     this.editor = CodeMirror.fromTextArea(
       document.getElementById('editor'),
       {
@@ -123,6 +125,72 @@ let app = new Vue({
       }
       return output
     },
+    clipData(key, extendText = '') {
+      const item = this.selectedItem[key];
+      if (!item) {
+        return;
+      }
+      const text = document.createElement('textarea');
+      text.id = 'temp-span';
+      text.style.cssText = 'display: absolute; left: -1000px; z-index: -1;';
+      text.value = item + extendText;
+
+      document.body.appendChild(text);
+      text.select();
+
+      document.execCommand('Copy');
+
+      this.$message({
+        message: '已复制到剪贴板', type: 'success'
+      });
+
+      document.body.removeChild(text);
+    },
+    copyLink() {
+      this.clipData('url');
+    },
+    copyTitle() {
+      this.clipData('title');
+    },
+    copymd() {
+      this.clipData('body', '\r\n![公众号：前端黑洞](https://doddle.oss-cn-beijing.aliyuncs.com/oldNotes/20200607230314.png)');
+    },
+    refreshContent() {
+      const { key: graph } = this.selectedItem;
+      $('#loading').show();
+      fetch('https://closertb.site/arcticle/graphql', {
+        method: 'post',
+        headers: {
+          Authorization: `bearer ${token}`,
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          operationName: 'BlogDetailForEdit',
+          query: `query BlogDetailForEdit($number: Int!) {
+                    repository(owner: "closertb", name: "closertb.github.io") {
+                      issue(number: $number) {
+                        title
+                        url
+                        body
+                        updatedAt
+                      }
+                    }
+                  }`,
+          variables: { number: graph }
+        })
+      }).then(res => res.json()).then((resp) => {
+        $('#loading').hide();
+        if (resp.data) {
+          const { repository: { issue: { body, title, url } } } = resp.data;
+          this.selectedItem = Object.assign(this.selectedItem, { title, url, body });
+          this.editor.setValue(body);
+          return;
+        }
+        console.log('some error happend');
+      }).catch(() => {
+        $('#loading').hide();
+      });
+    },
     refreshList() {
       this.loading = true;
       fetch('https://closertb.site/arcticle/getListAll', {
@@ -133,8 +201,8 @@ let app = new Vue({
       }).then(res => res.json()).then((resp) => {
         this.loading = false;
         if (resp.data) {
-          const { repository: { issues: { totalCount, edges }}} = resp.data;
-          self.graphList = [defaultPargh].concat(edges.map(({ node }) => node));
+          const { repository: { issues: { totalCount, edges } } } = resp.data;
+          this.graphList = [defaultPargh].concat(edges.map(({ node }) => node));
           return;
         }
         console.log('some error happend');
@@ -166,38 +234,8 @@ let app = new Vue({
         });
         return;
       }
-      $('#loading').show();
-      fetch('https://closertb.site/arcticle/graphql', {
-        method: 'post',
-        headers: {
-          Authorization: `bearer ${token}`,
-          'content-type': 'application/json'
-        },
-        body: JSON.stringify({
-          operationName: "BlogDetailForEdit",
-          query: `query BlogDetailForEdit($number: Int!) {
-                    repository(owner: "closertb", name: "closertb.github.io") {
-                      issue(number: $number) {
-                        title
-                        url
-                        body
-                        updatedAt
-                      }
-                    }
-                  }`,
-          variables: { number: graph }
-        })
-      }).then(res => res.json()).then((resp) => {
-        $('#loading').hide();
-        if (resp.data) {
-          const { repository: { issue: { body, title, url }}} = resp.data;
-          this.editor.setValue(body);
-          return;
-        }
-        console.log('some error happend');
-      }).catch(() => {
-        $('#loading').hide();
-      });
+      this.selectedItem = { key: graph };
+      this.refreshContent();
     },
 /*     themeChanged: function (themeName) {
       let themeObject = this.styleThemes[themeName];
