@@ -7,12 +7,15 @@ import styles from './index.less';
 
 export default function Layout(props) {
   const [active, setActive] = useState(false);
-  const { history: { location: { pathname } } } = props;
+  const { history: { location: { search, pathname } } } = props;
   // 移动端，关闭Menu
   const closeNav = useCallback(() => {
     setActive(false);
   });
 
+  const showCount = search.slice(1).includes('show=1');
+
+  console.log('show', search, showCount);
   return (
     <div className={styles.Layout}>
       {false &&
@@ -62,10 +65,11 @@ export default function Layout(props) {
             {ICP_CODE}
           </a>
         </div>
+        {showCount &&
         <div>
           <span id="busuanzi_container_site_pv">本站总访问量：<span id="busuanzi_value_site_pv" />次</span>
           <span className="pl-30" id="busuanzi_container_site_uv">访问人数：<span id="busuanzi_value_site_uv" />次</span>
-        </div>
+        </div>}
       </footer>
     </div>
   );
