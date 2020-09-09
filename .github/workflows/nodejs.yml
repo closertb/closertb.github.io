@@ -23,7 +23,7 @@ jobs:
         type: 'server'
         name: 'doddle'
         cmd: 'npm run dev'
-        targetPath: '../closertb.github.io'
+        targetPath: '../closertb.github.io/src'
         token: ${{ secrets.Deploy_Token }}
         requestUrl: 'http://deploy.closertb.site/operate/deploy'
         dist: 'dist'
