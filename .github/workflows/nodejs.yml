@@ -13,9 +13,6 @@ jobs:
     steps:
     - name: checkout
       uses: actions/checkout@master
-      
-    - name: build
-      run: npm install && npm run pub
 
     - name: deploy
       uses: closertb/deploy-static-action@master
