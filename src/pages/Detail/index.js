@@ -26,7 +26,7 @@ const marked = markdownit({
 
 function RelateLink({ data, className }) {
   const { edges = [] } = data;
-  if (edges.length === 0) {
+  if (!edges || edges.length === 0) {
     return null;
   }
   const { cursor, node: { title, url } } = edges[0];

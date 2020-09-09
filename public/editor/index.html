@@ -18,7 +18,7 @@
 
   <link rel="stylesheet" href="/editor/libs/prettify/color-themes/github-v2.min.css">
 
-  <link rel="stylesheet" href="/editor/assets/css/app.css?version=1">
+  <link rel="stylesheet" href="/editor/assets/css/app.css?version=2">
 </head>
 <body>
   <!--loading 界面-->
@@ -79,7 +79,10 @@
                 <span>{{ graph.title }}</span>
               </el-option>
             </el-select>
-            <img class="refresh" :class="{ 'loading': loading }" @click="refreshList" src="/editor/assets/images/refresh.png"/>
+            <img class="refresh" title="刷新列表" :class="{ 'loading': loading }" @click="refreshList" src="/editor/assets/images/refresh.png"/>
+            <img class="refresh ml-10" v-if="selectedItem.url" title="复制链接" @click="copyLink" src="/editor/assets/images/link.png"/>
+            <img class="refresh ml-10" v-if="selectedItem.title" title="复制标题" @click="copyTitle" src="/editor/assets/images/copy.png"/>
+            <img class="refresh ml-10" v-if="selectedItem.key" title="重载内容" @click="refreshContent" src="/editor/assets/images/download.png"/>
           </el-form-item>
         </el-form>
         <el-button class="about" @click="aboutDialogVisible = true">关于</el-button>
@@ -87,12 +90,13 @@
       <el-main class="main-body">
         <el-row :gutter="10" class="main-section">
           <el-col :span="12">
-              <textarea
-                  id="editor"
-                  type="textarea"
-                  placeholder="Your markdown here."
-                  v-model="source">
-              </textarea>
+            <img class="md-copy-link" v-if="selectedItem.body" title="复制md" @click="copymd" src="/editor/assets/images/copy.png"/>
+            <textarea
+                id="editor"
+                type="textarea"
+                placeholder="Your markdown here."
+                v-model="source">
+            </textarea>
           </el-col>
           <el-col :span="12" class="preview-wrapper" id="preview">
             <section>
@@ -138,7 +142,7 @@
 
   <script src="/editor/assets/scripts/themes/default.js"></script>
   <script src="/editor/assets/scripts/renderers/wx-renderer.js"></script>
-  <script src="/editor/assets/scripts/editor.js?version=1"></script>
+  <script src="/editor/assets/scripts/editor.js?version=2"></script>
   <script src="/editor/assets/scripts/loading.js"></script>
 
 </body>
