@@ -3,7 +3,7 @@ name: Deploy blog source to github pages
 on: 
   push:
     branches:
-      - github
+      - server
 
 jobs:
   build:
@@ -20,7 +20,10 @@ jobs:
     - name: deploy
       uses: closertb/deploy-static-action@master
       with:
+        type: 'server'
         name: 'doddle'
+        cmd: 'npm run dev'
+        targetPath: '../closertb.github.io'
         token: ${{ secrets.Deploy_Token }}
         requestUrl: 'http://deploy.closertb.site/operate/deploy'
         dist: 'dist'
