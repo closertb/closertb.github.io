@@ -19,9 +19,7 @@ jobs:
       with:
         type: 'server'
         name: 'doddle'
-        cmd: 'npm run dev'
+        cmd: 'npm run update'
         targetPath: '../closertb.github.io/src'
         token: ${{ secrets.Deploy_Token }}
-        requestUrl: 'http://deploy.closertb.site/operate/deploy'
-        dist: 'dist'
-        target: 'blog'
+        requestUrl: 'http://deploy.closertb.site/operate/triggerDeploy'
