@@ -9,7 +9,7 @@ function unCompileParam(code = '') {
 }
 
 const token = unCompileParam(TOKEN);
-const defaultPargh = { title: '示例文章', number: 0, key: 'closertb' };
+const defaultPargh = { title: '示例文章', value: '', key: 'closertb' };
 
 function getDefault () {
   return fetch('/editor/assets/default-content.md')
@@ -58,7 +58,7 @@ const app = new Vue({
     d.currentFont = d.builtinFonts[0].value;
     d.currentSize = d.sizeOption[1].value;
     d.currentTheme = d.themeOption[0].value;
-    d.currentGraph = d.graphList[0].number;
+    d.currentGraph = d.graphList[0].value;
     return d;
   },
   mounted() {
@@ -106,10 +106,13 @@ const app = new Vue({
     }).then(res => res.json()).then(function (resp) {
       if (resp.data) {
         const { repository: { issues: { totalCount, edges }}} = resp.data;
-        self.graphList = [defaultPargh].concat(edges.map(({ node }) => node));
+        self.graphList = [defaultPargh].concat(edges.map(({ cursor, node }) => {
+          node.value = `${node.number}-|-${cursor}`;
+          return node;
+        }));
         return;
       }
-      console.log('some error happend');
+      console.error('some error happend');
     });
   },
   methods: {
@@ -156,7 +159,7 @@ const app = new Vue({
       this.clipData('body', '\r\n![公众号：前端黑洞](https://doddle.oss-cn-beijing.aliyuncs.com/oldNotes/20200607230314.png)');
     },
     refreshContent() {
-      const { key: graph } = this.selectedItem;
+      const params = this.selectedItem;
       $('#loading').show();
       fetch('https://closertb.site/arcticle/graphql', {
         method: 'post',
@@ -176,7 +179,7 @@ const app = new Vue({
                       }
                     }
                   }`,
-          variables: { number: graph }
+          variables: params
         })
       }).then(res => res.json()).then((resp) => {
         $('#loading').hide();
@@ -186,7 +189,7 @@ const app = new Vue({
           this.editor.setValue(body);
           return;
         }
-        console.log('some error happend');
+        console.error('some error happend');
       }).catch(() => {
         $('#loading').hide();
       });
@@ -202,10 +205,13 @@ const app = new Vue({
         this.loading = false;
         if (resp.data) {
           const { repository: { issues: { totalCount, edges } } } = resp.data;
-          this.graphList = [defaultPargh].concat(edges.map(({ node }) => node));
+          this.graphList = [defaultPargh].concat(edges.map(({ cursor, node }) => {
+            node.value = `${node.number}-|-${cursor}`;
+            return node;
+          }));
           return;
         }
-        console.log('some error happend');
+        console.error('some error happend');
       });
     },
 /*     editorThemeChanged: function (editorTheme) {
@@ -224,17 +230,22 @@ const app = new Vue({
       this.refresh()
     },
     graphChanged: function (graph) {
+      const [number, cursor] = graph.split('-|-');
+      const params = {
+        number: +number,
+        cursor
+      };
       this.wxRenderer.setOptions({
-        graph: graph
+        graph
       });
-      if (!graph) {
+      if (!number) {
         getDefault()
         .then(data => {
           this.editor.setValue(data);
         });
         return;
       }
-      this.selectedItem = { key: graph };
+      this.selectedItem = params;
       this.refreshContent();
     },
 /*     themeChanged: function (themeName) {

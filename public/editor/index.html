@@ -75,7 +75,7 @@
           </el-form-item> -->
           <el-form-item label="目标文章">
             <el-select v-model="currentGraph" size="mini" placeholder="选择文章" @change="graphChanged">
-              <el-option v-for="graph in graphList" :key="graph.id" :label="graph.title" :value="graph.number">
+              <el-option v-for="graph in graphList" :key="graph.id" :label="graph.title" :value="graph.value">
                 <span>{{ graph.title }}</span>
               </el-option>
             </el-select>
