@@ -168,17 +168,62 @@ const app = new Vue({
           'content-type': 'application/json'
         },
         body: JSON.stringify({
-          operationName: 'BlogDetailForEdit',
-          query: `query BlogDetailForEdit($number: Int!) {
-                    repository(owner: "closertb", name: "closertb.github.io") {
-                      issue(number: $number) {
-                        title
-                        url
-                        body
-                        updatedAt
-                      }
+          operationName: 'BlogDetail',
+          query: `query BlogDetail($number: Int!, $cursor: String) {
+            repository(owner: "closertb", name: "closertb.github.io") {
+              issue(number: $number) {
+                title
+                url
+                body
+                updatedAt
+                comments(first:100) {
+                  totalCount
+                  nodes {
+                    createdAt
+                    bodyHTML
+                    author {
+                      login
+                      avatarUrl
                     }
-                  }`,
+                  }
+                }
+                reactions(first: 100) {
+                  totalCount
+                  nodes {
+                    content
+                  }
+                }
+              }
+              last: issues(last: 1, before: $cursor, orderBy: {
+                field: CREATED_AT
+                direction: DESC
+              }, filterBy: {
+                createdBy: 'closertb'
+              }) {
+                edges {
+                  cursor
+                  node {
+                    title
+                    url
+                  }
+                }
+              }
+              next: issues(first: 1, after: $cursor, orderBy: {
+                field: CREATED_AT
+                direction: DESC
+              }, filterBy: {
+                createdBy: 'closertb'
+              }) {
+                edges {
+                  cursor
+                  node {
+                    title
+                    url
+                  }
+                }
+              }
+            }
+          }`,
           variables: params
         })
       }).then(res => res.json()).then((resp) => {
