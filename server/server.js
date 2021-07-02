@@ -11,7 +11,8 @@ app.use(staticSource(path.join(__dirname, staticPath)));
 
 
 app.use(router.routes())
-  .use(router.allowedMethods());
+  .use(router.allowedMethods())
+  .use(router.redirect('/404.html'));
 
 const server = app.listen(3005, () => {
   const { port } = server.address();
