@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "pub": "doddle-build pub --template none",
+    "build": "doddle-build pub --template none",
     "start": "doddle-build start --port 8905",
     "dev:ssr": "doddle-build dev --template none",
     "serve": "NODE_ENV=dev nodemon ./server",
