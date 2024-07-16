@@ -9,7 +9,7 @@ if (workbox) {
 
   workbox.skipWaiting();
   workbox.clientsClaim();
-  workbox.routing.registerRoute(/https:\/\/closertb.site\/.+\.(css|js)$/,
+  workbox.routing.registerRoute(/https:\/\/closertb.ronghuizt.cn\/.+\.(css|js)$/,
     workbox.strategies.cacheFirst({
       cacheName: 'doddle:static',
       plugins: [

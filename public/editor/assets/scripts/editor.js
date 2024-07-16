@@ -95,7 +95,7 @@ let app = new Vue({
         self.editor.setValue(data)
       });
     }
-    fetch('https://closertb.site/arcticle/getListAll', {
+    fetch('https://closertb.ronghuizt.cn/arcticle/getListAll', {
       method: 'post',
       headers: {
         Authorization: `bearer ${token}`,
@@ -149,7 +149,7 @@ let app = new Vue({
         return;
       }
       $('#loading').show();
-      fetch('https://closertb.site/arcticle/graphql', {
+      fetch('https://closertb.ronghuizt.cn/arcticle/graphql', {
         method: 'post',
         headers: {
           Authorization: `bearer ${token}`,

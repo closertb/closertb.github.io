@@ -1,6 +1,6 @@
 export default (env => ({
-  local: 'https://closertb.site/arcticle/graphql',
-  dev: 'https://closertb.site/arcticle/graphql',
-  qa: 'https://closertb.site/arcticle/graphql',
-  prod: 'https://closertb.site/arcticle/graphql'
+  local: 'https://closertb.ronghuizt.cn/arcticle/graphql',
+  dev: 'https://closertb.ronghuizt.cn/arcticle/graphql',
+  qa: 'https://closertb.ronghuizt.cn/arcticle/graphql',
+  prod: 'https://closertb.ronghuizt.cn/arcticle/graphql'
 }[env]))(process.env.DEPLOY_ENV);
