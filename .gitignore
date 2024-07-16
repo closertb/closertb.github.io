@@ -5,3 +5,4 @@ node_modules/
 dist/
 logs/
 .deploy*/
+node_modules

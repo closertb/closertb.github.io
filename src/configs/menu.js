@@ -32,7 +32,7 @@ export const NavMenu = [{
   git: 'https://github.com/closertb/simpleEchartsDemo'
 }, {
   name: 'Antd-doddle 组件库',
-  path: 'http://doc.closertb.site',
+  path: 'http://doctb.ronghuizt.cn',
   imgUrl: 'https://doddle.oss-cn-beijing.aliyuncs.com/oldNotes/antd-doddle.png',
   git: 'https://github.com/closertb/antd-doddle'
 }];

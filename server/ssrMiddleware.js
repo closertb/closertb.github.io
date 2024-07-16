@@ -31,7 +31,7 @@ function renderFullPage(html, state, title = '吃饭不洗...') {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width = device-width,initial-scale=1, maximum-scale=1, user-scalable=no">
-      <meta name="keywords" content="github graphql API,graphql, closertb.site, doddle's blog, 前端饭团">
+      <meta name="keywords" content="github graphql API,graphql, closertb.ronghuizt.cn, doddle's blog, 前端饭团">
       <meta name="discription" content="a frontend blog to record doddle technical life, 一个记录前端程序员成长的博客">
       <meta name="author" content="doddle,closertb@163.com">
       <meta name="format-detection" content="telephone=no">
